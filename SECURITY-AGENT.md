@@ -31,10 +31,18 @@ The **Mobile Security & Standards Agent** is an intelligent security analysis to
    - **Python 3**: Type hints, docstrings, PEP 8, security patterns
    - **HTML/CSS v2**: Pure web standards, accessibility, mobile-first
 
-3. 📊 **Generates Comprehensive Reports**
+3. 🗑️ **Detects Dead/Unused Code**
+   - Identifies files with zero references
+   - Finds deprecated naming patterns
+   - Detects backup and temporary files
+   - Flags legacy framework files
+   - Suggests safe removal process with underscore renaming
+
+4. 📊 **Generates Comprehensive Reports**
    - JSON (machine-readable for CI/CD)
    - HTML (interactive visual reports)
    - Markdown (human-readable documentation)
+   - Unused files report with removal instructions
 
 ## Architecture
 
@@ -364,6 +372,73 @@ Customize behavior in `security-agent/config/agent-config.json`:
 | Dependencies | 50+ | 0 |
 | Attack Surface | Medium | Minimal |
 | CSP Support | Partial | Full |
+
+## Dead Code Detection
+
+The agent automatically identifies unused and outdated files in your codebase.
+
+### Detection Methods
+
+- **No References**: Files with zero imports/references
+- **Deprecated Names**: Files with `old`, `backup`, `temp`, `copy` in name
+- **Backup Extensions**: `.old`, `.bak`, `.backup`, `.tmp` files
+- **Underscore Prefix**: Files already marked `_filename` (staged for removal)
+- **Duplicates**: Similar files that may be redundant
+- **Empty Files**: Files < 100 bytes
+- **Legacy Frameworks**: Svelte files in React projects, etc.
+
+### Confidence Levels
+
+- 🔴 **High**: Very likely unused (0 references, clear indicators)
+- 🟡 **Medium**: Possibly unused (requires review)
+- 🟢 **Low**: May be unused (careful review needed)
+
+### Safe Removal Workflow
+
+1. **Review Report**: Check `unused-files-*.md` in reports directory
+2. **Rename Files**: Add underscore prefix to test
+   ```bash
+   # Example: Test if file is unused
+   mv src/OldComponent.tsx src/_OldComponent.tsx
+   ```
+3. **Test Application**: Run dev server, tests, and build
+4. **Monitor**: Keep renamed files for a few days
+5. **Delete**: Remove if no issues arise
+   ```bash
+   git rm src/_OldComponent.tsx
+   ```
+
+### Report Example
+
+```markdown
+## 🔴 High Confidence (Likely Unused)
+
+### `src/components/LoadingSpinner.svelte`
+
+**Reason:** Svelte component in React project; No references found
+**References:** 0
+**File Size:** 2456 bytes
+**Action:** Rename with underscore, test, then delete
+```
+
+### Configuration
+
+Enable/disable in `security-agent/config/agent-config.json`:
+
+```json
+{
+  "deadCode": {
+    "enabled": true,
+    "detection": {
+      "checkReferences": true,
+      "checkNamingPatterns": true,
+      "checkDuplicates": true
+    }
+  }
+}
+```
+
+**📖 Full Documentation**: See [DEAD-CODE-DETECTION.md](security-agent/DEAD-CODE-DETECTION.md) for complete guide.
 
 ## Troubleshooting
 

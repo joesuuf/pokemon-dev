@@ -108,6 +108,25 @@
     "parallel": true,
     "maxConcurrent": 4
   },
+  "deadCode": {
+    "enabled": true,
+    "description": "Detect unused and outdated code files",
+    "detection": {
+      "checkReferences": true,
+      "checkFileAge": false,
+      "checkFileSize": true,
+      "checkNamingPatterns": true,
+      "checkDuplicates": true,
+      "checkFileExtensions": true
+    },
+    "patterns": {
+      "deprecated": ["old", "backup", "deprecated", "temp", "test2", "copy"],
+      "backupExtensions": [".old", ".bak", ".backup", ".tmp"],
+      "emptyFileThreshold": 100
+    },
+    "autoRename": false,
+    "generateReport": true
+  },
   "reporting": {
     "outputDir": "security-agent/reports",
     "console": true,

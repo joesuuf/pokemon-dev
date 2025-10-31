@@ -79,11 +79,36 @@ class StandardsViolation:
 
 
 @dataclass
+class UnusedFile:
+    """Represents a potentially unused or outdated file"""
+    file_path: str
+    reason: str
+    confidence: str  # high, medium, low
+    last_modified: str
+    file_size: int
+    references_found: int
+    suggested_action: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization"""
+        return {
+            "file_path": self.file_path,
+            "reason": self.reason,
+            "confidence": self.confidence,
+            "last_modified": self.last_modified,
+            "file_size": self.file_size,
+            "references_found": self.references_found,
+            "suggested_action": self.suggested_action
+        }
+
+
+@dataclass
 class ScanResult:
     """Results from a complete security and standards scan"""
     timestamp: str
     security_issues: List[SecurityIssue] = field(default_factory=list)
     standards_violations: List[StandardsViolation] = field(default_factory=list)
+    unused_files: List[UnusedFile] = field(default_factory=list)
     files_scanned: int = 0
     scan_duration: float = 0.0
 
@@ -107,10 +132,12 @@ class ScanResult:
                 "scan_duration": f"{self.scan_duration:.2f}s",
                 "security_issues": len(self.security_issues),
                 "standards_violations": len(self.standards_violations),
+                "unused_files": len(self.unused_files),
                 "issues_by_severity": self.get_issue_count_by_severity()
             },
             "security_issues": [issue.to_dict() for issue in self.security_issues],
-            "standards_violations": [violation.to_dict() for violation in self.standards_violations]
+            "standards_violations": [violation.to_dict() for violation in self.standards_violations],
+            "unused_files": [file.to_dict() for file in self.unused_files]
         }
 
 
@@ -609,6 +636,220 @@ class PythonStandardsChecker:
         return violations
 
 
+class DeadCodeDetector:
+    """Detector for unused and outdated code files"""
+
+    def __init__(self, config: Dict[str, Any], root_dir: Path):
+        self.config = config
+        self.root_dir = root_dir
+        self.dead_code_config = config.get("deadCode", {})
+        self.all_files: List[Path] = []
+        self.file_references: Dict[str, int] = {}
+
+    def detect_unused_files(self, scanned_files: List[Path]) -> List[UnusedFile]:
+        """Detect potentially unused files in the codebase"""
+        if not self.dead_code_config.get("enabled", False):
+            return []
+
+        print("\n🔍 Detecting unused and outdated code...")
+
+        self.all_files = scanned_files
+        unused_files = []
+
+        # Build reference map
+        self._build_reference_map()
+
+        # Check each file
+        for file_path in scanned_files:
+            unused_file = self._analyze_file(file_path)
+            if unused_file:
+                unused_files.append(unused_file)
+
+        print(f"📋 Found {len(unused_files)} potentially unused files")
+
+        return unused_files
+
+    def _build_reference_map(self):
+        """Build a map of how many times each file is referenced"""
+        print("   Building reference map...")
+
+        for file_path in self.all_files:
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read()
+
+                # Look for imports and references in the content
+                for other_file in self.all_files:
+                    if other_file == file_path:
+                        continue
+
+                    # Get filename patterns to search for
+                    filename = other_file.stem
+                    relative_path = str(other_file.relative_to(self.root_dir))
+
+                    # Count references
+                    count = 0
+
+                    # TypeScript/JavaScript imports
+                    patterns = [
+                        rf'import.*["\'].*{re.escape(filename)}["\']',
+                        rf'require\(["\'].*{re.escape(filename)}["\']',
+                        rf'from.*["\'].*{re.escape(filename)}["\']',
+                    ]
+
+                    for pattern in patterns:
+                        count += len(re.findall(pattern, content, re.IGNORECASE))
+
+                    # Also check for direct file path references
+                    if relative_path in content or filename in content:
+                        count += 1
+
+                    if count > 0:
+                        ref_path = str(other_file)
+                        self.file_references[ref_path] = self.file_references.get(ref_path, 0) + count
+
+            except Exception as e:
+                continue
+
+    def _analyze_file(self, file_path: Path) -> Optional[UnusedFile]:
+        """Analyze a single file to determine if it's unused"""
+        try:
+            stats = file_path.stat()
+            last_modified = datetime.fromtimestamp(stats.st_mtime).isoformat()
+            file_size = stats.st_size
+
+            file_path_str = str(file_path)
+            references = self.file_references.get(file_path_str, 0)
+
+            # Criteria for unused file detection
+            reasons = []
+            confidence = "low"
+
+            # Check 1: No references found
+            if references == 0:
+                reasons.append("No imports or references found in codebase")
+                confidence = "high"
+
+            # Check 2: Old file patterns (deprecated naming conventions)
+            filename = file_path.name
+            if any(pattern in filename for pattern in ['old', 'backup', 'deprecated', 'temp', 'test2', 'copy']):
+                reasons.append(f"Filename suggests deprecated/backup code: '{filename}'")
+                if confidence == "high":
+                    confidence = "high"
+                else:
+                    confidence = "medium"
+
+            # Check 3: Already prefixed with underscore
+            if filename.startswith('_') and not filename.startswith('__'):
+                reasons.append("File already marked with underscore prefix (staged for removal)")
+                confidence = "high"
+
+            # Check 4: Duplicate files (similar names)
+            similar_files = self._find_similar_files(file_path)
+            if similar_files:
+                reasons.append(f"Similar files exist: {', '.join([f.name for f in similar_files[:3]])}")
+                if confidence != "high":
+                    confidence = "medium"
+
+            # Check 5: Empty or nearly empty files
+            if file_size < 100:  # Less than 100 bytes
+                reasons.append(f"Nearly empty file ({file_size} bytes)")
+                if confidence != "high":
+                    confidence = "medium"
+
+            # Check 6: Old file extensions or patterns
+            if file_path.suffix in ['.old', '.bak', '.backup', '.tmp']:
+                reasons.append(f"Backup/temporary file extension: {file_path.suffix}")
+                confidence = "high"
+
+            # Check 7: Svelte files when project is React-based
+            if file_path.suffix == '.svelte' and self._is_react_project():
+                reasons.append("Svelte component in React project (legacy code)")
+                confidence = "medium"
+
+            # Only report if we found reasons
+            if reasons:
+                suggested_action = self._get_suggested_action(confidence, references)
+
+                return UnusedFile(
+                    file_path=str(file_path.relative_to(self.root_dir)),
+                    reason="; ".join(reasons),
+                    confidence=confidence,
+                    last_modified=last_modified,
+                    file_size=file_size,
+                    references_found=references,
+                    suggested_action=suggested_action
+                )
+
+        except Exception as e:
+            pass
+
+        return None
+
+    def _find_similar_files(self, file_path: Path) -> List[Path]:
+        """Find files with similar names"""
+        similar = []
+        base_name = file_path.stem.lower()
+
+        # Remove common suffixes to find base
+        for suffix in ['-old', '_old', '-copy', '_copy', '2', '-backup', '_backup']:
+            if base_name.endswith(suffix):
+                base_name = base_name[:-len(suffix)]
+
+        for other_file in self.all_files:
+            if other_file == file_path:
+                continue
+
+            other_base = other_file.stem.lower()
+            if base_name in other_base or other_base in base_name:
+                if file_path.suffix == other_file.suffix:
+                    similar.append(other_file)
+
+        return similar
+
+    def _is_react_project(self) -> bool:
+        """Check if this is a React project"""
+        package_json = self.root_dir / "package.json"
+        if package_json.exists():
+            try:
+                with open(package_json, 'r') as f:
+                    data = json.load(f)
+                    deps = {**data.get('dependencies', {}), **data.get('devDependencies', {})}
+                    return 'react' in deps
+            except:
+                pass
+        return False
+
+    def _get_suggested_action(self, confidence: str, references: int) -> str:
+        """Get suggested action based on confidence level"""
+        if confidence == "high" and references == 0:
+            return "Rename with underscore prefix to verify, then delete if no issues arise"
+        elif confidence == "high":
+            return f"Review {references} reference(s), then consider removal"
+        elif confidence == "medium":
+            return "Review file usage and consider marking for removal"
+        else:
+            return "Manual review recommended"
+
+    def rename_file_with_underscore(self, file_path: Path) -> bool:
+        """Rename a file by adding underscore prefix"""
+        try:
+            new_name = f"_{file_path.name}"
+            new_path = file_path.parent / new_name
+
+            if new_path.exists():
+                print(f"   ⚠️  Cannot rename {file_path.name}: Target already exists")
+                return False
+
+            file_path.rename(new_path)
+            print(f"   ✓ Renamed: {file_path.name} → {new_name}")
+            return True
+
+        except Exception as e:
+            print(f"   ❌ Error renaming {file_path}: {e}")
+            return False
+
+
 class SecurityStandardsAgent:
     """Main agent orchestrating security scans and standards checks"""
 
@@ -624,6 +865,7 @@ class SecurityStandardsAgent:
         self.security_scanner = MobileSecurityScanner(self.config)
         self.ts_checker = TypeScriptReactStandardsChecker(self.config)
         self.py_checker = PythonStandardsChecker(self.config)
+        self.dead_code_detector = DeadCodeDetector(self.config, self.root_dir)
 
         self.scan_result = ScanResult(timestamp=datetime.now().isoformat())
 
@@ -644,6 +886,10 @@ class SecurityStandardsAgent:
         # Scan each file
         for file_path in files_to_scan:
             self._scan_file(file_path)
+
+        # Detect unused/dead code
+        unused_files = self.dead_code_detector.detect_unused_files(files_to_scan)
+        self.scan_result.unused_files = unused_files
 
         # Calculate duration
         end_time = datetime.now()
@@ -717,6 +963,13 @@ class SecurityStandardsAgent:
 
         print(f"\n📋 STANDARDS VIOLATIONS: {len(self.scan_result.standards_violations)}")
 
+        # Unused files
+        if self.scan_result.unused_files:
+            print(f"\n🗑️  UNUSED/OUTDATED FILES: {len(self.scan_result.unused_files)}")
+            high_conf = sum(1 for f in self.scan_result.unused_files if f.confidence == "high")
+            if high_conf > 0:
+                print(f"  ⚠️  {high_conf} file(s) with high confidence for removal")
+
         # Critical issues warning
         if self.scan_result.has_critical_issues():
             print("\n⚠️  CRITICAL ISSUES FOUND - IMMEDIATE ACTION REQUIRED!")
@@ -757,6 +1010,12 @@ class SecurityStandardsAgent:
             html_path = report_dir / f"security-report-{timestamp}.html"
             self._generate_html_report(html_path)
             print(f"📄 HTML report: {html_path}")
+
+        # Unused files report (always generate if found)
+        if self.scan_result.unused_files:
+            unused_path = report_dir / f"unused-files-{timestamp}.md"
+            self._generate_unused_files_report(unused_path)
+            print(f"📄 Unused files report: {unused_path}")
 
     def _generate_markdown_report(self, output_path: Path):
         """Generate markdown report"""
@@ -927,6 +1186,107 @@ class SecurityStandardsAgent:
 
         with open(output_path, 'w') as f:
             f.write(html)
+
+    def _generate_unused_files_report(self, output_path: Path):
+        """Generate markdown report for unused/outdated files"""
+        with open(output_path, 'w') as f:
+            f.write("# Unused & Outdated Files Report\n\n")
+            f.write(f"**Generated:** {self.scan_result.timestamp}\n\n")
+            f.write(f"**Total Files Found:** {len(self.scan_result.unused_files)}\n\n")
+
+            f.write("---\n\n")
+
+            f.write("## Summary\n\n")
+            f.write("This report identifies files that may be unused or outdated in your codebase. ")
+            f.write("Files are categorized by confidence level based on various heuristics.\n\n")
+
+            # Count by confidence
+            high_conf = [f for f in self.scan_result.unused_files if f.confidence == "high"]
+            medium_conf = [f for f in self.scan_result.unused_files if f.confidence == "medium"]
+            low_conf = [f for f in self.scan_result.unused_files if f.confidence == "low"]
+
+            f.write(f"- **High Confidence:** {len(high_conf)} files\n")
+            f.write(f"- **Medium Confidence:** {len(medium_conf)} files\n")
+            f.write(f"- **Low Confidence:** {len(low_conf)} files\n\n")
+
+            f.write("## Recommendation Process\n\n")
+            f.write("1. **Review** the files listed below\n")
+            f.write("2. **Rename** suspicious files with underscore prefix using the agent\n")
+            f.write("3. **Test** your application thoroughly\n")
+            f.write("4. **Delete** files if no issues arise\n\n")
+
+            f.write("### Renaming Files\n\n")
+            f.write("To rename files with underscore prefix for testing:\n\n")
+            f.write("```bash\n")
+            f.write("# This renames the file to verify it's not being used\n")
+            f.write("# If your app still works, the file is safe to delete\n")
+            f.write("python3 security-agent/agent.py --rename-unused\n")
+            f.write("```\n\n")
+
+            f.write("---\n\n")
+
+            # High confidence files
+            if high_conf:
+                f.write("## 🔴 High Confidence (Likely Unused)\n\n")
+                f.write("These files are highly likely to be unused based on multiple indicators.\n\n")
+
+                for unused_file in sorted(high_conf, key=lambda x: x.file_path):
+                    self._write_unused_file_entry(f, unused_file)
+
+            # Medium confidence files
+            if medium_conf:
+                f.write("\n## 🟡 Medium Confidence (Review Recommended)\n\n")
+                f.write("These files show some signs of being unused but require manual review.\n\n")
+
+                for unused_file in sorted(medium_conf, key=lambda x: x.file_path):
+                    self._write_unused_file_entry(f, unused_file)
+
+            # Low confidence files
+            if low_conf:
+                f.write("\n## 🟢 Low Confidence (Manual Review)\n\n")
+                f.write("These files may be unused but need careful review.\n\n")
+
+                for unused_file in sorted(low_conf, key=lambda x: x.file_path):
+                    self._write_unused_file_entry(f, unused_file)
+
+            # Footer with commands
+            f.write("\n---\n\n")
+            f.write("## Actions\n\n")
+            f.write("### Rename Files for Testing\n\n")
+            f.write("To mark files as potentially unused by adding underscore prefix:\n\n")
+            f.write("```bash\n")
+            f.write("# Review the list above and add filenames to rename\n")
+            f.write("# Example: This would rename LoadingSpinner.svelte to _LoadingSpinner.svelte\n")
+            f.write("mv src/components/LoadingSpinner.svelte src/components/_LoadingSpinner.svelte\n")
+            f.write("```\n\n")
+            f.write("### Test Your Application\n\n")
+            f.write("After renaming:\n")
+            f.write("1. Run your development server\n")
+            f.write("2. Test all major features\n")
+            f.write("3. Check for any import errors in console\n")
+            f.write("4. Run your test suite\n\n")
+            f.write("### Delete Confirmed Unused Files\n\n")
+            f.write("If everything works after renaming:\n\n")
+            f.write("```bash\n")
+            f.write("# Delete the file\n")
+            f.write("git rm src/components/_LoadingSpinner.svelte\n")
+            f.write("git commit -m \"Remove unused file: LoadingSpinner.svelte\"\n")
+            f.write("```\n\n")
+
+            f.write("---\n\n")
+            f.write("*Generated by Mobile Security & Standards Agent*\n")
+
+    def _write_unused_file_entry(self, f, unused_file: UnusedFile):
+        """Write a single unused file entry to the markdown report"""
+        f.write(f"### `{unused_file.file_path}`\n\n")
+        f.write(f"**Confidence:** {unused_file.confidence.upper()}\n\n")
+        f.write(f"**Reason:** {unused_file.reason}\n\n")
+        f.write(f"**Details:**\n")
+        f.write(f"- References found: {unused_file.references_found}\n")
+        f.write(f"- File size: {unused_file.file_size} bytes\n")
+        f.write(f"- Last modified: {unused_file.last_modified}\n\n")
+        f.write(f"**Suggested Action:** {unused_file.suggested_action}\n\n")
+        f.write("---\n\n")
 
 
 def main():
