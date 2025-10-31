@@ -5,3 +5,13 @@ dist/
 logs/
 .vscode/
 .DS_Store
+
+# Security agent reports (generated files)
+security-agent/reports/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
