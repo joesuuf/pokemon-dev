@@ -1,0 +1,115 @@
+# Pokemon TCG Dev - System Requirements
+# This file documents system-level requirements for development
+
+# ==============================================================================
+# Node.js & npm
+# ==============================================================================
+# Node.js: 18.x or higher (18.19.1 recommended)
+# npm: 9.x or higher
+# Check: node --version && npm --version
+
+# ==============================================================================
+# Docker (for sandbox development)
+# ==============================================================================
+# Docker: 20.10.x or higher
+# Docker Compose: 2.x or higher
+# Check: docker --version && docker compose version
+
+# ==============================================================================
+# Git
+# ==============================================================================
+# Git: 2.30.x or higher
+# Check: git --version
+
+# ==============================================================================
+# Python (optional, for some npm packages with native dependencies)
+# ==============================================================================
+# Python: 3.9.x or higher
+# Check: python3 --version
+
+# ==============================================================================
+# Build Tools (optional, for some npm packages)
+# ==============================================================================
+# Linux: build-essential
+#   sudo apt-get install build-essential
+# macOS: Xcode Command Line Tools
+#   xcode-select --install
+# Windows: windows-build-tools
+#   npm install --global windows-build-tools
+
+# ==============================================================================
+# Node.js Dependencies (installed via npm)
+# ==============================================================================
+# See package.json for complete list
+# Install with: npm install
+
+# Production Dependencies:
+# - react@18.2.0
+# - react-dom@18.2.0
+# - axios@1.12.2
+
+# Development Dependencies:
+# - tailwindcss@4.1.16
+# - @tailwindcss/postcss@4.1.16
+# - vite@7.1.12
+# - vitest@4.0.3
+# - typescript@5.2.2
+# - @testing-library/react@16.3.0
+# - @testing-library/jest-dom@6.9.1
+# - eslint@8.55.0
+# - msw@2.11.6
+
+# ==============================================================================
+# Editor / IDE (recommended)
+# ==============================================================================
+# VS Code with extensions:
+# - ESLint
+# - Tailwind CSS IntelliSense
+# - TypeScript and JavaScript Language Features
+# - Prettier (optional)
+
+# ==============================================================================
+# Browser Requirements (for testing)
+# ==============================================================================
+# - Chrome/Chromium 90+
+# - Firefox 88+
+# - Safari 14+
+# - Edge 90+
+
+# ==============================================================================
+# Environment Variables
+# ==============================================================================
+# Create a .env file with:
+# VITE_API_KEY=your-pokemon-tcg-api-key
+# NODE_ENV=development
+# VITE_PORT=3000
+
+# ==============================================================================
+# System Resources (recommended)
+# ==============================================================================
+# RAM: 8GB minimum, 16GB recommended
+# Disk Space: 2GB for node_modules
+# CPU: Multi-core processor recommended
+
+# ==============================================================================
+# Network Access
+# ==============================================================================
+# Required domains:
+# - registry.npmjs.org (npm packages)
+# - api.pokemontcg.io (Pokemon TCG API)
+# - github.com (git operations)
+
+# ==============================================================================
+# Optional Tools
+# ==============================================================================
+# - Docker Desktop (for containerized development)
+# - nvm (Node Version Manager)
+# - Postman or curl (for API testing)
+# - Lighthouse (for performance audits)
+
+# ==============================================================================
+# Installation Verification Script
+# ==============================================================================
+# Run this script to verify all requirements are met:
+# bash verify-requirements.sh
+# (see docs/verify-requirements.sh)
