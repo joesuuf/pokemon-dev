@@ -11,7 +11,12 @@
     "test": "NODE_OPTIONS=--max-old-space-size=4096 vitest",
     "test:run": "NODE_OPTIONS=--max-old-space-size=4096 vitest run",
     "test:watch": "NODE_OPTIONS=--max-old-space-size=4096 vitest --watch",
-    "test:ui": "NODE_OPTIONS=--max-old-space-size=4096 vitest --ui"
+    "test:ui": "NODE_OPTIONS=--max-old-space-size=4096 vitest --ui",
+    "security:scan": "python3 security-agent/agent.py",
+    "security:report": "python3 security-agent/agent.py --format html",
+    "security:ci": "python3 security-agent/agent.py --exit-on-critical",
+    "v2:dev": "cd v2 && python3 -m http.server 8080",
+    "v2:serve": "npx http-server v2 -p 8080 -o"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",

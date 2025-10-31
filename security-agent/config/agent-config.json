@@ -1,0 +1,117 @@
+{
+  "agent": {
+    "name": "Mobile Security & Standards Agent",
+    "version": "1.0.0",
+    "description": "Expert agent for mobile browser attack detection and framework standardization",
+    "enabled": true
+  },
+  "security": {
+    "mobileAttacks": {
+      "enabled": true,
+      "checks": [
+        "xss",
+        "injection",
+        "csrf",
+        "clickjacking",
+        "openRedirect",
+        "insecureStorage",
+        "weakCrypto",
+        "mixedContent",
+        "csp",
+        "cors",
+        "sensitiveDataExposure",
+        "mobileSpecific"
+      ]
+    },
+    "severity": {
+      "critical": ["xss", "injection", "csrf", "sensitiveDataExposure"],
+      "high": ["clickjacking", "openRedirect", "weakCrypto", "cors"],
+      "medium": ["insecureStorage", "mixedContent", "csp"],
+      "low": ["mobileSpecific"]
+    },
+    "autoFix": false,
+    "reportFormat": ["json", "html", "markdown"]
+  },
+  "frameworks": {
+    "typescript": {
+      "enabled": true,
+      "version": "5.x",
+      "strict": true,
+      "standards": {
+        "react": {
+          "version": "18.x",
+          "hooks": true,
+          "functionalComponents": true,
+          "propTypes": false,
+          "typescript": true
+        },
+        "naming": {
+          "components": "PascalCase",
+          "files": "PascalCase",
+          "hooks": "camelCase",
+          "constants": "UPPER_SNAKE_CASE"
+        },
+        "security": {
+          "dangerouslySetInnerHTML": "warn",
+          "externalLinks": "requireNoopener",
+          "apiKeys": "requireEnv"
+        }
+      }
+    },
+    "python": {
+      "enabled": true,
+      "version": "3.x",
+      "standards": {
+        "pep8": true,
+        "typeHints": true,
+        "docstrings": "google",
+        "security": {
+          "sqlInjection": true,
+          "commandInjection": true,
+          "pathTraversal": true
+        }
+      }
+    },
+    "htmlCss": {
+      "enabled": true,
+      "version": "v2",
+      "standards": {
+        "pure": true,
+        "noFrameworks": true,
+        "accessibility": true,
+        "responsive": true,
+        "semanticHtml": true
+      }
+    }
+  },
+  "scanning": {
+    "paths": {
+      "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.js",
+        "src/**/*.jsx",
+        "api/**/*.ts",
+        "api/**/*.js",
+        "**/*.py",
+        "v2/**/*.html",
+        "v2/**/*.css"
+      ],
+      "exclude": [
+        "node_modules/**",
+        "dist/**",
+        "build/**",
+        "coverage/**",
+        ".git/**"
+      ]
+    },
+    "parallel": true,
+    "maxConcurrent": 4
+  },
+  "reporting": {
+    "outputDir": "security-agent/reports",
+    "console": true,
+    "file": true,
+    "exitOnCritical": false
+  }
+}
