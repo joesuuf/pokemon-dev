@@ -1,4 +1,28 @@
 /* src/index.css */
+
+/* Import Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* Define Pokemon-themed colors and custom design tokens */
+@theme {
+  /* Pokemon brand colors */
+  --color-pokemon-red: #CC0000;
+  --color-pokemon-blue: #003DA5;
+  --color-pokemon-yellow: #FFDE00;
+
+  /* Semantic color aliases */
+  --color-primary: #CC0000;
+  --color-secondary: #003DA5;
+  --color-accent: #FFDE00;
+
+  /* Extended color palette for Pokemon theme */
+  --color-pokemon-red-light: #FF0000;
+  --color-pokemon-red-dark: #990000;
+  --color-pokemon-blue-light: #0066CC;
+  --color-pokemon-blue-dark: #002966;
+}
+
+/* Global reset styles */
 * {
   margin: 0;
   padding: 0;
