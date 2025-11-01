@@ -301,7 +301,8 @@
             <div class="info-box">
                 <strong>Web Server Status:</strong> Running on <code>http://localhost:8000</code><br>
                 <strong>React Front-End:</strong> Requires Vite dev server (port 3000)<br>
-                <strong>HTML Front-End:</strong> Served directly from <code>/v2</code> directory
+                <strong>HTML Front-End:</strong> Served directly from <code>/v2</code> directory<br>
+                <strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11
             </div>
             
             <div class="frontends">
@@ -337,9 +338,14 @@
                         <button class="copy-btn" onclick="copyToClipboard('npm run dev')">📋 Copy</button>
                     </div>
                     <div class="code-block">
-                        <strong>Auto-launch:</strong>
-                        <code onclick="copyToClipboard(this.textContent)">npm run dev && start http://localhost:3000</code>
-                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && start http://localhost:3000')">📋 Copy</button>
+                        <strong>Auto-launch (WSL → Windows browser):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; cmd.exe /c start http://localhost:3000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Alternative (if wslview installed):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; wslview http://localhost:3000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && wslview http://localhost:3000')">📋 Copy</button>
                     </div>
                 </div>
                 
@@ -375,9 +381,14 @@
                         <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000')">📋 Copy</button>
                     </div>
                     <div class="code-block">
-                        <strong>Auto-launch:</strong>
-                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && start http://localhost:8000/v2/index.html</code>
-                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && start http://localhost:8000/v2/index.html')">📋 Copy</button>
+                        <strong>Auto-launch (WSL → Windows browser):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/v2/index.html</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && cmd.exe /c start http://localhost:8000/v2/index.html')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Alternative (if wslview installed):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; wslview http://localhost:8000/v2/index.html</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && wslview http://localhost:8000/v2/index.html')">📋 Copy</button>
                     </div>
                 </div>
             </div>
@@ -418,31 +429,38 @@
             </div>
             
             <div class="command-item">
-                <strong>React Dev Server - Auto-launch (Windows):</strong>
-                <code onclick="copyToClipboard(this.textContent)">npm run dev && start http://localhost:3000</code>
-                <button class="copy-btn" onclick="copyToClipboard('npm run dev && start http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
+                <strong>React Dev Server - Auto-launch (WSL → Windows browser):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; cmd.exe /c start http://localhost:3000</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
             </div>
             
             <div class="command-item">
-                <strong>React Dev Server - Auto-launch (macOS/Linux):</strong>
-                <code onclick="copyToClipboard(this.textContent)">npm run dev && (sleep 3 && open http://localhost:3000 || xdg-open http://localhost:3000)</code>
-                <button class="copy-btn" onclick="copyToClipboard('npm run dev && (sleep 3 && open http://localhost:3000 || xdg-open http://localhost:3000)')" style="margin-top: 5px;">📋 Copy</button>
+                <strong>React Dev Server - Auto-launch (WSL with wslview):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; wslview http://localhost:3000</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && wslview http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
+                <small style="display: block; margin-top: 5px; color: #666;">Note: Install wslview with: sudo apt install wslu</small>
             </div>
             
             <div class="command-item">
-                <strong>HTML App - Auto-launch (Windows):</strong>
-                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && start http://localhost:8000/v2/index.html</code>
-                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && start http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
+                <strong>HTML App - Auto-launch (WSL → Windows browser):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/v2/index.html</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && cmd.exe /c start http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
             </div>
             
             <div class="command-item">
-                <strong>HTML App - Auto-launch (macOS/Linux):</strong>
-                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && (sleep 2 && open http://localhost:8000/v2/index.html || xdg-open http://localhost:8000/v2/index.html)</code>
-                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && (sleep 2 && open http://localhost:8000/v2/index.html || xdg-open http://localhost:8000/v2/index.html)')" style="margin-top: 5px;">📋 Copy</button>
+                <strong>HTML App - Auto-launch (WSL with wslview):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; wslview http://localhost:8000/v2/index.html</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && wslview http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
             </div>
             
             <div class="command-item">
-                <strong>All Servers - Start Everything (Windows PowerShell):</strong>
+                <strong>All Servers - Start Everything (WSL):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/index-test.html &amp;&amp; npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 & sleep 2 && cmd.exe /c start http://localhost:8000/index-test.html && npm run dev')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>Native Windows (if running from Windows PowerShell):</strong>
                 <code onclick="copyToClipboard(this.textContent)">Start-Process python -ArgumentList '-m','http.server','8000'; Start-Sleep -Seconds 2; Start-Process 'http://localhost:8000/index-test.html'; npm run dev</code>
                 <button class="copy-btn" onclick="copyToClipboard('Start-Process python -ArgumentList \\\'-m\\\',\\\'http.server\\\',\\\'8000\\\'; Start-Sleep -Seconds 2; Start-Process \\\'http://localhost:8000/index-test.html\\\'; npm run dev')" style="margin-top: 5px;">📋 Copy</button>
             </div>
@@ -451,7 +469,9 @@
         <div class="footer">
             <p><strong>Server Running:</strong> http://localhost:8000</p>
             <p><strong>React Dev Server:</strong> http://localhost:3000 (requires <code>npm run dev</code>)</p>
+            <p><strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11</p>
             <p><strong>Phase 1 Status:</strong> ✅ Complete | All 49 tests passing</p>
+            <p><small><strong>Tip:</strong> Use <code>cmd.exe /c start</code> or <code>wslview</code> to open URLs in Windows browser from WSL</small></p>
         </div>
     </div>
     
@@ -517,10 +537,10 @@
         
         // Start React server (prompts user with command)
         function startReactServer() {
-            const command = 'npm run dev && start http://localhost:3000';
-            if (confirm('Start React dev server?\n\nCommand: ' + command + '\n\nCopy this command and run it in your terminal.')) {
+            const command = 'npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000';
+            if (confirm('Start React dev server (WSL)?\n\nCommand: ' + command + '\n\nCopy this command and run it in your WSL terminal.')) {
                 copyToClipboard(command);
-                alert('Command copied to clipboard! Run it in your terminal.');
+                alert('Command copied to clipboard! Run it in your WSL terminal.');
             }
         }
         
