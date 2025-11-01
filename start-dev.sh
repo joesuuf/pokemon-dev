@@ -14,8 +14,9 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
-REACT_PORT=3000
-HTML_PORT=8080
+REACT_PORT=8888
+HTML_PORT=9999
+CAROUSEL_PORT=7777
 
 # Detect if we're in GitHub Codespaces
 is_codespace() {

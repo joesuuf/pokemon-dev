@@ -17,8 +17,11 @@
     "security:scan": "python3 security-agent/agent.py",
     "security:report": "python3 security-agent/agent.py --format html",
     "security:ci": "python3 security-agent/agent.py --exit-on-critical",
-    "v2:dev": "cd v2 && python3 -m http.server 8080 --bind 0.0.0.0",
-    "v2:serve": "npx http-server v2 -p 8080 -a 0.0.0.0 -o"
+    "v2:dev": "cd v2 && python3 -m http.server 9999 --bind 0.0.0.0",
+    "v2:serve": "npx http-server v2 -p 9999 -a 0.0.0.0 -o",
+    "carousel:dev": "cd carousel && python3 -m http.server 7777 --bind 0.0.0.0",
+    "carousel:serve": "npx http-server carousel -p 7777 -a 0.0.0.0 -o",
+    "start:all": "concurrently \"npm run dev\" \"npm run v2:serve\" \"npm run carousel:serve\""
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
@@ -46,6 +49,8 @@
     "tailwindcss": "^4.1.16",
     "typescript": "^5.2.2",
     "vite": "^7.1.12",
-    "vitest": "^4.0.3"
+    "vitest": "^4.0.3",
+    "concurrently": "^9.1.0",
+    "http-server": "^14.1.1"
   }
 }
