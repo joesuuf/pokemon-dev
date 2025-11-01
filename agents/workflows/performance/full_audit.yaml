@@ -1,0 +1,11 @@
+name: full_audit
+description: Complete performance and security audit workflow
+skills:
+  - lighthouse_audit
+  - check_security_headers
+  - analyze_bundle_size
+  - validate_accessibility
+config:
+  timeout: 300
+  generate_report: true
+  report_format: json
