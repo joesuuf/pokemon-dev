@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Security Findings Schema",
+  "description": "Security-specific extensions for agent output schema",
+  "type": "object",
+  "properties": {
+    "security_issues": {
+      "type": "array",
+      "description": "Security vulnerabilities found",
+      "items": {
+        "type": "object",
+        "required": ["category", "severity", "file_path", "line_number", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique issue identifier"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["xss", "csrf", "cors", "csp", "injection", "auth", "crypto", "other"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "line_number": {
+            "type": "integer"
+          },
+          "code_snippet": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "cwe_id": {
+            "type": "string",
+            "pattern": "^CWE-\\d+$"
+          },
+          "mobile_specific": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "standards_violations": {
+      "type": "array",
+      "description": "Framework standards violations",
+      "items": {
+        "type": "object",
+        "required": ["framework", "rule", "file_path"],
+        "properties": {
+          "framework": {
+            "type": "string"
+          },
+          "rule": {
+            "type": "string"
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "line_number": {
+            "type": "integer"
+          },
+          "code_snippet": {
+            "type": "string"
+          },
+          "expected": {
+            "type": "string"
+          },
+          "actual": {
+            "type": "string"
+          },
+          "auto_fixable": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "unused_files": {
+      "type": "array",
+      "description": "Potentially unused files",
+      "items": {
+        "type": "object",
+        "required": ["file_path", "confidence"],
+        "properties": {
+          "file_path": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "last_modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "file_size": {
+            "type": "integer"
+          },
+          "references_found": {
+            "type": "integer"
+          },
+          "suggested_action": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

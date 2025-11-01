@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Output Schema",
+  "description": "Standardized output format for all modular agents",
+  "type": "object",
+  "required": ["schema_version", "agent", "execution", "results"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Version of the output schema",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "agent": {
+      "type": "object",
+      "required": ["name", "version", "category"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable agent name"
+        },
+        "version": {
+          "type": "string",
+          "description": "Agent version",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "category": {
+          "type": "string",
+          "description": "Agent category",
+          "enum": ["security", "performance", "seo", "content", "installation"]
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["timestamp", "status"],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp"
+        },
+        "duration_ms": {
+          "type": "number",
+          "description": "Execution duration in milliseconds"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["success", "partial", "failed"],
+          "description": "Execution status"
+        },
+        "skill_name": {
+          "type": "string",
+          "description": "Name of executed skill (if single skill)"
+        },
+        "workflow_name": {
+          "type": "string",
+          "description": "Name of executed workflow (if workflow)"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "Input context and metadata",
+      "properties": {
+        "input": {
+          "type": "object",
+          "description": "Input parameters provided to agent"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional context metadata"
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "required": ["data"],
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "Primary result data"
+        },
+        "artifacts": {
+          "type": "array",
+          "description": "Generated artifacts (reports, files, etc.)",
+          "items": {
+            "type": "object",
+            "required": ["type", "format", "path"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Artifact type"
+              },
+              "format": {
+                "type": "string",
+                "description": "Artifact format"
+              },
+              "path": {
+                "type": "string",
+                "description": "Path to artifact"
+              }
+            }
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "description": "Key metrics from execution"
+        }
+      }
+    },
+    "findings": {
+      "type": "object",
+      "description": "Issues, warnings, and informational messages",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["severity", "message"],
+            "properties": {
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low", "info"]
+              },
+              "message": {
+                "type": "string"
+              },
+              "impact": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "info": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Actionable recommendations",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_actions": {
+      "type": "object",
+      "description": "Suggested next steps for orchestration",
+      "properties": {
+        "suggested_agents": {
+          "type": "array",
+          "description": "Agents that should run next",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_skills": {
+          "type": "array",
+          "description": "Skills that should be executed",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

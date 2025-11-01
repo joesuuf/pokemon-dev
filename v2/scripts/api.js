@@ -10,7 +10,7 @@ const PokemonAPI = (function() {
     const CONFIG = {
         baseURL: 'https://api.pokemontcg.io/v2',
         pageSize: 20,
-        timeout: 10000 // 10 seconds
+        timeout: 20000 // 20 seconds (doubled from 10 seconds)
     };
 
     /**
