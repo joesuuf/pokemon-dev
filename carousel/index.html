@@ -246,7 +246,7 @@
                 const slide = document.createElement('div');
                 slide.className = 'card-slide';
                 slide.innerHTML = `
-                    <img src="${card.images.large}" alt="${card.name}" class="card-image" />
+                    <img src="${card.images.large}" alt="${card.name}" class="card-image" loading="lazy" />
                     <div class="card-name">${card.name}</div>
                     <div class="card-type">${card.types ? card.types.join(', ') : 'Pokemon'}</div>
                 `;
