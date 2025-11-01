@@ -302,7 +302,8 @@
                 <strong>Web Server Status:</strong> Running on <code>http://localhost:8000</code><br>
                 <strong>React Front-End:</strong> Requires Vite dev server (port 3000)<br>
                 <strong>HTML Front-End:</strong> Served directly from <code>/v2</code> directory<br>
-                <strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11
+                <strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11<br>
+                <strong>⚠️ First Time Setup:</strong> Run <code>npm install</code> in WSL terminal before starting dev server
             </div>
             
             <div class="frontends">
@@ -423,7 +424,14 @@
             </div>
             
             <div class="command-item">
-                <strong>React Dev Server (Port 3000) - Windows:</strong>
+                <strong>React Dev Server (Port 3000) - Install dependencies first (WSL):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm install</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm install')" style="margin-top: 5px;">📋 Copy</button>
+                <small style="display: block; margin-top: 5px; color: #666;">Run this first if you get "next: not found" or "vite: not found" errors</small>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server (Port 3000) - WSL:</strong>
                 <code onclick="copyToClipboard(this.textContent)">npm run dev</code>
                 <button class="copy-btn" onclick="copyToClipboard('npm run dev')" style="margin-top: 5px;">📋 Copy</button>
             </div>
