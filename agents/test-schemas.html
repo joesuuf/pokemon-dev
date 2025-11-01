@@ -223,17 +223,38 @@
     </div>
     
     <script>
-        // Load schemas
+        // Load schemas - using fetch with absolute path from root
         async function loadSchema(schemaName, elementId) {
             try {
-                const response = await fetch(`agents/schemas/${schemaName}`);
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${schemaName}`);
+                // Try multiple path variations
+                const paths = [
+                    `agents/schemas/${schemaName}`,
+                    `/${schemaName}`,
+                    `./agents/schemas/${schemaName}`
+                ];
+                
+                let schema = null;
+                let lastError = null;
+                
+                for (const path of paths) {
+                    try {
+                        const response = await fetch(path);
+                        if (response.ok) {
+                            schema = await response.json();
+                            break;
+                        }
+                    } catch (error) {
+                        lastError = error;
+                    }
                 }
-                const schema = await response.json();
-                document.getElementById(elementId).textContent = JSON.stringify(schema, null, 2);
+                
+                if (schema) {
+                    document.getElementById(elementId).textContent = JSON.stringify(schema, null, 2);
+                } else {
+                    throw lastError || new Error(`Failed to load ${schemaName} from any path`);
+                }
             } catch (error) {
-                document.getElementById(elementId).textContent = `Error loading schema: ${error.message}`;
+                document.getElementById(elementId).textContent = `Error loading schema: ${error.message}\n\nNote: Ensure web server is running from project root and schema files exist.`;
             }
         }
         
