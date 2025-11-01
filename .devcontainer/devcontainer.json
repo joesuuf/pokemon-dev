@@ -1,0 +1,66 @@
+{
+  "name": "Pokemon Dev - Full Stack",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "ms-playwright.playwright",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": false,
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.pyc": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 8000, 8080],
+  "portsAttributes": {
+    "3000": {
+      "label": "React Dev Server",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Main Web Server",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "HTML v2 Server",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "npm install && pip3 install -r agents/requirements.txt",
+  "postStartCommand": "echo 'Codespace ready! Run: npm run dev'",
+
+  "remoteUser": "node",
+  "remoteEnv": {
+    "NODE_ENV": "development"
+  }
+}
