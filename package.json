@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:all": "bash start-dev.sh",
+    "dev:all:win": "powershell -ExecutionPolicy Bypass -File start-dev.ps1",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -15,8 +17,8 @@
     "security:scan": "python3 security-agent/agent.py",
     "security:report": "python3 security-agent/agent.py --format html",
     "security:ci": "python3 security-agent/agent.py --exit-on-critical",
-    "v2:dev": "cd v2 && python3 -m http.server 8080",
-    "v2:serve": "npx http-server v2 -p 8080 -o"
+    "v2:dev": "cd v2 && python3 -m http.server 8080 --bind 0.0.0.0",
+    "v2:serve": "npx http-server v2 -p 8080 -a 0.0.0.0 -o"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
