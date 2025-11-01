@@ -197,6 +197,97 @@
         .info-box strong {
             color: #1976d2;
         }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .code-block strong {
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .code-block code {
+            display: block;
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+            word-break: break-all;
+        }
+        
+        .code-block code:hover {
+            background: #3d3d3d;
+        }
+        
+        .copy-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        
+        .copy-success {
+            background: #4caf50 !important;
+        }
+        
+        .commands-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .commands-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .command-item {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .command-item strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .command-item code {
+            display: block;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -233,9 +324,22 @@
                         <a href="http://localhost:3000" target="_blank" class="btn secondary" onclick="checkReactStatus()">
                             🔍 Check Status
                         </a>
+                        <button class="btn secondary" onclick="startReactServer()">
+                            ▶️ Start Server
+                        </button>
                     </div>
                     <div>
                         <span class="status unknown" id="react-status">Status: Unknown</span>
+                    </div>
+                    <div class="code-block">
+                        <strong>Start Command:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Auto-launch:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev && start http://localhost:3000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && start http://localhost:3000')">📋 Copy</button>
                     </div>
                 </div>
                 
@@ -258,9 +362,22 @@
                         <a href="http://localhost:8000/v2/index.html" target="_blank" class="btn secondary" onclick="checkHtmlStatus()">
                             🔍 Check Status
                         </a>
+                        <button class="btn secondary" onclick="launchHtmlApp()">
+                            ▶️ Launch Now
+                        </button>
                     </div>
                     <div>
                         <span class="status unknown" id="html-status">Status: Unknown</span>
+                    </div>
+                    <div class="code-block">
+                        <strong>Start Command:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Auto-launch:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && start http://localhost:8000/v2/index.html</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && start http://localhost:8000/v2/index.html')">📋 Copy</button>
                     </div>
                 </div>
             </div>
@@ -278,7 +395,56 @@
                     <a href="agents/PHASE1_COMPLETE.md" target="_blank" class="btn secondary">
                         📖 View Documentation
                     </a>
+                    <button class="btn secondary" onclick="launchSchemaVisualizer()">
+                        ▶️ Launch Now
+                    </button>
                 </div>
+            </div>
+        </div>
+        
+        <div class="commands-section">
+            <h3>🚀 Quick Start Commands</h3>
+            
+            <div class="command-item">
+                <strong>Main Web Server (Port 8000):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server (Port 3000) - Windows:</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server - Auto-launch (Windows):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev && start http://localhost:3000</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && start http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server - Auto-launch (macOS/Linux):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev && (sleep 3 && open http://localhost:3000 || xdg-open http://localhost:3000)</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && (sleep 3 && open http://localhost:3000 || xdg-open http://localhost:3000)')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>HTML App - Auto-launch (Windows):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && start http://localhost:8000/v2/index.html</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && start http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>HTML App - Auto-launch (macOS/Linux):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 && (sleep 2 && open http://localhost:8000/v2/index.html || xdg-open http://localhost:8000/v2/index.html)</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && (sleep 2 && open http://localhost:8000/v2/index.html || xdg-open http://localhost:8000/v2/index.html)')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>All Servers - Start Everything (Windows PowerShell):</strong>
+                <code onclick="copyToClipboard(this.textContent)">Start-Process python -ArgumentList '-m','http.server','8000'; Start-Sleep -Seconds 2; Start-Process 'http://localhost:8000/index-test.html'; npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('Start-Process python -ArgumentList \\\'-m\\\',\\\'http.server\\\',\\\'8000\\\'; Start-Sleep -Seconds 2; Start-Process \\\'http://localhost:8000/index-test.html\\\'; npm run dev')" style="margin-top: 5px;">📋 Copy</button>
             </div>
         </div>
         
@@ -325,6 +491,47 @@
                 statusEl.className = 'status stopped';
                 statusEl.textContent = 'Status: Error Loading';
             }
+        }
+        
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show visual feedback
+                const buttons = document.querySelectorAll('.copy-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.includes(text)) {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✅ Copied!';
+                        btn.classList.add('copy-success');
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copy-success');
+                        }, 2000);
+                    }
+                });
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard. Please copy manually.');
+            });
+        }
+        
+        // Start React server (prompts user with command)
+        function startReactServer() {
+            const command = 'npm run dev && start http://localhost:3000';
+            if (confirm('Start React dev server?\n\nCommand: ' + command + '\n\nCopy this command and run it in your terminal.')) {
+                copyToClipboard(command);
+                alert('Command copied to clipboard! Run it in your terminal.');
+            }
+        }
+        
+        // Launch HTML app
+        function launchHtmlApp() {
+            window.open('http://localhost:8000/v2/index.html', '_blank');
+        }
+        
+        // Launch Schema Visualizer
+        function launchSchemaVisualizer() {
+            window.open('http://localhost:8000/agents/test-schemas.html', '_blank');
         }
         
         // Auto-check status on load
