@@ -5,7 +5,8 @@ interface CardDisplayProps {
   card: PokemonCard;
 }
 
-export const CardDisplay: React.FC<CardDisplayProps> = ({ card }) => {
+// PERF-01: Memoize CardDisplay component to prevent unnecessary re-renders
+export const CardDisplay = React.memo<CardDisplayProps>(({ card }) => {
   return (
     <div className="card-display-3col">
       <div className="card-display-header">
@@ -21,6 +22,7 @@ export const CardDisplay: React.FC<CardDisplayProps> = ({ card }) => {
               src={card.images.large}
               alt={card.name}
               className="card-image-large"
+              loading="lazy"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = card.images.small;
               }}
@@ -138,4 +140,4 @@ export const CardDisplay: React.FC<CardDisplayProps> = ({ card }) => {
       </div>
     </div>
   );
-};
+});

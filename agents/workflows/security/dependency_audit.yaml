@@ -1,0 +1,10 @@
+---
+name: dependency_audit
+description: Third-party dependency security analysis
+skills:
+  - analyze_dependencies
+config:
+  check_npm: true
+  check_python: true
+  check_vulnerabilities: true
+---

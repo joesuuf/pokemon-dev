@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inter-Agent Message Schema",
+  "description": "Schema for messages passed between agents",
+  "type": "object",
+  "required": ["message_id", "from_agent", "to_agent", "message_type", "payload"],
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "description": "Unique message identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "from_agent": {
+      "type": "string",
+      "description": "Source agent name"
+    },
+    "to_agent": {
+      "type": "string",
+      "description": "Destination agent name"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": ["request", "response", "notification", "error"],
+      "description": "Type of message"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Message payload"
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "ID linking request/response pairs"
+    }
+  }
+}

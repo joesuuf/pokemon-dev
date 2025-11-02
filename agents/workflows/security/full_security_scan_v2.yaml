@@ -1,0 +1,18 @@
+---
+name: full_security_scan_v2
+description: Full security scan with all v2 enhancements
+skills:
+  - scan_xss
+  - validate_csrf
+  - check_cors
+  - validate_csp
+  - dynamic_security_test
+  - analyze_dependencies
+  - check_compliance
+  - performance_security_check
+  - check_security_headers
+  - mobile_advanced_tests
+config:
+  generate_reports: true
+  severity_threshold: medium
+---

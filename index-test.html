@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Dev - Front-End Testing Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .frontends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .frontend-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            background: #f9f9f9;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .frontend-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frontend-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .frontend-card .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            background: #667eea;
+            color: white;
+        }
+        
+        .badge.react {
+            background: #61dafb;
+            color: #000;
+        }
+        
+        .badge.html {
+            background: #e34c26;
+            color: white;
+        }
+        
+        .badge.vite {
+            background: #646cff;
+            color: white;
+        }
+        
+        .frontend-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn.secondary {
+            background: #6c757d;
+        }
+        
+        .btn.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .status.running {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .status.stopped {
+            background: #f44336;
+            color: white;
+        }
+        
+        .status.unknown {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .phase1-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+        
+        .phase1-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .phase1-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box strong {
+            color: #1976d2;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .code-block strong {
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .code-block code {
+            display: block;
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+            word-break: break-all;
+        }
+        
+        .code-block code:hover {
+            background: #3d3d3d;
+        }
+        
+        .copy-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        
+        .copy-success {
+            background: #4caf50 !important;
+        }
+        
+        .commands-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .commands-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .command-item {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .command-item strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .command-item code {
+            display: block;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Pokemon Dev - Front-End Testing Hub</h1>
+            <p>Phase 1 Complete | Testing React and HTML Front-Ends</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-box">
+                <strong>Web Server Status:</strong> Running on <code>http://localhost:8000</code><br>
+                <strong>React Front-End:</strong> Requires Vite dev server (port 3000)<br>
+                <strong>HTML Front-End:</strong> Served directly from <code>/v2</code> directory<br>
+                <strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11<br>
+                <strong>⚠️ First Time Setup:</strong> Run <code>npm install</code> in WSL terminal before starting dev server
+            </div>
+            
+            <div class="frontends">
+                <div class="frontend-card">
+                    <h2>⚛️ React Front-End</h2>
+                    <div class="tech-stack">
+                        <span class="badge react">React</span>
+                        <span class="badge">TypeScript</span>
+                        <span class="badge vite">Vite</span>
+                        <span class="badge">Tailwind CSS</span>
+                    </div>
+                    <p>
+                        Modern React application with TypeScript, Vite build tool, and Tailwind CSS.
+                        Located in <code>/src</code> directory.
+                    </p>
+                    <div>
+                        <a href="http://localhost:3000" target="_blank" class="btn" id="react-link">
+                            🚀 Open React App
+                        </a>
+                        <a href="http://localhost:3000" target="_blank" class="btn secondary" onclick="checkReactStatus()">
+                            🔍 Check Status
+                        </a>
+                        <button class="btn secondary" onclick="startReactServer()">
+                            ▶️ Start Server
+                        </button>
+                    </div>
+                    <div>
+                        <span class="status unknown" id="react-status">Status: Unknown</span>
+                    </div>
+                    <div class="code-block">
+                        <strong>Start Command:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Auto-launch (WSL → Windows browser):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; cmd.exe /c start http://localhost:3000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Alternative (if wslview installed):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; wslview http://localhost:3000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && wslview http://localhost:3000')">📋 Copy</button>
+                    </div>
+                </div>
+                
+                <div class="frontend-card">
+                    <h2>📄 Pure HTML Front-End</h2>
+                    <div class="tech-stack">
+                        <span class="badge html">HTML5</span>
+                        <span class="badge">CSS3</span>
+                        <span class="badge">Vanilla JS</span>
+                        <span class="badge">Mobile-First</span>
+                    </div>
+                    <p>
+                        Pure HTML/CSS/JavaScript version with no frameworks.
+                        Located in <code>/v2</code> directory.
+                    </p>
+                    <div>
+                        <a href="http://localhost:8000/v2/index.html" target="_blank" class="btn">
+                            📄 Open HTML App
+                        </a>
+                        <a href="http://localhost:8000/v2/index.html" target="_blank" class="btn secondary" onclick="checkHtmlStatus()">
+                            🔍 Check Status
+                        </a>
+                        <button class="btn secondary" onclick="launchHtmlApp()">
+                            ▶️ Launch Now
+                        </button>
+                    </div>
+                    <div>
+                        <span class="status unknown" id="html-status">Status: Unknown</span>
+                    </div>
+                    <div class="code-block">
+                        <strong>Start Command:</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Auto-launch (WSL → Windows browser):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/v2/index.html</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && cmd.exe /c start http://localhost:8000/v2/index.html')">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <strong>Alternative (if wslview installed):</strong>
+                        <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; wslview http://localhost:8000/v2/index.html</code>
+                        <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && wslview http://localhost:8000/v2/index.html')">📋 Copy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="phase1-section">
+                <h2>🔒 Phase 1: JSON Communication Infrastructure</h2>
+                <p>
+                    Phase 1 implementation complete with JSON schemas, validation, and agent communication.
+                    All 49 tests passing.
+                </p>
+                <div>
+                    <a href="http://localhost:8000/agents/test-schemas.html" target="_blank" class="btn">
+                        📊 View Schema Visualizer
+                    </a>
+                    <a href="agents/PHASE1_COMPLETE.md" target="_blank" class="btn secondary">
+                        📖 View Documentation
+                    </a>
+                    <button class="btn secondary" onclick="launchSchemaVisualizer()">
+                        ▶️ Launch Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="commands-section">
+            <h3>🚀 Quick Start Commands</h3>
+            
+            <div class="command-item">
+                <strong>Main Web Server (Port 8000):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server (Port 3000) - Install dependencies first (WSL):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm install</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm install')" style="margin-top: 5px;">📋 Copy</button>
+                <small style="display: block; margin-top: 5px; color: #666;">Run this first if you get "next: not found" or "vite: not found" errors</small>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server (Port 3000) - WSL:</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server - Auto-launch (WSL → Windows browser):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; cmd.exe /c start http://localhost:3000</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>React Dev Server - Auto-launch (WSL with wslview):</strong>
+                <code onclick="copyToClipboard(this.textContent)">npm run dev &amp;&amp; sleep 3 &amp;&amp; wslview http://localhost:3000</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm run dev && sleep 3 && wslview http://localhost:3000')" style="margin-top: 5px;">📋 Copy</button>
+                <small style="display: block; margin-top: 5px; color: #666;">Note: Install wslview with: sudo apt install wslu</small>
+            </div>
+            
+            <div class="command-item">
+                <strong>HTML App - Auto-launch (WSL → Windows browser):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/v2/index.html</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && cmd.exe /c start http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>HTML App - Auto-launch (WSL with wslview):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp;&amp; sleep 2 &amp;&amp; wslview http://localhost:8000/v2/index.html</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 && sleep 2 && wslview http://localhost:8000/v2/index.html')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>All Servers - Start Everything (WSL):</strong>
+                <code onclick="copyToClipboard(this.textContent)">python -m http.server 8000 &amp; sleep 2 &amp;&amp; cmd.exe /c start http://localhost:8000/index-test.html &amp;&amp; npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('python -m http.server 8000 & sleep 2 && cmd.exe /c start http://localhost:8000/index-test.html && npm run dev')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+            
+            <div class="command-item">
+                <strong>Native Windows (if running from Windows PowerShell):</strong>
+                <code onclick="copyToClipboard(this.textContent)">Start-Process python -ArgumentList '-m','http.server','8000'; Start-Sleep -Seconds 2; Start-Process 'http://localhost:8000/index-test.html'; npm run dev</code>
+                <button class="copy-btn" onclick="copyToClipboard('Start-Process python -ArgumentList \\\'-m\\\',\\\'http.server\\\',\\\'8000\\\'; Start-Sleep -Seconds 2; Start-Process \\\'http://localhost:8000/index-test.html\\\'; npm run dev')" style="margin-top: 5px;">📋 Copy</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Server Running:</strong> http://localhost:8000</p>
+            <p><strong>React Dev Server:</strong> http://localhost:3000 (requires <code>npm run dev</code>)</p>
+            <p><strong>Environment:</strong> WSL (Windows Subsystem for Linux) on Windows 11</p>
+            <p><strong>Phase 1 Status:</strong> ✅ Complete | All 49 tests passing</p>
+            <p><small><strong>Tip:</strong> Use <code>cmd.exe /c start</code> or <code>wslview</code> to open URLs in Windows browser from WSL</small></p>
+        </div>
+    </div>
+    
+    <script>
+        // Check React app status
+        async function checkReactStatus() {
+            const statusEl = document.getElementById('react-status');
+            statusEl.className = 'status unknown';
+            statusEl.textContent = 'Checking...';
+            
+            try {
+                const response = await fetch('http://localhost:3000', { method: 'HEAD', mode: 'no-cors' });
+                statusEl.className = 'status running';
+                statusEl.textContent = 'Status: Running on port 3000';
+            } catch (error) {
+                statusEl.className = 'status stopped';
+                statusEl.textContent = 'Status: Not Running (Start with: npm run dev)';
+            }
+        }
+        
+        // Check HTML app status
+        async function checkHtmlStatus() {
+            const statusEl = document.getElementById('html-status');
+            statusEl.className = 'status unknown';
+            statusEl.textContent = 'Checking...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/v2/index.html');
+                if (response.ok) {
+                    statusEl.className = 'status running';
+                    statusEl.textContent = 'Status: Running on port 8000';
+                } else {
+                    statusEl.className = 'status stopped';
+                    statusEl.textContent = 'Status: File Not Found';
+                }
+            } catch (error) {
+                statusEl.className = 'status stopped';
+                statusEl.textContent = 'Status: Error Loading';
+            }
+        }
+        
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show visual feedback
+                const buttons = document.querySelectorAll('.copy-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.includes(text)) {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✅ Copied!';
+                        btn.classList.add('copy-success');
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copy-success');
+                        }, 2000);
+                    }
+                });
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard. Please copy manually.');
+            });
+        }
+        
+        // Start React server (prompts user with command)
+        function startReactServer() {
+            const command = 'npm run dev && sleep 3 && cmd.exe /c start http://localhost:3000';
+            if (confirm('Start React dev server (WSL)?\n\nCommand: ' + command + '\n\nCopy this command and run it in your WSL terminal.')) {
+                copyToClipboard(command);
+                alert('Command copied to clipboard! Run it in your WSL terminal.');
+            }
+        }
+        
+        // Launch HTML app
+        function launchHtmlApp() {
+            window.open('http://localhost:8000/v2/index.html', '_blank');
+        }
+        
+        // Launch Schema Visualizer
+        function launchSchemaVisualizer() {
+            window.open('http://localhost:8000/agents/test-schemas.html', '_blank');
+        }
+        
+        // Auto-check status on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                checkHtmlStatus();
+                checkReactStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

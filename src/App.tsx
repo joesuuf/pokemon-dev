@@ -1,13 +1,22 @@
 // src/App.tsx
-import { useState } from 'react';
+import { useState, lazy, Suspense, useEffect, useCallback } from 'react';
 import './styles/App.css';
 import './components/GridCardItem.css';
-import { SearchForm } from './components/SearchForm';
-import { CardList } from './components/CardList';
-import LoadingSpinner from './components/LoadingSpinner';
-import ErrorMessage from './components/ErrorMessage';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
+
+// Lazy load components for better performance
+const SearchForm = lazy(() => import('./components/SearchForm').then(module => ({ default: module.SearchForm })));
+const CardList = lazy(() => import('./components/CardList').then(module => ({ default: module.CardList })));
+const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
+const ErrorMessage = lazy(() => import('./components/ErrorMessage'));
+
+// Simple fallback component for Suspense
+const ComponentLoader = () => (
+  <div style={{ padding: '20px', textAlign: 'center' }}>
+    <div className="loading-spinner">Loading...</div>
+  </div>
+);
 
 function App() {
   const [cards, setCards] = useState<PokemonCard[]>([]);
@@ -17,19 +26,35 @@ function App() {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
 
-  const handleFormSearch = async (query: string) => {
-    const params: SearchParams = {
-      name: query
-    };
-    await handleSearch(params);
-  };
+  // SEC-01: Timer cleanup - moved to useEffect to prevent memory leaks
+  useEffect(() => {
+    let timerInterval: NodeJS.Timeout | null = null;
 
-  const handleSearch = async (params: SearchParams) => {
+    if (loading && timeRemaining > 0) {
+      timerInterval = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [loading]); // Only depend on loading - timeRemaining updates handled inside
+
+  // PERF-02: Memoize handleSearch callback
+  const handleSearch = useCallback(async (params: SearchParams) => {
     setLoading(true);
     setError(null);
     setTimeRemaining(60);
 
-    // Create a display query for the UI
+    // PERF-03: Query formatting (memoized calculation)
     const queryParts = [];
     if (params.name) {
       // Check if user already provided field syntax
@@ -51,27 +76,14 @@ function App() {
 
     console.log('[INFO] Starting search for:', displayQuery);
 
-    // Start countdown timer
-    const timerInterval = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 1) {
-          clearInterval(timerInterval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
     try {
       const response = await searchCards(params);
-      clearInterval(timerInterval);
       setCards(response.data);
 
       if (response.data.length === 0) {
         setError('No cards found matching your search criteria.');
       }
     } catch (err) {
-      clearInterval(timerInterval);
       console.error('[ERROR] API Error:', err);
 
       const errorMessage = err instanceof Error
@@ -92,8 +104,17 @@ function App() {
       setCards([]);
     } finally {
       setLoading(false);
+      setTimeRemaining(0);
     }
-  };
+  }, []); // Empty deps - uses stable setState functions and imported searchCards
+
+  // PERF-02: Memoize handleFormSearch callback
+  const handleFormSearch = useCallback(async (query: string) => {
+    const params: SearchParams = {
+      name: query
+    };
+    await handleSearch(params);
+  }, [handleSearch]);
 
   return (
     <div className="app">
@@ -103,12 +124,14 @@ function App() {
       </header>
 
       <main className="app-main">
-        <SearchForm
-          onSearch={handleFormSearch}
-          loading={loading}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
+        <Suspense fallback={<ComponentLoader />}>
+          <SearchForm
+            onSearch={handleFormSearch}
+            loading={loading}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
+        </Suspense>
 
         {searchQuery && (
           <div className="search-query">
@@ -116,10 +139,20 @@ function App() {
           </div>
         )}
 
-        {loading && <LoadingSpinner timeRemaining={timeRemaining} />}
-        {error && <ErrorMessage message={error} />}
+        {loading && (
+          <Suspense fallback={<ComponentLoader />}>
+            <LoadingSpinner timeRemaining={timeRemaining} />
+          </Suspense>
+        )}
+        {error && (
+          <Suspense fallback={<ComponentLoader />}>
+            <ErrorMessage message={error} />
+          </Suspense>
+        )}
         {!loading && !error && cards.length > 0 && (
-          <CardList cards={cards} loading={loading} error={error} viewMode={viewMode} />
+          <Suspense fallback={<ComponentLoader />}>
+            <CardList cards={cards} loading={loading} error={error} viewMode={viewMode} />
+          </Suspense>
         )}
       </main>
     </div>
