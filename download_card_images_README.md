@@ -9,6 +9,9 @@ The `download_card_images.py` script processes the Pokemon card masterlist, down
 - Downloads high-resolution card images from Pokemon TCG API
 - Tracks download status: `downloaded`, `missing`, `needed`, or `error`
 - Concurrent downloads for faster processing
+- **Randomized card order** - processes cards in random order to avoid sequential scraping patterns
+- **Randomized delays** - adds random delays (0.5-2.0 seconds) between requests
+- **Randomized timeouts** - uses random timeouts (1.0x-2.5x base timeout) per request
 - Resume capability (can verify existing downloads)
 - Updates masterlist JSON with image status flags
 - Creates backups before modifying masterlist

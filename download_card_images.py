@@ -28,6 +28,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 import hashlib
 import time
+import random
 
 # Download status types
 DownloadStatus = Literal['downloaded', 'missing', 'needed', 'error']
@@ -38,6 +39,9 @@ DEFAULT_OUTPUT_DIR = 'public/images/cards'
 DEFAULT_CONCURRENT_DOWNLOADS = 5
 MAX_RETRIES = 3
 RETRY_DELAY = 2  # seconds
+BASE_TIMEOUT = 30  # seconds - base timeout for requests
+MIN_DELAY = 0.5  # minimum delay between requests (seconds)
+MAX_DELAY = 2.0  # maximum delay between requests (seconds)
 
 
 class ImageDownloader:
@@ -140,8 +144,20 @@ class ImageDownloader:
             return True
         
         try:
+            # Add randomized delay before download to avoid robotic behavior
+            # Delay between MIN_DELAY and MAX_DELAY seconds, in 0.1 increments
+            # Note: With concurrent downloads, delays overlap between threads,
+            # but each request still has its own randomized timing
+            delay = round(random.uniform(MIN_DELAY, MAX_DELAY), 1)
+            time.sleep(delay)
+            
             # Download image
             print(f"  [DOWNLOAD] {card_id} -> {image_path.name}")
+            
+            # Randomize timeout: 1.0x to 2.5x BASE_TIMEOUT, in 0.1 second increments
+            # This varies per request to avoid robotic patterns
+            timeout_multiplier = round(random.uniform(1.0, 2.5), 1)
+            randomized_timeout = round(BASE_TIMEOUT * timeout_multiplier, 1)
             
             # Create request with headers to avoid blocking
             req = urllib.request.Request(
@@ -151,7 +167,7 @@ class ImageDownloader:
                 }
             )
             
-            with urllib.request.urlopen(req, timeout=30) as response:
+            with urllib.request.urlopen(req, timeout=randomized_timeout) as response:
                 image_data = response.read()
                 
                 # Verify we got image data
@@ -229,7 +245,17 @@ class ImageDownloader:
         print(f"\nProcessing {len(cards)} cards...")
         print(f"Download mode: {'VERIFY ONLY' if verify_only else ('DOWNLOAD' if download else 'CHECK STATUS')}")
         print(f"Output directory: {self.output_dir}")
-        print(f"Concurrent downloads: {self.concurrent_downloads}\n")
+        print(f"Concurrent downloads: {self.concurrent_downloads}")
+        
+        # Randomize card order to avoid scraping in sequential order
+        # This prevents robotic patterns when downloading cards
+        if download and not verify_only:
+            print("Randomizing card order for non-sequential scraping...")
+            cards = cards.copy()  # Don't modify original list
+            random.shuffle(cards)
+            print(f"Cards randomized - processing in random order\n")
+        else:
+            print()
         
         if verify_only:
             download = False

@@ -103,6 +103,17 @@ public/
 - First run downloads all images (may take time)
 - Subsequent runs only download missing images
 
+## Anti-Robotic Features
+
+The script includes several features to avoid robotic scraping patterns:
+
+- **Randomized card order**: Cards are shuffled before processing, so they're not downloaded sequentially
+- **Randomized delays**: Each download waits a random amount (0.5-2.0 seconds) before starting
+- **Randomized timeouts**: Request timeouts vary between 30-75 seconds (1.0x-2.5x base timeout)
+- All randomization uses 0.1 second increments for natural variation
+
+This helps make the scraping pattern look more human-like and reduces the risk of rate limiting.
+
 ## Integration Notes
 
 The masterlist service now includes `getCardImageUrl()` which:
