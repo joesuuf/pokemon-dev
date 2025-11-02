@@ -651,7 +651,7 @@ class DeadCodeDetector:
         if not self.dead_code_config.get("enabled", False):
             return []
 
-        print("\n🔍 Detecting unused and outdated code...")
+        print("\n?? Detecting unused and outdated code...")
 
         self.all_files = scanned_files
         unused_files = []
@@ -665,7 +665,7 @@ class DeadCodeDetector:
             if unused_file:
                 unused_files.append(unused_file)
 
-        print(f"📋 Found {len(unused_files)} potentially unused files")
+        print(f"?? Found {len(unused_files)} potentially unused files")
 
         return unused_files
 
@@ -838,15 +838,15 @@ class DeadCodeDetector:
             new_path = file_path.parent / new_name
 
             if new_path.exists():
-                print(f"   ⚠️  Cannot rename {file_path.name}: Target already exists")
+                print(f"   ??  Cannot rename {file_path.name}: Target already exists")
                 return False
 
             file_path.rename(new_path)
-            print(f"   ✓ Renamed: {file_path.name} → {new_name}")
+            print(f"   ? Renamed: {file_path.name} ? {new_name}")
             return True
 
         except Exception as e:
-            print(f"   ❌ Error renaming {file_path}: {e}")
+            print(f"   ? Error renaming {file_path}: {e}")
             return False
 
 
@@ -873,7 +873,7 @@ class SecurityStandardsAgent:
         """Run complete security and standards scan"""
         start_time = datetime.now()
 
-        print("🔍 Mobile Security & Standards Agent")
+        print("?? Mobile Security & Standards Agent")
         print("=" * 60)
         print(f"Starting scan at {start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
@@ -881,7 +881,7 @@ class SecurityStandardsAgent:
         files_to_scan = self._get_files_to_scan()
         self.scan_result.files_scanned = len(files_to_scan)
 
-        print(f"📁 Scanning {len(files_to_scan)} files...\n")
+        print(f"?? Scanning {len(files_to_scan)} files...\n")
 
         # Scan each file
         for file_path in files_to_scan:
@@ -942,48 +942,48 @@ class SecurityStandardsAgent:
                 self.scan_result.standards_violations.extend(violations)
 
         except Exception as e:
-            print(f"❌ Error scanning {file_path}: {e}", file=sys.stderr)
+            print(f"? Error scanning {file_path}: {e}", file=sys.stderr)
 
     def _print_summary(self):
         """Print scan summary to console"""
         print("\n" + "=" * 60)
-        print("📊 SCAN SUMMARY")
+        print("?? SCAN SUMMARY")
         print("=" * 60)
 
-        print(f"\n⏱️  Duration: {self.scan_result.scan_duration:.2f}s")
-        print(f"📁 Files scanned: {self.scan_result.files_scanned}")
+        print(f"\n??  Duration: {self.scan_result.scan_duration:.2f}s")
+        print(f"?? Files scanned: {self.scan_result.files_scanned}")
 
         # Security issues by severity
-        print("\n🔒 SECURITY ISSUES:")
+        print("\n?? SECURITY ISSUES:")
         issue_counts = self.scan_result.get_issue_count_by_severity()
         for severity, count in issue_counts.items():
             if count > 0:
                 icon = self._get_severity_icon(severity)
                 print(f"  {icon} {severity.upper()}: {count}")
 
-        print(f"\n📋 STANDARDS VIOLATIONS: {len(self.scan_result.standards_violations)}")
+        print(f"\n?? STANDARDS VIOLATIONS: {len(self.scan_result.standards_violations)}")
 
         # Unused files
         if self.scan_result.unused_files:
-            print(f"\n🗑️  UNUSED/OUTDATED FILES: {len(self.scan_result.unused_files)}")
+            print(f"\n???  UNUSED/OUTDATED FILES: {len(self.scan_result.unused_files)}")
             high_conf = sum(1 for f in self.scan_result.unused_files if f.confidence == "high")
             if high_conf > 0:
-                print(f"  ⚠️  {high_conf} file(s) with high confidence for removal")
+                print(f"  ??  {high_conf} file(s) with high confidence for removal")
 
         # Critical issues warning
         if self.scan_result.has_critical_issues():
-            print("\n⚠️  CRITICAL ISSUES FOUND - IMMEDIATE ACTION REQUIRED!")
+            print("\n??  CRITICAL ISSUES FOUND - IMMEDIATE ACTION REQUIRED!")
 
     def _get_severity_icon(self, severity: str) -> str:
         """Get icon for severity level"""
         icons = {
-            "critical": "🔴",
-            "high": "🟠",
-            "medium": "🟡",
-            "low": "🟢",
-            "info": "ℹ️"
+            "critical": "??",
+            "high": "??",
+            "medium": "??",
+            "low": "??",
+            "info": "??"
         }
-        return icons.get(severity, "•")
+        return icons.get(severity, "?")
 
     def _generate_reports(self):
         """Generate scan reports in configured formats"""
@@ -997,25 +997,25 @@ class SecurityStandardsAgent:
             json_path = report_dir / f"security-report-{timestamp}.json"
             with open(json_path, 'w') as f:
                 json.dump(self.scan_result.to_dict(), f, indent=2)
-            print(f"\n📄 JSON report: {json_path}")
+            print(f"\n?? JSON report: {json_path}")
 
         # Markdown report
         if "markdown" in self.config.get("security", {}).get("reportFormat", []):
             md_path = report_dir / f"security-report-{timestamp}.md"
             self._generate_markdown_report(md_path)
-            print(f"📄 Markdown report: {md_path}")
+            print(f"?? Markdown report: {md_path}")
 
         # HTML report
         if "html" in self.config.get("security", {}).get("reportFormat", []):
             html_path = report_dir / f"security-report-{timestamp}.html"
             self._generate_html_report(html_path)
-            print(f"📄 HTML report: {html_path}")
+            print(f"?? HTML report: {html_path}")
 
         # Unused files report (always generate if found)
         if self.scan_result.unused_files:
             unused_path = report_dir / f"unused-files-{timestamp}.md"
             self._generate_unused_files_report(unused_path)
-            print(f"📄 Unused files report: {unused_path}")
+            print(f"?? Unused files report: {unused_path}")
 
     def _generate_markdown_report(self, output_path: Path):
         """Generate markdown report"""
@@ -1026,7 +1026,7 @@ class SecurityStandardsAgent:
             f.write(f"**Scan Duration:** {self.scan_result.scan_duration:.2f}s\n\n")
 
             # Security issues
-            f.write("## 🔒 Security Issues\n\n")
+            f.write("## ?? Security Issues\n\n")
             issue_counts = self.scan_result.get_issue_count_by_severity()
             for severity, count in issue_counts.items():
                 if count > 0:
@@ -1044,7 +1044,7 @@ class SecurityStandardsAgent:
                 f.write(f"- **Recommendation:** {issue.recommendation}\n\n")
 
             # Standards violations
-            f.write("\n## 📋 Standards Violations\n\n")
+            f.write("\n## ?? Standards Violations\n\n")
             f.write(f"**Total:** {len(self.scan_result.standards_violations)}\n\n")
 
             for violation in self.scan_result.standards_violations:
@@ -1066,7 +1066,7 @@ class SecurityStandardsAgent:
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             color: #333;
             background: #f5f5f5;
@@ -1112,7 +1112,7 @@ class SecurityStandardsAgent:
 </head>
 <body>
     <div class="container">
-        <h1>🔒 Mobile Security & Standards Report</h1>
+        <h1>?? Mobile Security & Standards Report</h1>
 
         <div class="summary">
             <div class="summary-item"><strong>Generated:</strong> {self.scan_result.timestamp}</div>
@@ -1227,7 +1227,7 @@ class SecurityStandardsAgent:
 
             # High confidence files
             if high_conf:
-                f.write("## 🔴 High Confidence (Likely Unused)\n\n")
+                f.write("## ?? High Confidence (Likely Unused)\n\n")
                 f.write("These files are highly likely to be unused based on multiple indicators.\n\n")
 
                 for unused_file in sorted(high_conf, key=lambda x: x.file_path):
@@ -1235,7 +1235,7 @@ class SecurityStandardsAgent:
 
             # Medium confidence files
             if medium_conf:
-                f.write("\n## 🟡 Medium Confidence (Review Recommended)\n\n")
+                f.write("\n## ?? Medium Confidence (Review Recommended)\n\n")
                 f.write("These files show some signs of being unused but require manual review.\n\n")
 
                 for unused_file in sorted(medium_conf, key=lambda x: x.file_path):
@@ -1243,7 +1243,7 @@ class SecurityStandardsAgent:
 
             # Low confidence files
             if low_conf:
-                f.write("\n## 🟢 Low Confidence (Manual Review)\n\n")
+                f.write("\n## ?? Low Confidence (Manual Review)\n\n")
                 f.write("These files may be unused but need careful review.\n\n")
 
                 for unused_file in sorted(low_conf, key=lambda x: x.file_path):
