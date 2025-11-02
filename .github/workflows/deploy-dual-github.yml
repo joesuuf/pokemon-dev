@@ -1,0 +1,154 @@
+name: Deploy Dual Version to GitHub Pages (git.count.la)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-dual"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app with API key
+        env:
+          VITE_POKEMON_API_KEY: ${{ secrets.POKEMON_API_KEY }}
+        run: npm run build
+
+      - name: Prepare dual deployment
+        run: |
+          echo "Creating dual deployment structure..."
+
+          # React is already in dist/
+          # Now add static site to dist/v2/
+          mkdir -p dist/v2
+
+          # Copy static site files
+          cp static-site/index.html dist/v2/
+          cp -r static-site/scripts dist/v2/
+          cp -r static-site/styles dist/v2/
+
+          # Copy assets if they exist
+          if [ -d "static-site/assets" ]; then
+            cp -r static-site/assets dist/v2/
+          fi
+
+          # Add footer link to static version pointing back to React
+          cat >> dist/v2/index.html << 'FOOTER'
+
+          <style>
+          .version-footer {
+              position: fixed;
+              bottom: 15px;
+              right: 15px;
+              background: rgba(204, 0, 0, 0.9);
+              color: white;
+              padding: 10px 20px;
+              border-radius: 4px;
+              text-decoration: none;
+              font-size: 14px;
+              font-weight: 600;
+              z-index: 9999;
+              transition: all 0.3s ease;
+              border: 2px solid rgba(255, 255, 255, 0.3);
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+          }
+          .version-footer:hover {
+              background: rgba(204, 0, 0, 1);
+              border-color: rgba(255, 255, 255, 0.6);
+              transform: translateY(-2px);
+              box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+          }
+          </style>
+          <a href="/" class="version-footer" title="Switch to React TypeScript Version">← React Version</a>
+          </body>
+          </html>
+          FOOTER
+
+          # Fix the duplicate </body></html> tags
+          # Remove the original closing tags and keep only the ones we added
+          sed -i '$ d' dist/v2/index.html  # Remove last line
+          sed -i '$ d' dist/v2/index.html  # Remove second to last line
+
+          # Create CNAME for custom domain
+          echo "git.count.la" > dist/CNAME
+
+          # Create .nojekyll to disable Jekyll processing
+          touch dist/.nojekyll
+
+          echo "Deployment structure ready!"
+          echo "Contents of dist/:"
+          ls -la dist/
+          echo "Contents of dist/v2/:"
+          ls -la dist/v2/
+
+      - name: Create deployment README
+        run: |
+          cat > dist/DEPLOY_INFO.txt << 'EOF'
+          Pokemon TCG Search - Dual Version Deployment
+          ============================================
+
+          Deployed: $(date)
+          Domain: git.count.la
+
+          Structure:
+          - / (root)        - React TypeScript version
+          - /v2/            - Static HTML/CSS/JS version
+
+          Navigation:
+          - React has footer link "Static v2 →" pointing to /v2/
+          - Static has footer link "← React Version" pointing to /
+
+          Deployment: GitHub Pages
+          Platform: Node.js $(node --version)
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Deployment summary
+        run: |
+          echo "## Deployment Complete! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**React Version:** https://git.count.la/" >> $GITHUB_STEP_SUMMARY
+          echo "**Static Version:** https://git.count.la/v2/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Configure DNS in Cloudflare" >> $GITHUB_STEP_SUMMARY
+          echo "2. Add CNAME record: git.count.la → joesuuf.github.io" >> $GITHUB_STEP_SUMMARY
+          echo "3. Set to DNS only (gray cloud)" >> $GITHUB_STEP_SUMMARY
+          echo "4. Wait for DNS propagation (5-30 min)" >> $GITHUB_STEP_SUMMARY
