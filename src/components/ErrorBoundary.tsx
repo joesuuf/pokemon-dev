@@ -5,7 +5,7 @@
  * preventing the entire application from crashing.
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { logger } from '../utils/logger';
 import { isWebviewEnvironment } from '../utils/serviceWorkerHandler';
 
@@ -65,8 +65,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Log error, but suppress service worker errors in webview environments
     if (isServiceWorkerError && isWebviewEnvironment()) {
       logger.warn(
-        'Service worker error caught by error boundary (suppressed in webview)',
-        { url: window.location.href }
+        'Service worker error caught by error boundary (suppressed in webview)'
       );
       // Reset error state to prevent error UI from showing
       this.setState({ hasError: false, error: null, errorInfo: null });

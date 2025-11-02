@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  // Base path for GitHub Pages - empty string means root deployment
+  base: '/',
   server: {
     port: 8888,
     strictPort: false,

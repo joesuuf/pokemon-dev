@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { uploadImage, processOCR, matchCard, type OCRMatchResponse } from '../services/ocrService';
-import type { PokemonCard } from '../types/pokemon';
 
 interface OCRProcessingProps {
   imageFile: File;
