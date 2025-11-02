@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { PokemonCard } from '../types/pokemon';
 import { CardDisplay } from './CardDisplay';
 
@@ -6,15 +6,25 @@ interface GridCardItemProps {
   card: PokemonCard;
 }
 
-export const GridCardItem: React.FC<GridCardItemProps> = ({ card }) => {
+// PERF-01: Memoize GridCardItem component to prevent unnecessary re-renders
+export const GridCardItem = React.memo<GridCardItemProps>(({ card }) => {
   const [showDetails, setShowDetails] = useState(false);
+
+  // PERF-02: Memoize callback handlers
+  const handleShowDetails = useCallback(() => {
+    setShowDetails(true);
+  }, []);
+
+  const handleHideDetails = useCallback(() => {
+    setShowDetails(false);
+  }, []);
 
   if (showDetails) {
     return (
       <div className="card-grid-item-expanded">
         <button
           className="card-close-btn"
-          onClick={() => setShowDetails(false)}
+          onClick={handleHideDetails}
           title="Close details"
         >
           ✕
@@ -25,7 +35,7 @@ export const GridCardItem: React.FC<GridCardItemProps> = ({ card }) => {
   }
 
   return (
-    <div className="card-grid-item" onClick={() => setShowDetails(true)}>
+    <div className="card-grid-item" onClick={handleShowDetails}>
       <div className="card-grid-image">
         <img
           src={card.images.small}
@@ -47,4 +57,4 @@ export const GridCardItem: React.FC<GridCardItemProps> = ({ card }) => {
       </div>
     </div>
   );
-};
+});

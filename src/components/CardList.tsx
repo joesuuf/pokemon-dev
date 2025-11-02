@@ -10,7 +10,8 @@ interface CardListProps {
   viewMode: 'card-view' | 'detailed-view';
 }
 
-export const CardList: React.FC<CardListProps> = ({ cards, loading, error, viewMode }) => {
+// PERF-01: Memoize CardList component to prevent unnecessary re-renders
+export const CardList = React.memo<CardListProps>(({ cards, loading, error, viewMode }) => {
   if (loading) {
     return (
       <div className="loading">
@@ -56,4 +57,4 @@ export const CardList: React.FC<CardListProps> = ({ cards, loading, error, viewM
       ))}
     </div>
   );
-};
+});
