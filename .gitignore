@@ -99,3 +99,7 @@ storybook-static
 # Temporary folders
 tmp/
 temp/
+
+# Pokemon card images (uncomment if you don't want to commit downloaded images)
+# public/images/cards/
+# data/masterlist.json.backup

@@ -160,6 +160,11 @@ export interface PokemonCard {
   legalities?: Legalities;
   regulationMark?: string;
   images: CardImage;
+  imageStatus?: {
+    large?: 'downloaded' | 'missing' | 'needed' | 'error';
+    small?: 'downloaded' | 'missing' | 'needed' | 'error';
+    updatedAt?: string;
+  };
   tcgplayer?: TCGPlayer;
   cardmarket?: CardMarket;
 }

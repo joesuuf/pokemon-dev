@@ -201,3 +201,23 @@ export async function getRandomCards(count: number = 20): Promise<PokemonCard[]>
   const shuffled = [...masterlist].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
+
+/**
+ * Get the image URL for a card, preferring local images if available
+ * @param card The Pokemon card
+ * @param size 'small' or 'large' - defaults to 'large'
+ * @returns URL to the image (local if downloaded, remote otherwise)
+ */
+export function getCardImageUrl(card: PokemonCard, size: 'small' | 'large' = 'large'): string {
+  // Check if image is downloaded locally
+  const imageStatus = card.imageStatus?.[size];
+  
+  if (imageStatus === 'downloaded') {
+    // Return local image path
+    const cardId = card.id.replace('/', '_').replace('\\', '_');
+    return `/images/cards/${cardId}.jpg`;
+  }
+  
+  // Fall back to remote URL
+  return card.images[size];
+}
