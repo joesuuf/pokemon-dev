@@ -1,17 +1,41 @@
 # Cloudflare Stream Video Analysis
 
+**IMPORTANT**: This document contains technical metadata extracted from video manifests. Visual content analysis (colors, animations, UI elements) requires direct video viewing capabilities which are not available. This file can be updated with visual details when video content is reviewed.
+
 ## Video Information
 - **Video ID**: `8b2c797f471c0126be3dad81cd59d609`
 - **HLS Manifest**: https://customer-n4l5hckcjle5zdhk.cloudflarestream.com/8b2c797f471c0126be3dad81cd59d609/manifest/video.m3u8
 - **DASH Manifest**: https://customer-n4l5hckcjle5zdhk.cloudflarestream.com/8b2c797f471c0126be3dad81cd59d609/manifest/video.mpd
-- **Date Documented**: [Date to be filled]
+- **Date Documented**: 2025-01-XX
+
+## Technical Metadata (From Manifest Files)
+
+### Overall Appearance
+- **Video Duration**: 43.2 seconds (`PT43.2S` from DASH manifest)
+- **Aspect Ratio**: ~9:19.5 (Portrait/Vertical orientation)
+- **Primary Resolution**: 1080x2340 pixels (portrait mode - likely mobile UI)
+- **Frame Rate**: 90 fps (very high frame rate for smooth animations)
+- **Audio**: Present, stereo (2 channels), 48kHz sample rate
+
+### Available Resolutions
+- 1080x2340 (highest quality)
+- 720x1560
+- 480x1040
+- 360x780
+- 240x520 (lowest quality)
+
+### Codec Information
+- **Video Codec**: H.264 (AVC)
+- **Audio Codec**: AAC (mp4a.40.2)
+
+**Note**: The portrait orientation (1080x2340) strongly suggests this is a mobile UI/UX demonstration video showing an app interface or mobile web application.
 
 ## Visual Description
 
 ### Overall Appearance
-- **Video Duration**: [Duration]
-- **Aspect Ratio**: [e.g., 16:9, 4:3, etc.]
-- **Resolution**: [If visible/applicable]
+- **Video Duration**: 43.2 seconds
+- **Aspect Ratio**: Portrait/Vertical (~9:19.5)
+- **Resolution**: 1080x2340 (native), multiple adaptive streams available
 
 ### Color Palette
 - **Primary Colors**: 
