@@ -26,6 +26,7 @@
     "start:all+6666": "concurrently \"npm run dev\" \"npm run dev:6666\" \"npm run v2:serve\" \"npm run carousel:serve\""
   },
   "dependencies": {
+    "@cloudflare/stream-react": "^1.9.3",
     "@types/axios": "^0.9.36",
     "axios": "^1.12.2",
     "react": "^19.2.0",

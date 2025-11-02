@@ -10,6 +10,7 @@ const SearchForm = lazy(() => import('./components/SearchForm').then(module => (
 const CardList = lazy(() => import('./components/CardList').then(module => ({ default: module.CardList })));
 const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
 const ErrorMessage = lazy(() => import('./components/ErrorMessage'));
+const CloudflareStreamVideo = lazy(() => import('./components/CloudflareStreamVideo').then(module => ({ default: module.CloudflareStreamVideo })));
 
 // Simple fallback component for Suspense
 const ComponentLoader = () => (
@@ -112,6 +113,12 @@ function App() {
       </header>
 
       <main className="app-main">
+        <div className="video-section" style={{ marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem auto' }}>
+          <Suspense fallback={<ComponentLoader />}>
+            <CloudflareStreamVideo videoId="8b2c797f471c0126be3dad81cd59d609" />
+          </Suspense>
+        </div>
+
         <Suspense fallback={<ComponentLoader />}>
           <SearchForm
             onSearch={handleFormSearch}

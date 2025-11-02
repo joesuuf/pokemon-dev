@@ -880,3 +880,31 @@ body {
     aspect-ratio: 2.5 / 3.5;
   }
 }
+
+/* Cloudflare Stream Video Styles */
+.video-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.cloudflare-stream-video {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cloudflare-stream-video iframe,
+.cloudflare-stream-video video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .video-section {
+    padding: 15px;
+  }
+}
