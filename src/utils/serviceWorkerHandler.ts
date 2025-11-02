@@ -59,13 +59,11 @@ export function handleServiceWorkerErrors(): void {
       // Log the error for debugging but don't crash the app
       if (isWebview) {
         logger.warn(
-          'Service worker registration failed in webview environment (this is expected and harmless)',
-          { url: window.location.href }
+          `Service worker registration failed in webview environment (this is expected and harmless) - ${window.location.href}`
         );
       } else {
         logger.warn(
-          'Service worker registration failed (non-critical)',
-          { url: window.location.href }
+          `Service worker registration failed (non-critical) - ${window.location.href}`
         );
       }
       
@@ -99,13 +97,11 @@ export function handleServiceWorkerErrors(): void {
       
       if (isWebview) {
         logger.warn(
-          'Suppressed service worker registration error in webview',
-          { url: window.location.href }
+          `Suppressed service worker registration error in webview - ${window.location.href}`
         );
       } else {
         logger.warn(
-          'Suppressed service worker registration error',
-          { url: window.location.href }
+          `Suppressed service worker registration error - ${window.location.href}`
         );
       }
       
@@ -133,13 +129,11 @@ export function handleServiceWorkerErrors(): void {
       
       if (isWebview) {
         logger.warn(
-          'Suppressed service worker error event in webview',
-          { url: window.location.href }
+          `Suppressed service worker error event in webview - ${window.location.href}`
         );
       } else {
         logger.warn(
-          'Suppressed service worker error event',
-          { url: window.location.href }
+          `Suppressed service worker error event - ${window.location.href}`
         );
       }
       
@@ -179,9 +173,7 @@ export async function safeRegisterServiceWorker(
     
     // Don't log errors in webview environments as they're expected
     if (!isWebviewEnvironment()) {
-      logger.warn(`Service worker registration failed: ${errorMessage}`, {
-        url: swPath
-      });
+      logger.warn(`Service worker registration failed: ${errorMessage} - ${swPath}`);
     }
     
     return null;

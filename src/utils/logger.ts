@@ -122,7 +122,7 @@ class Logger {
     this.log('debug', message, options)
   }
 
-  warn(message: string, options?: { duration?: number; size?: number }) {
+  warn(message: string, options?: { duration?: number; size?: number; url?: string }) {
     this.log('warn', message, options)
   }
 
