@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import ocrRoutes from './routes/ocr.js';
+import serverRoutes from './routes/servers.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Routes
 app.use('/api/ocr', ocrRoutes);
+app.use('/api', serverRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
