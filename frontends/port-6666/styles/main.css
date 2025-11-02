@@ -68,14 +68,22 @@ html {
     scroll-behavior: smooth;
 }
 
-body {
-    font-family: var(--font-primary);
+/* Enforce Roboto font globally */
+html,
+body,
+#root {
+    font-family: 'Roboto', sans-serif !important;
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--bg-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all elements inherit Roboto */
+body * {
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Accessibility - Visually Hidden */
