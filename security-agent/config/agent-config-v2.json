@@ -1,0 +1,189 @@
+{
+  "agent": {
+    "name": "Mobile Security & Standards Agent v2",
+    "version": "2.0.0",
+    "description": "Comprehensive security scanning agent with 10 advanced capabilities",
+    "enabled": true
+  },
+  "security": {
+    "mobileAttacks": {
+      "enabled": true,
+      "checks": [
+        "xss",
+        "injection",
+        "csrf",
+        "clickjacking",
+        "openRedirect",
+        "insecureStorage",
+        "weakCrypto",
+        "mixedContent",
+        "csp",
+        "cors",
+        "sensitiveDataExposure",
+        "mobileSpecific"
+      ]
+    },
+    "severity": {
+      "critical": ["xss", "injection", "csrf", "sensitiveDataExposure"],
+      "high": ["clickjacking", "openRedirect", "weakCrypto", "cors"],
+      "medium": ["insecureStorage", "mixedContent", "csp"],
+      "low": ["mobileSpecific"]
+    },
+    "autoFix": false,
+    "reportFormat": ["json", "html", "markdown"]
+  },
+  "v2": {
+    "dynamicSecurity": {
+      "enabled": true,
+      "checks": ["codeExecution", "urlManipulation", "runtimePatterns"]
+    },
+    "dependencyAnalysis": {
+      "enabled": true,
+      "checkNpm": true,
+      "checkPython": true,
+      "checkVulnerabilities": true
+    },
+    "compliance": {
+      "enabled": true,
+      "owaspTop10": true,
+      "generateReports": true
+    },
+    "remediation": {
+      "enabled": true,
+      "generateSuggestions": true,
+      "autoFixable": true
+    },
+    "performanceSecurity": {
+      "enabled": true,
+      "checkDoS": true,
+      "checkResourceExhaustion": true,
+      "checkRateLimiting": true
+    },
+    "securityHeaders": {
+      "enabled": true,
+      "checkAll": true
+    },
+    "codeQuality": {
+      "enabled": true,
+      "checkComplexity": true,
+      "checkNesting": true
+    },
+    "threatModeling": {
+      "enabled": true,
+      "strideAnalysis": true
+    },
+    "mobileAdvanced": {
+      "enabled": true,
+      "checkATS": true,
+      "checkCertificatePinning": true
+    },
+    "monitoring": {
+      "enabled": true,
+      "generateWorkflows": true
+    }
+  },
+  "frameworks": {
+    "typescript": {
+      "enabled": true,
+      "version": "5.x",
+      "strict": true,
+      "standards": {
+        "react": {
+          "version": "19.x",
+          "hooks": true,
+          "functionalComponents": true,
+          "propTypes": false,
+          "typescript": true
+        },
+        "naming": {
+          "components": "PascalCase",
+          "files": "PascalCase",
+          "hooks": "camelCase",
+          "constants": "UPPER_SNAKE_CASE"
+        },
+        "security": {
+          "dangerouslySetInnerHTML": "warn",
+          "externalLinks": "requireNoopener",
+          "apiKeys": "requireEnv"
+        }
+      }
+    },
+    "python": {
+      "enabled": true,
+      "version": "3.x",
+      "standards": {
+        "pep8": true,
+        "typeHints": true,
+        "docstrings": "google",
+        "security": {
+          "sqlInjection": true,
+          "commandInjection": true,
+          "pathTraversal": true
+        }
+      }
+    },
+    "htmlCss": {
+      "enabled": true,
+      "version": "v2",
+      "standards": {
+        "pure": true,
+        "noFrameworks": true,
+        "accessibility": true,
+        "responsive": true,
+        "semanticHtml": true
+      }
+    }
+  },
+  "scanning": {
+    "paths": {
+      "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.js",
+        "src/**/*.jsx",
+        "api/**/*.ts",
+        "api/**/*.js",
+        "**/*.py",
+        "v2/**/*.html",
+        "v2/**/*.css",
+        "index.html",
+        "carousel/**/*.html"
+      ],
+      "exclude": [
+        "node_modules/**",
+        "dist/**",
+        "build/**",
+        "coverage/**",
+        ".git/**",
+        "security-agent/v1/**"
+      ]
+    },
+    "parallel": true,
+    "maxConcurrent": 4
+  },
+  "deadCode": {
+    "enabled": true,
+    "description": "Detect unused and outdated code files",
+    "detection": {
+      "checkReferences": true,
+      "checkFileAge": false,
+      "checkFileSize": true,
+      "checkNamingPatterns": true,
+      "checkDuplicates": true,
+      "checkFileExtensions": true
+    },
+    "patterns": {
+      "deprecated": ["old", "backup", "deprecated", "temp", "test2", "copy"],
+      "backupExtensions": [".old", ".bak", ".backup", ".tmp"],
+      "emptyFileThreshold": 100
+    },
+    "autoRename": false,
+    "generateReport": true
+  },
+  "reporting": {
+    "outputDir": "security-agent/reports",
+    "console": true,
+    "file": true,
+    "exitOnCritical": false
+  }
+}

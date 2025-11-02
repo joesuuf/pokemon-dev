@@ -1,0 +1,23 @@
+---
+name: comprehensive_audit
+description: Complete security audit with all v2 enhancements including dynamic testing, compliance, remediation, and monitoring
+skills:
+  - scan_xss
+  - validate_csrf
+  - check_cors
+  - validate_csp
+  - dynamic_security_test
+  - analyze_dependencies
+  - check_compliance
+  - performance_security_check
+  - check_security_headers
+  - analyze_code_quality
+  - threat_modeling_stride
+  - mobile_advanced_tests
+  - generate_remediation
+  - setup_monitoring
+config:
+  generate_reports: true
+  include_remediation: true
+  setup_monitoring: true
+---

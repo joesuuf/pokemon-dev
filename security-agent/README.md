@@ -1,552 +1,211 @@
-# Mobile Security & Standards Agent
+---
+name: Security Agent v2
+description: Comprehensive security scanning agent with 10 advanced capabilities - Dynamic testing, dependency analysis, OWASP compliance, automated remediation, performance security, threat modeling, and more
+version: 2.0.0
+model: claude-sonnet-4
+temperature: 0.3
+max_tokens: 8192
+tools:
+  - read
+  - write
+  - bash
+skills_dir: ./skills/security
+workflows_dir: ./workflows/security
+enabled_skills:
+  # Core security scanning
+  - scan_xss
+  - validate_csrf
+  - check_cors
+  - validate_csp
+  - check_typescript_standards
+  - check_python_standards
+  - detect_dead_code
+  # Enhanced capabilities (v2)
+  - dynamic_security_test
+  - analyze_dependencies
+  - check_compliance
+  - generate_remediation
+  - performance_security_check
+  - check_security_headers
+  - analyze_code_quality
+  - threat_modeling_stride
+  - mobile_advanced_tests
+  - setup_monitoring
+enabled_workflows:
+  - full_security_scan_v2
+  - comprehensive_audit
+  - owasp_compliance_check
+  - dependency_audit
+  - performance_security_audit
+  - threat_modeling_analysis
+categories:
+  - Security
+  - Standards
+  - Code Quality
+  - Compliance
+  - Threat Modeling
+  - Performance
+---
 
-## Overview
+# Security Agent v2.0
 
-The **Mobile Security & Standards Agent** is an expert system for detecting mobile browser attack vectors and ensuring framework standardization across TypeScript/React, Python 3, and pure HTML/CSS codebases.
+Comprehensive security scanning agent with advanced capabilities for mobile and web applications.
 
-## Features
+## Version 2.0 Enhancements
 
-### 🔒 Security Scanning
+### 🆕 New Capabilities
 
-#### Mobile Browser Attack Detection
-- **XSS (Cross-Site Scripting)**: Detects dangerous HTML injection points
-  - `dangerouslySetInnerHTML`, `innerHTML`, `outerHTML`
-  - `document.write`, `eval`, `Function` constructor
-  - String-based `setTimeout`/`setInterval`
+1. **Dynamic Security Testing** - Runtime pattern detection, URL manipulation analysis
+2. **Dependency Vulnerability Analysis** - npm/Python package security scanning
+3. **OWASP Top 10 Compliance** - Industry-standard compliance verification
+4. **Automated Remediation** - Code examples and auto-fix suggestions
+5. **Performance Security** - DoS vulnerability and resource exhaustion detection
+6. **HTTP Security Headers** - Comprehensive headers validation
+7. **Code Quality Metrics** - Complexity and nesting depth analysis
+8. **Advanced Threat Modeling** - STRIDE analysis framework
+9. **Mobile Advanced Tests** - ATS, certificate pinning, secure storage
+10. **Continuous Monitoring** - CI/CD integration and monitoring setup
 
-- **Injection Attacks**: Code and script injection vulnerabilities
-  - SQL injection patterns
-  - Command injection
-  - Path traversal
+## Core Capabilities
 
-- **CSRF Protection**: Verifies CSRF tokens in forms
-- **Clickjacking**: Checks for X-Frame-Options and frame-ancestors
-- **Open Redirect**: Validates redirect URLs
-- **Insecure Storage**: Detects sensitive data in localStorage/sessionStorage
-- **Weak Cryptography**: Identifies weak crypto implementations
-- **Mixed Content**: HTTP resources in HTTPS pages
-- **CSP (Content Security Policy)**: Missing or weak CSP headers
-- **CORS Misconfigurations**: Overly permissive CORS policies
-- **Sensitive Data Exposure**: Hardcoded API keys, passwords, tokens
-- **Mobile-Specific Issues**:
-  - Disabled zoom (accessibility issue)
-  - `target="_blank"` without `noopener`
-  - Touch event mishandling
+### Security Scanning
+- **Mobile browser attack detection**: XSS, CSRF, CORS, clickjacking vulnerabilities
+- **Injection vulnerability scanning**: SQL injection, command injection, path traversal
+- **Dynamic security testing**: Runtime pattern detection, code execution analysis
+- **Dependency security**: npm/Python package vulnerability scanning
+- **Performance security**: DoS detection, resource exhaustion checks
+- **Security headers**: HTTP headers validation and recommendations
 
-### 📋 Framework Standards Checking
+### Compliance & Standards
+- **OWASP Top 10 compliance**: Full compliance checking and scoring
+- **Framework standards**: TypeScript/React, Python 3 standards validation
+- **Code quality metrics**: Complexity, nesting depth, function analysis
 
-#### TypeScript/React Standards
-- **Component Naming**: PascalCase for components and files
-- **Functional Components**: Prefer functional over class components
-- **TypeScript Types**: Avoid `any` type and `@ts-ignore`
-- **PropTypes**: Use TypeScript interfaces instead of PropTypes
-- **Security**: External links with `rel="noopener noreferrer"`
-- **Hooks**: Proper React hooks usage
+### Threat Modeling
+- **STRIDE analysis**: Comprehensive threat modeling framework
+- **Attack surface mapping**: Identification of security boundaries
+- **Threat risk assessment**: Prioritized threat identification
 
-#### Python 3 Standards
-- **Version Compatibility**: Python 3 syntax enforcement
-- **Type Hints**: Function type annotations
-- **Docstrings**: Google-style documentation
-- **PEP 8**: Code style compliance
-- **Security**:
-  - SQL injection prevention
-  - Command injection prevention
-  - Path traversal protection
+### Remediation & Monitoring
+- **Automated remediation**: Code examples and fix suggestions
+- **Continuous monitoring**: CI/CD integration templates
+- **Security training**: Awareness scoring and recommendations
 
-#### HTML/CSS Standards (v2)
-- **Pure Code**: No frameworks allowed
-- **Semantic HTML**: Proper HTML5 semantics
-- **Accessibility**: WCAG 2.1 compliance
-- **Responsive**: Mobile-first design
-- **Security**: CSP headers, input validation
+## Workflows
 
-## Installation
+### Full Security Scan v2
+Complete security audit including all v2 enhancements:
+1. Basic security scanning (XSS, CSRF, CORS, CSP)
+2. Dynamic security testing
+3. Dependency vulnerability analysis
+4. OWASP Top 10 compliance check
+5. Performance security analysis
+6. Security headers validation
+7. Code quality metrics
+8. Threat modeling (STRIDE)
+9. Mobile advanced tests
+10. Generate comprehensive report
 
-### Prerequisites
-- Python 3.8 or higher
-- Node.js 16+ (for running TypeScript/React project)
+### Comprehensive Audit
+Complete security audit with remediation suggestions:
+1. Execute full security scan
+2. Generate remediation suggestions
+3. Provide code examples for fixes
+4. Create compliance report
+5. Generate monitoring configuration
 
-### Setup
+### OWASP Compliance Check
+Focus on OWASP Top 10 compliance:
+1. Map findings to OWASP categories
+2. Calculate compliance scores
+3. Generate compliance gap analysis
+4. Provide remediation roadmap
 
-```bash
-# No installation needed! Agent is standalone Python script
-cd security-agent
+### Dependency Audit
+Third-party security analysis:
+1. Scan package.json and requirements.txt
+2. Check for known vulnerabilities
+3. Validate version pinning
+4. Generate dependency report
 
-# Make executable (Unix/Linux/Mac)
-chmod +x run-agent.sh
+### Performance Security Audit
+DoS and resource exhaustion detection:
+1. Check for infinite loops
+2. Analyze unbounded recursion
+3. Verify timeout handling
+4. Check rate limiting implementation
+5. Resource exhaustion analysis
 
-# Or use Python directly
-python3 agent.py
-```
-
-## Usage
-
-### Quick Start
-
-```bash
-# From project root
-./security-agent/run-agent.sh
-
-# Or from security-agent directory
-python3 agent.py
-
-# With custom config
-python3 agent.py --config custom-config.json
-```
-
-### Command Line Options
-
-```bash
-python3 agent.py [OPTIONS]
-
-Options:
-  --config PATH         Path to configuration file (default: config/agent-config.json)
-  --output-dir PATH     Output directory for reports (default: reports/)
-  --format FORMAT       Report format: json, html, markdown, all (default: all)
-  --exit-on-critical    Exit with error code if critical issues found
-  --parallel            Enable parallel file scanning (default: true)
-  --help                Show help message
-```
-
-### Integration with npm
-
-Add to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "security:scan": "python3 security-agent/agent.py",
-    "security:report": "python3 security-agent/agent.py --format html",
-    "security:ci": "python3 security-agent/agent.py --exit-on-critical"
-  }
-}
-```
-
-Then run:
-
-```bash
-npm run security:scan
-npm run security:report
-npm run security:ci  # For CI/CD pipelines
-```
-
-### Integration with Git Hooks
-
-#### Pre-commit Hook
-
-Create `.git/hooks/pre-commit`:
-
-```bash
-#!/bin/bash
-
-echo "Running Mobile Security & Standards Agent..."
-
-python3 security-agent/agent.py --exit-on-critical
-
-if [ $? -ne 0 ]; then
-    echo "❌ Security scan failed! Fix critical issues before committing."
-    exit 1
-fi
-
-echo "✅ Security scan passed!"
-exit 0
-```
-
-Make executable:
-```bash
-chmod +x .git/hooks/pre-commit
-```
-
-#### Pre-push Hook
-
-Create `.git/hooks/pre-push`:
-
-```bash
-#!/bin/bash
-
-echo "Running comprehensive security scan..."
-
-python3 security-agent/agent.py --format all
-
-echo "📊 Review security reports in security-agent/reports/"
-```
+### Threat Modeling Analysis
+STRIDE-based threat analysis:
+1. Spoofing threat analysis
+2. Tampering threat analysis
+3. Repudiation threat analysis
+4. Information Disclosure analysis
+5. Denial of Service analysis
+6. Elevation of Privilege analysis
 
 ## Configuration
 
-The agent is configured via `config/agent-config.json`:
+See `security-agent/config/agent-config-v2.json` for full configuration options.
+
+## Usage
+
+```bash
+# Run comprehensive security scan
+python agents/python/security_agent_v2.py .
+
+# Run with specific workflow
+python agents/python/security_agent_v2.py . -w comprehensive_audit
+
+# Generate JSON report
+python agents/python/security_agent_v2.py . -o security-report-v2.json
+
+# Use via npm script
+npm run security:scan:v2
+```
+
+## Output Format
+
+Follows standardized agent output schema with enhanced v2 fields:
 
 ```json
 {
+  "schema_version": "2.0.0",
   "agent": {
-    "name": "Mobile Security & Standards Agent",
-    "version": "1.0.0",
-    "enabled": true
+    "name": "Security Agent v2",
+    "version": "2.0.0",
+    "category": "security"
   },
-  "security": {
-    "mobileAttacks": {
-      "enabled": true,
-      "checks": [
-        "xss",
-        "injection",
-        "csrf",
-        "clickjacking",
-        "openRedirect",
-        "insecureStorage",
-        "weakCrypto",
-        "mixedContent",
-        "csp",
-        "cors",
-        "sensitiveDataExposure",
-        "mobileSpecific"
-      ]
-    },
-    "severity": {
-      "critical": ["xss", "injection", "csrf", "sensitiveDataExposure"],
-      "high": ["clickjacking", "openRedirect", "weakCrypto", "cors"],
-      "medium": ["insecureStorage", "mixedContent", "csp"],
-      "low": ["mobileSpecific"]
-    }
+  "execution": {
+    "timestamp": "ISO-8601",
+    "duration_ms": 0.0,
+    "status": "success|error"
   },
-  "frameworks": {
-    "typescript": { ... },
-    "python": { ... },
-    "htmlCss": { ... }
+  "results": {
+    "security_issues": [...],
+    "dynamic_security_findings": [...],
+    "dependency_vulnerabilities": [...],
+    "compliance_scores": {...},
+    "performance_security_issues": [...],
+    "threat_modeling_results": {...},
+    "remediation_suggestions": [...]
   }
 }
 ```
 
-### Customizing Checks
+## Integration
 
-Enable/disable specific checks:
+- **Modular Framework**: Fully integrated with `modular_agent_framework.py`
+- **CI/CD**: GitHub Actions, GitLab CI, Jenkins templates included
+- **Monitoring**: Continuous monitoring setup available
+- **Reporting**: JSON, HTML, Markdown report formats
 
-```json
-{
-  "security": {
-    "mobileAttacks": {
-      "checks": [
-        "xss",          // Enable XSS detection
-        "csrf",         // Enable CSRF detection
-        "cors"          // Enable CORS checking
-        // Omit others to disable
-      ]
-    }
-  }
-}
-```
+## Requirements
 
-### Custom Severity Levels
+- Python 3.12+
+- See `security-agent/requirements.txt` for dependencies
 
-```json
-{
-  "security": {
-    "severity": {
-      "critical": ["xss", "injection"],
-      "high": ["csrf"],
-      "medium": ["cors"],
-      "low": []
-    }
-  }
-}
-```
+## Migration from v1
 
-## Reports
-
-The agent generates three types of reports:
-
-### 1. JSON Report
-Machine-readable format for CI/CD integration
-
-```json
-{
-  "timestamp": "2025-10-31T10:30:00",
-  "summary": {
-    "files_scanned": 45,
-    "security_issues": 12,
-    "standards_violations": 8,
-    "issues_by_severity": {
-      "critical": 2,
-      "high": 3,
-      "medium": 5,
-      "low": 2
-    }
-  },
-  "security_issues": [...],
-  "standards_violations": [...]
-}
-```
-
-### 2. HTML Report
-Visual, interactive report for review
-
-Features:
-- Color-coded severity levels
-- Filterable issues
-- Code snippets
-- Recommendations
-- Issue statistics
-
-### 3. Markdown Report
-Human-readable format for documentation
-
-Perfect for:
-- Pull request comments
-- Security documentation
-- Issue tracking
-- Team reviews
-
-## CI/CD Integration
-
-### GitHub Actions
-
-Create `.github/workflows/security-scan.yml`:
-
-```yaml
-name: Security Scan
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  security-scan:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Run Security Agent
-      run: |
-        python3 security-agent/agent.py --exit-on-critical
-
-    - name: Upload Security Reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: security-reports
-        path: security-agent/reports/
-```
-
-### GitLab CI
-
-Add to `.gitlab-ci.yml`:
-
-```yaml
-security_scan:
-  stage: test
-  image: python:3.10
-  script:
-    - python3 security-agent/agent.py --exit-on-critical
-  artifacts:
-    paths:
-      - security-agent/reports/
-    when: always
-  allow_failure: false
-```
-
-### Jenkins
-
-```groovy
-stage('Security Scan') {
-    steps {
-        sh 'python3 security-agent/agent.py --exit-on-critical'
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'security-agent/reports/**/*', allowEmptyArchive: true
-        }
-    }
-}
-```
-
-## Understanding Results
-
-### Severity Levels
-
-- 🔴 **CRITICAL**: Immediate security risk, must fix before deployment
-  - XSS vulnerabilities
-  - SQL/Code injection
-  - CSRF missing
-  - Hardcoded credentials
-
-- 🟠 **HIGH**: Serious security concern, fix ASAP
-  - Weak CORS policies
-  - Clickjacking risks
-  - Open redirects
-  - Weak cryptography
-
-- 🟡 **MEDIUM**: Security improvement recommended
-  - Missing CSP
-  - Insecure storage
-  - Mixed content
-
-- 🟢 **LOW**: Best practice violation
-  - Mobile UX issues
-  - Accessibility concerns
-
-### Common Issues and Fixes
-
-#### Issue: XSS via dangerouslySetInnerHTML
-```typescript
-// ❌ BAD
-<div dangerouslySetInnerHTML={{__html: userInput}} />
-
-// ✅ GOOD
-import DOMPurify from 'dompurify';
-<div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(userInput)}} />
-
-// ✅ BETTER - Avoid if possible
-<div>{userInput}</div>
-```
-
-#### Issue: Hardcoded API Key
-```typescript
-// ❌ BAD
-const API_KEY = "sk_live_abc123def456";
-
-// ✅ GOOD
-const API_KEY = import.meta.env.VITE_API_KEY;
-```
-
-#### Issue: Missing CSRF Token
-```tsx
-// ❌ BAD
-<form method="post" action="/api/update">
-  <input name="data" />
-</form>
-
-// ✅ GOOD
-<form method="post" action="/api/update">
-  <input type="hidden" name="csrf_token" value={csrfToken} />
-  <input name="data" />
-</form>
-```
-
-#### Issue: Insecure External Link
-```tsx
-// ❌ BAD
-<a href="https://example.com" target="_blank">Link</a>
-
-// ✅ GOOD
-<a href="https://example.com" target="_blank" rel="noopener noreferrer">Link</a>
-```
-
-## Best Practices
-
-### 1. Regular Scans
-- Run before every commit (pre-commit hook)
-- Run in CI/CD pipeline
-- Weekly comprehensive scans
-
-### 2. Fix Critical Issues First
-- Prioritize by severity
-- Address critical before high
-- Document medium/low for backlog
-
-### 3. Review Reports
-- Share HTML reports with team
-- Discuss patterns and trends
-- Update standards as needed
-
-### 4. Educate Team
-- Share security findings
-- Provide training on common issues
-- Create coding guidelines
-
-### 5. Continuous Improvement
-- Update agent configuration
-- Add custom rules
-- Track metrics over time
-
-## Troubleshooting
-
-### Agent Not Finding Files
-```bash
-# Check scan paths in config
-cat security-agent/config/agent-config.json | grep -A 10 "paths"
-
-# Verify files exist
-ls -la src/
-```
-
-### Permission Denied
-```bash
-# Make script executable
-chmod +x security-agent/run-agent.sh
-
-# Or run directly
-python3 security-agent/agent.py
-```
-
-### False Positives
-```json
-// Add exceptions in config
-{
-  "security": {
-    "exceptions": {
-      "files": ["src/test/*.test.ts"],
-      "patterns": ["// @security-ignore"]
-    }
-  }
-}
-```
-
-## Advanced Usage
-
-### Custom Rules
-
-Create `security-agent/custom-rules.py`:
-
-```python
-from agent import SecurityIssue, Severity
-
-class CustomSecurityScanner:
-    def check_custom_rule(self, file_path, line, line_num):
-        if 'MY_DANGEROUS_PATTERN' in line:
-            return SecurityIssue(
-                category='custom',
-                severity=Severity.CRITICAL,
-                file_path=str(file_path),
-                line_number=line_num,
-                code_snippet=line.strip(),
-                description='Custom security rule violated',
-                recommendation='Fix this custom issue',
-                cwe_id='CWE-XXX'
-            )
-```
-
-## Support
-
-For issues, questions, or feature requests:
-1. Check existing issues on GitHub
-2. Create new issue with "security-agent" label
-3. Include:
-   - Agent version
-   - Configuration used
-   - Sample report
-   - Expected vs actual behavior
-
-## Roadmap
-
-- [ ] VS Code extension
-- [ ] Real-time scanning (watch mode)
-- [ ] Auto-fix capabilities for simple issues
-- [ ] Integration with SonarQube
-- [ ] SARIF output format
-- [ ] Custom rule DSL
-- [ ] Machine learning for pattern detection
-- [ ] Performance profiling integration
-
-## License
-
-Same as parent project.
-
-## Credits
-
-Built with ❤️ for secure mobile web applications.
+v1 agents are archived in `security-agent/v1/`. v2 is backward compatible with v1 configuration but adds extensive new capabilities.

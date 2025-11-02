@@ -1,0 +1,10 @@
+---
+name: performance_security_audit
+description: Performance-based security vulnerability detection
+skills:
+  - performance_security_check
+config:
+  check_dos: true
+  check_resource_exhaustion: true
+  check_rate_limiting: true
+---

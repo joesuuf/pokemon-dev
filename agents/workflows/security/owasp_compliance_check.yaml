@@ -1,0 +1,13 @@
+---
+name: owasp_compliance_check
+description: OWASP Top 10 compliance verification and scoring
+skills:
+  - check_compliance
+  - scan_xss
+  - validate_csrf
+  - check_cors
+  - analyze_dependencies
+config:
+  focus: compliance
+  generate_compliance_report: true
+---
