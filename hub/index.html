@@ -270,7 +270,7 @@
         <div class="servers-grid">
             <!-- Main Development Server -->
             <div class="server-card main">
-                <div class="port-badge">Port 5173</div>
+                <div class="port-badge">Port 8888</div>
                 <h2>Main Application</h2>
                 <div class="server-type">Primary Development Server</div>
 
@@ -296,7 +296,7 @@
                     <span class="tech-badge">TailwindCSS 4</span>
                 </div>
 
-                <a href="http://localhost:5173" class="action-button" target="_blank">Open Main App →</a>
+                <a href="http://localhost:8888" class="action-button" target="_blank">Open Main App →</a>
             </div>
 
             <!-- Alternate Port Server -->
@@ -477,7 +477,7 @@
                         <td>OCR feature, card identification</td>
                     </tr>
                     <tr>
-                        <td><strong>5173</strong></td>
+                        <td><strong>8888</strong></td>
                         <td>Vite Dev Server</td>
                         <td>Main Development</td>
                         <td>✅ Yes (HMR)</td>
@@ -538,7 +538,7 @@
 
             <h3>Individual Server Commands</h3>
             <div class="command-block">
-                <code>npm run dev          # Start main dev server (port 5173)</code><br>
+                <code>npm run dev          # Start main dev server (port 8888)</code><br>
                 <code>npm run dev:6666     # Start alternate dev server (port 6666)</code><br>
                 <code>npm run v2           # Start v2 app (port 9999)</code><br>
                 <code>npm run carousel     # Start carousel (port 7777)</code><br>
@@ -606,28 +606,237 @@
     </div>
 
     <script>
-        // Check server status on load
+        // Detect current hostname/IP for public access
+        function getHostname() {
+            const hostname = window.location.hostname;
+            
+            // If accessed via IP or domain, use that
+            if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+                return hostname;
+            }
+            
+            // For localhost, return the hostname (will be replaced with actual IP if accessed via network)
+            // The browser will use the same hostname as the current page
+            return hostname;
+        }
+
+        // Get base URL for server access
+        function getServerUrl(port) {
+            const hostname = getHostname();
+            const protocol = window.location.protocol;
+            
+            // Use the same hostname as the current page
+            // This ensures mobile access works when dashboard is accessed via IP
+            return `${protocol}//${hostname}:${port}`;
+        }
+
+        // Server configuration
         const servers = [
-            { port: 4444, name: 'OCR Search' },
-            { port: 5173, name: 'Main Dev' },
-            { port: 6666, name: 'Alt Dev' },
-            { port: 9999, name: 'V2 App' },
-            { port: 7777, name: 'Carousel' }
+            { port: 4444, name: 'OCR Search', startScript: 'frontend:4444' },
+            { port: 8888, name: 'Main Dev', startScript: 'dev' },
+            { port: 6666, name: 'Alt Dev', startScript: 'dev:6666' },
+            { port: 9999, name: 'V2 App', startScript: 'v2:serve' },
+            { port: 7777, name: 'Carousel', startScript: 'carousel:serve' },
+            { port: 1111, name: 'Hub', startScript: 'hub' }
         ];
 
-        async function checkServerStatus() {
-            for (const server of servers) {
-                try {
-                    const response = await fetch(`http://localhost:${server.port}`, { method: 'HEAD', mode: 'no-cors' });
-                    console.log(`✅ ${server.name} (${server.port}) is running`);
-                } catch (error) {
-                    console.log(`❌ ${server.name} (${server.port}) is not accessible`);
+        // Update all links to use public URLs
+        function updateUrls() {
+            const hostname = getHostname();
+            const baseUrl = hostname ? `${window.location.protocol}//${hostname}` : window.location.origin;
+            
+            servers.forEach(server => {
+                const link = document.querySelector(`a[href*=":${server.port}"]`);
+                if (link) {
+                    const newUrl = getServerUrl(server.port);
+                    link.href = newUrl;
+                    link.setAttribute('data-port', server.port);
+                }
+            });
+
+            // Update status display
+            const statusEl = document.querySelector('.status');
+            if (statusEl && hostname) {
+                statusEl.innerHTML = `
+                    <span class="status-indicator active"></span>
+                    Accessible at: <strong>${hostname}</strong>
+                `;
+            }
+        }
+
+        // Check server status using fetch (works even with CORS)
+        async function checkServerStatus(port) {
+            return new Promise((resolve) => {
+                const url = getServerUrl(port);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => {
+                    controller.abort();
+                    resolve(false);
+                }, 2000); // 2 second timeout
+                
+                // Use fetch with no-cors mode - we can't read response but can detect if server responds
+                fetch(url, { 
+                    method: 'GET',
+                    mode: 'no-cors',
+                    signal: controller.signal,
+                    cache: 'no-cache'
+                })
+                .then(() => {
+                    clearTimeout(timeoutId);
+                    resolve(true); // Server responded (even if opaque response)
+                })
+                .catch(() => {
+                    clearTimeout(timeoutId);
+                    resolve(false); // Server not responding or network error
+                });
+            });
+        }
+
+        // Update server status indicators
+        async function updateServerStatuses() {
+            const statusPromises = servers.map(async (server) => {
+                const isRunning = await checkServerStatus(server.port);
+                return { ...server, isRunning };
+            });
+
+            const statuses = await Promise.all(statusPromises);
+            
+            statuses.forEach(({ port, name, isRunning }) => {
+                const card = document.querySelector(`.server-card`);
+                if (!card) return;
+
+                // Find the card for this port
+                const portBadge = Array.from(document.querySelectorAll('.port-badge'))
+                    .find(badge => badge.textContent.includes(`Port ${port}`));
+                
+                if (portBadge) {
+                    const card = portBadge.closest('.server-card');
+                    if (card) {
+                        // Remove existing status indicator
+                        const existingStatus = card.querySelector('.server-status');
+                        if (existingStatus) {
+                            existingStatus.remove();
+                        }
+
+                        // Add status indicator
+                        const statusDiv = document.createElement('div');
+                        statusDiv.className = 'server-status';
+                        statusDiv.style.cssText = 'margin-top: 1rem; padding: 0.5rem; border-radius: 6px; font-size: 0.85rem;';
+                        
+                        if (isRunning) {
+                            statusDiv.style.background = '#d1fae5';
+                            statusDiv.style.color = '#065f46';
+                            statusDiv.innerHTML = '<span class="status-indicator active"></span> <strong>Running</strong>';
+                        } else {
+                            statusDiv.style.background = '#fee2e2';
+                            statusDiv.style.color = '#991b1b';
+                            statusDiv.innerHTML = '<span class="status-indicator" style="background: #ef4444;"></span> <strong>Not Running</strong>';
+                            
+                            // Add start button
+                            const startBtn = document.createElement('button');
+                            startBtn.className = 'start-server-btn';
+                            startBtn.textContent = 'Start Server';
+                            startBtn.style.cssText = 'margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--accent-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;';
+                            startBtn.onclick = () => startServer(port, name);
+                            statusDiv.appendChild(document.createElement('br'));
+                            statusDiv.appendChild(startBtn);
+                        }
+                        
+                        // Insert after description or before action button
+                        const actionButton = card.querySelector('.action-button');
+                        if (actionButton) {
+                            actionButton.parentNode.insertBefore(statusDiv, actionButton);
+                        } else {
+                            card.appendChild(statusDiv);
+                        }
+                    }
+                }
+            });
+
+            // Update overall status
+            const allRunning = statuses.every(s => s.isRunning);
+            const anyRunning = statuses.some(s => s.isRunning);
+            const statusEl = document.querySelector('.status');
+            if (statusEl) {
+                const hostname = getHostname();
+                if (allRunning) {
+                    statusEl.innerHTML = `
+                        <span class="status-indicator active"></span>
+                        All Systems Operational${hostname ? ` @ ${hostname}` : ''}
+                    `;
+                } else if (anyRunning) {
+                    statusEl.innerHTML = `
+                        <span class="status-indicator" style="background: #f59e0b;"></span>
+                        Some Servers Running${hostname ? ` @ ${hostname}` : ''}
+                    `;
+                } else {
+                    statusEl.innerHTML = `
+                        <span class="status-indicator" style="background: #ef4444;"></span>
+                        No Servers Running${hostname ? ` @ ${hostname}` : ''}
+                    `;
                 }
             }
         }
 
-        // Check on page load
-        window.addEventListener('load', checkServerStatus);
+        // Get backend API URL
+        function getBackendUrl() {
+            const hostname = getHostname();
+            const protocol = window.location.protocol;
+            // Backend runs on port 3001
+            return `${protocol}//${hostname}:3001`;
+        }
+
+        // Start server via API
+        async function startServer(port, name) {
+            const server = servers.find(s => s.port === port);
+            if (!server) return;
+
+            // Try to start via backend API
+            try {
+                const backendUrl = getBackendUrl();
+                const response = await fetch(`${backendUrl}/api/start-server`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ port, script: server.startScript })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`Starting ${name} server... This may take a few seconds.`);
+                    // Wait a bit then check status
+                    setTimeout(() => {
+                        updateServerStatuses();
+                    }, 3000);
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'Failed to start server');
+                }
+            } catch (error) {
+                // Fallback: show instructions
+                const instructions = `
+To start ${name} server, run:
+npm run ${server.startScript}
+
+Or start all servers:
+npm run start:all
+
+Note: Backend API may not be running. Start it with:
+npm run backend
+                `;
+                alert(instructions);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            updateUrls();
+            updateServerStatuses();
+            
+            // Refresh status every 10 seconds
+            setInterval(updateServerStatuses, 10000);
+        });
     </script>
 </body>
 </html>
