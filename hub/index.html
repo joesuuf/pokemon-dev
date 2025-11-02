@@ -574,11 +574,27 @@
             <h2>🔒 Security Features</h2>
             <ul style="line-height: 1.8;">
                 <li>✅ Dotfiles hidden (no .env, .git exposure)</li>
+                <li>✅ API keys handled via repo secrets (POKEMON_TCG_API_KEY)</li>
+                <li>✅ Serverless proxy API handles authentication server-side</li>
+                <li>✅ No API keys exposed in frontend code</li>
                 <li>✅ CORS enabled for controlled cross-origin testing</li>
                 <li>✅ Cache disabled to prevent stale content</li>
                 <li>✅ All servers run on localhost only (0.0.0.0 for local network access)</li>
                 <li>⚠️ For production: Use HTTPS, authentication, and proper cache headers</li>
             </ul>
+            
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 4px;">
+                <h3 style="color: #1e40af; margin-bottom: 0.5rem;">🔑 API Key Configuration</h3>
+                <p style="color: #1e3a8a; margin-bottom: 0.5rem;">
+                    <strong>Updated:</strong> All API keys are now handled via repo secrets. The frontend uses a serverless proxy API (<code>/api/cards</code>) that securely handles authentication server-side using the <code>POKEMON_TCG_API_KEY</code> environment variable.
+                </p>
+                <ul style="color: #1e3a8a; margin-top: 0.5rem;">
+                    <li>No <code>.env</code> file needed in repository</li>
+                    <li>API key stored as repo secret in deployment platform</li>
+                    <li>Frontend never directly accesses API keys</li>
+                    <li>Server-side proxy handles all authenticated requests</li>
+                </ul>
+            </div>
         </div>
 
         <footer>

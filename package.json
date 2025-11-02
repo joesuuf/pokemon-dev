@@ -30,7 +30,8 @@
     "watchdog:start": "bash start-watchdog-background.sh",
     "watchdog:stop": "bash stop-watchdog.sh",
     "watchdog:status": "bash status-watchdog.sh",
-    "watchdog:logs": "tail -f logs/watchdog/watchdog-background.log"
+    "watchdog:logs": "tail -f logs/watchdog/watchdog-background.log",
+    "hub": "npx http-server hub -p 1111 -a 0.0.0.0 --cors -c-1 --no-dotfiles -o"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
