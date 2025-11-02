@@ -9,7 +9,7 @@ This is a complete, standalone version of the Pokémon TCG Search application. A
 ## 🗂️ Project Structure
 
 ```
-pokemon-dev-v0/
+pokemon-dev/
 ├── src/                          # Source code
 │   ├── components/               # React components
 │   │   ├── CardDisplay.tsx       # Detailed 3-column card view
@@ -30,6 +30,24 @@ pokemon-dev-v0/
 │   ├── App.tsx                   # Root component
 │   ├── main.tsx                  # React entry point
 │   └── index.css                 # Global styles
+├── agents/                       # Modular agent framework
+│   ├── python/                   # Python agents
+│   │   └── security_agent_v2.py  # Security scanning agent v2
+│   ├── md/                       # Agent configurations
+│   └── workflows/                # Agent workflows
+├── security-agent/               # Security scanning (v2 primary)
+│   ├── v1/                       # ⚠️ ARCHIVED - Do not use
+│   ├── config/                   # Agent configurations
+│   ├── reports/                  # Generated security reports
+│   └── README.md                 # Security agent documentation
+├── v2/                           # V2 static application
+│   ├── index.html                # V2 app entry
+│   ├── scripts/                  # V2 JavaScript
+│   └── styles/                   # V2 CSS
+├── carousel/                     # Standalone carousel component
+│   └── index.html                # Carousel demo
+├── hub/                          # Development hub (NEW)
+│   └── index.html                # Central dashboard on port 1111
 ├── api/                          # Serverless API functions
 │   └── cards.ts                  # Card API endpoint
 ├── public/                       # Static assets
@@ -62,12 +80,31 @@ pokemon-dev-v0/
 
 ### Development
 
-Start the development server:
+**Quick Start - All Servers:**
 ```bash
-npm run dev
+npm run start:all
+```
+This launches all development servers concurrently:
+- Main app (Vite) on port 5173
+- V2 app (static) on port 9999
+- Carousel on port 7777
+- Development hub on port 1111
+
+**Individual Servers:**
+```bash
+npm run dev          # Main development server (port 5173)
+npm run dev:6666     # Alternate dev server (port 6666)
+npm run v2           # V2 static app (port 9999)
+npm run carousel     # Carousel component (port 7777)
+npm run hub          # Development hub (port 1111)
 ```
 
-The application will be available at `http://localhost:3000/`
+**🎯 Development Hub:** Open `http://localhost:1111` for a central dashboard with links to all running servers and documentation.
+
+**Advanced:** Run all servers including alternate port:
+```bash
+npm run start:all+6666  # Runs 5 servers total
+```
 
 ### Building
 
@@ -87,6 +124,25 @@ Run tests in watch mode:
 ```bash
 npm run test:watch
 ```
+
+### Security Scanning
+
+Run comprehensive security scan with v2 agent:
+```bash
+npm run security:scan        # Full security scan
+npm run security:report      # Generate JSON report
+npm run security:ci          # CI/CD integration (fails on critical issues)
+```
+
+The security agent scans for:
+- XSS, CSRF, CORS vulnerabilities
+- Dependency vulnerabilities
+- OWASP Top 10 compliance
+- Performance security issues
+- Mobile security concerns
+- Dead code detection
+
+See `agents/python/security_agent_v2.py` for details.
 
 ## ✨ Features
 
@@ -119,6 +175,40 @@ When viewing detailed card information:
 - Red: #CC0000 (Primary accent)
 - Yellow: #FFDE00 (Secondary accent)
 - Blue: #003DA5 (Tertiary accent)
+
+## 🌐 Development Servers
+
+This project runs multiple development servers for different purposes:
+
+| Port | Server | Purpose | Technology |
+|------|--------|---------|------------|
+| **1111** | Development Hub | Central dashboard with links to all servers | http-server |
+| **5173** | Main App | Primary development server with HMR | Vite |
+| **6666** | Alt App | Alternate instance for A/B testing | Vite |
+| **7777** | Carousel | Standalone component demo | http-server |
+| **9999** | V2 App | Static production-like build | http-server |
+
+### Server Features
+
+**Vite Servers (5173, 6666):**
+- Hot Module Replacement (HMR)
+- Live TypeScript compilation
+- React Fast Refresh
+- Development debugging tools
+
+**http-server Instances (1111, 7777, 9999):**
+- CORS enabled for API testing
+- Cache disabled (-c-1) for fresh content
+- Dotfiles hidden for security
+- Auto-opens browser on start
+
+### Why Multiple Servers?
+
+- **Port 1111 (Hub):** Quick access to all servers and documentation
+- **Port 5173 (Main):** Primary development with hot reload
+- **Port 6666 (Alt):** Test multiple versions or branches simultaneously
+- **Port 7777 (Carousel):** Component isolation and integration testing
+- **Port 9999 (V2):** Production-like static serving for final testing
 
 ## 🔧 Configuration Files
 
