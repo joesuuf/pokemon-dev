@@ -721,9 +721,10 @@ gcloud iam service-accounts create vision-service \
   --display-name="Vision API Service"
 
 # Grant Vision API permissions
+# Use roles/ml.developer for Vision API access
 gcloud projects add-iam-policy-binding pokemon-ocr \
   --member="serviceAccount:vision-service@pokemon-ocr.iam.gserviceaccount.com" \
-  --role="roles/vision.user"
+  --role="roles/ml.developer"
 
 # Create and download key
 gcloud iam service-accounts keys create ./gcp-key.json \

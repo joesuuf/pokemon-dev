@@ -50,9 +50,10 @@ gcloud iam service-accounts create vision-service \
 SA_EMAIL="vision-service@${PROJECT_ID}.iam.gserviceaccount.com"
 
 # Grant Vision API permissions
+# Note: Use roles/ml.developer or grant specific API access
 gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --member="serviceAccount:${SA_EMAIL}" \
-  --role="roles/vision.user"
+  --role="roles/ml.developer"
 
 # Create and download key for local development
 gcloud iam service-accounts keys create ./gcp-key.json \
