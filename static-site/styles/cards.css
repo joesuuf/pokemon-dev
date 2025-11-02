@@ -19,11 +19,13 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    border: 3px solid var(--pokemon-red);
 }
 
 .card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--pokemon-yellow);
 }
 
 .card:focus-within {
@@ -36,8 +38,9 @@
     position: relative;
     width: 100%;
     padding-top: 139.5%; /* Pokemon card aspect ratio */
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FFDE00 0%, #CC0000 100%);
     overflow: hidden;
+    border-bottom: 3px solid var(--pokemon-blue);
 }
 
 .card-image {

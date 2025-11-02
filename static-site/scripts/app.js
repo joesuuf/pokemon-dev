@@ -186,6 +186,11 @@ async function searchCards(query) {
         // Show found cards as they're discovered (simulate progressive loading)
         if (results.data && results.data.length > 0) {
             displayFoundCards(results.data);
+            
+            // Rotate gradient background for each card found
+            if (typeof GradientManager !== 'undefined') {
+                GradientManager.applyGradient(document.body);
+            }
         }
 
         renderCards(results.data);
@@ -285,6 +290,11 @@ function displayFoundCards(cards) {
             
             cardItem.textContent = `${index + 1}. ${variationName}`;
             cardList.appendChild(cardItem);
+            
+            // Rotate gradient for each card found
+            if (typeof GradientManager !== 'undefined') {
+                GradientManager.applyGradient(document.body);
+            }
         }, index * 200); // 200ms delay between each card
     });
     

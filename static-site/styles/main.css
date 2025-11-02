@@ -3,18 +3,23 @@
  * Mobile-first, accessible, secure
  */
 
-/* CSS Variables for theming */
+/* CSS Variables for theming - Updated to match pokemon-dev repo */
 :root {
-    /* Pokemon Brand Colors */
-    --pokemon-yellow: #ffcb05;
-    --pokemon-blue: #3d7dca;
-    --pokemon-red: #ee1515;
-    --pokemon-dark: #003a70;
+    /* Pokemon Brand Colors - Matching pokemon-dev repo */
+    --pokemon-red: #CC0000;
+    --pokemon-red-light: #FF0000;
+    --pokemon-red-dark: #990000;
+    --pokemon-blue: #003DA5;
+    --pokemon-blue-light: #0066CC;
+    --pokemon-blue-dark: #002966;
+    --pokemon-yellow: #FFDE00;
+    --pokemon-yellow-light: #FFFF00;
+    --pokemon-yellow-dark: #CCAA00;
 
     /* UI Colors */
-    --primary-color: #3d7dca;
-    --secondary-color: #ffcb05;
-    --accent-color: #ee1515;
+    --primary-color: #CC0000;
+    --secondary-color: #003DA5;
+    --accent-color: #FFDE00;
     --text-color: #333;
     --text-light: #666;
     --bg-color: #f5f5f5;
@@ -73,9 +78,11 @@ body {
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--text-color);
-    background-color: var(--bg-color);
+    background: linear-gradient(135deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%);
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background 0.3s ease;
 }
 
 /* Accessibility - Visually Hidden */
@@ -117,10 +124,11 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, var(--pokemon-blue) 0%, var(--pokemon-dark) 100%);
+    background: linear-gradient(135deg, var(--pokemon-blue) 0%, var(--pokemon-red) 100%);
     color: var(--white);
     padding: var(--spacing-xl) 0;
     box-shadow: var(--shadow-md);
+    border-bottom: 3px solid var(--pokemon-yellow);
 }
 
 .title {
@@ -215,12 +223,14 @@ body {
     background: var(--primary-color);
     color: var(--white);
     box-shadow: var(--shadow-sm);
+    border: 2px solid var(--pokemon-yellow);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: var(--pokemon-dark);
+    background: var(--pokemon-blue);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    border-color: var(--pokemon-yellow);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -236,6 +246,7 @@ body {
 .btn-secondary:hover:not(:disabled) {
     background: var(--primary-color);
     color: var(--white);
+    border-color: var(--pokemon-yellow);
 }
 
 .btn-icon {
@@ -402,11 +413,12 @@ body {
 
 /* Footer */
 .footer {
-    background: var(--pokemon-dark);
+    background: var(--pokemon-blue);
     color: var(--white);
     padding: var(--spacing-xl) 0;
     margin-top: var(--spacing-xxl);
     text-align: center;
+    border-top: 3px solid var(--pokemon-yellow);
 }
 
 .footer a {
