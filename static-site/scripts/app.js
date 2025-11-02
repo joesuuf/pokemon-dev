@@ -260,19 +260,21 @@ function displayFoundCards(cards) {
     // Clear previous
     DOM.foundCards.innerHTML = '';
     
-    // Show first few cards found (up to 5)
-    const cardsToShow = cards.slice(0, 5);
+    // Create header
+    const header = document.createElement('p');
+    header.className = 'found-cards-header';
+    header.textContent = `Found ${cards.length} card${cards.length !== 1 ? 's' : ''}:`;
+    DOM.foundCards.appendChild(header);
     
-    if (cardsToShow.length > 0) {
-        const header = document.createElement('p');
-        header.className = 'found-cards-header';
-        header.textContent = `Found ${cards.length} card${cards.length !== 1 ? 's' : ''}:`;
-        DOM.foundCards.appendChild(header);
-        
-        const cardList = document.createElement('div');
-        cardList.className = 'found-cards-list';
-        
-        cardsToShow.forEach((card, index) => {
+    const cardList = document.createElement('div');
+    cardList.className = 'found-cards-list';
+    DOM.foundCards.appendChild(cardList);
+    
+    // Show cards progressively (up to 5, then show "and X more")
+    const cardsToShow = Math.min(cards.length, 5);
+    
+    cards.slice(0, cardsToShow).forEach((card, index) => {
+        setTimeout(() => {
             const cardItem = document.createElement('div');
             cardItem.className = 'found-card-item';
             
@@ -283,16 +285,17 @@ function displayFoundCards(cards) {
             
             cardItem.textContent = `${index + 1}. ${variationName}`;
             cardList.appendChild(cardItem);
-        });
-        
-        if (cards.length > 5) {
+        }, index * 200); // 200ms delay between each card
+    });
+    
+    // Show "and X more" if there are more cards
+    if (cards.length > 5) {
+        setTimeout(() => {
             const more = document.createElement('div');
             more.className = 'found-cards-more';
             more.textContent = `... and ${cards.length - 5} more`;
             cardList.appendChild(more);
-        }
-        
-        DOM.foundCards.appendChild(cardList);
+        }, cardsToShow * 200);
     }
 }
 
