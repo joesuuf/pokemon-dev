@@ -4,9 +4,12 @@ All three front-ends are configured to run on persistent ports and are publicly 
 
 ## Port Configuration
 
+- **OCR Search Front-End**: Port `4444` (Vite dev server) - NEW!
 - **React Front-End**: Port `8888` (Vite dev server)
 - **HTML Front-End (v2)**: Port `9999` (HTTP server)
 - **Carousel Front-End**: Port `7777` (HTTP server)
+- **Development Hub**: Port `1111` (HTTP server)
+- **Backend API**: Port `3001` (Express server)
 
 All servers are configured with `host: 0.0.0.0` for public/remote access.
 
@@ -35,14 +38,23 @@ npm run dev:all:win
 ### Start Individual Front-Ends
 
 ```bash
+# OCR Search Front-End (Port 4444)
+npm run frontend:4444
+
 # React Front-End (Port 8888)
 npm run dev
+
+# Backend API (Port 3001)
+npm run backend
 
 # HTML Front-End (Port 9999)
 npm run v2:serve
 
 # Carousel Front-End (Port 7777)
 npm run carousel:serve
+
+# Development Hub (Port 1111)
+npm run hub
 ```
 
 ## Access URLs

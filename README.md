@@ -94,9 +94,11 @@ This launches all development servers concurrently:
 ```bash
 npm run dev          # Main development server (port 5173)
 npm run dev:6666     # Alternate dev server (port 6666)
+npm run frontend:4444 # OCR Card Search (port 4444)
 npm run v2           # V2 static app (port 9999)
 npm run carousel     # Carousel component (port 7777)
 npm run hub          # Development hub (port 1111)
+npm run backend      # Backend API server (port 3001)
 ```
 
 **🎯 Development Hub:** Open `http://localhost:1111` for a central dashboard with links to all running servers and documentation.
@@ -105,6 +107,15 @@ npm run hub          # Development hub (port 1111)
 ```bash
 npm run start:all+6666  # Runs 5 servers total
 ```
+
+**Watchdog Service (Auto-restart):**
+```bash
+npm run watchdog:start  # Start watchdog to keep all servers running
+npm run watchdog:stop   # Stop watchdog
+npm run watchdog:status # Check status
+npm run watchdog:logs   # View logs
+```
+The watchdog automatically restarts frontend servers on ports 4444, 5555, 6666, 7777, 8888, and 9999 every 60 seconds for maximum reliability.
 
 ### Building
 
@@ -146,6 +157,14 @@ See `agents/python/security_agent_v2.py` for details.
 
 ## ✨ Features
 
+### OCR Card Identification (NEW!)
+- **Upload card images**: Drag & drop or click to upload Pokemon card images
+- **Automatic identification**: Uses Google Cloud Vision API to extract text from card regions
+- **95%+ confidence matching**: Matches cards to official Pokemon TCG API with high confidence
+- **Real-time processing**: Visual feedback during OCR and matching process
+- **Multiple match strategies**: Exact ID, set code + number, or set name matching
+- Access at: `http://localhost:4444`
+
 ### View Modes
 - **Card Grid View** (default): Display cards as a clickable grid with images. Click any card to expand and see full details in a modal overlay.
 - **Detailed List View**: Display full card information immediately in compact text-based format.
@@ -183,6 +202,8 @@ This project runs multiple development servers for different purposes:
 | Port | Server | Purpose | Technology |
 |------|--------|---------|------------|
 | **1111** | Development Hub | Central dashboard with links to all servers | http-server |
+| **3001** | Backend API | OCR and card matching API server | Express/Node.js |
+| **4444** | OCR Search | Card identification via image upload | Vite/React |
 | **5173** | Main App | Primary development server with HMR | Vite |
 | **6666** | Alt App | Alternate instance for A/B testing | Vite |
 | **7777** | Carousel | Standalone component demo | http-server |
@@ -205,6 +226,8 @@ This project runs multiple development servers for different purposes:
 ### Why Multiple Servers?
 
 - **Port 1111 (Hub):** Quick access to all servers and documentation
+- **Port 3001 (Backend):** Express API server for OCR processing and card matching
+- **Port 4444 (OCR):** Card identification feature with Google Vision API integration
 - **Port 5173 (Main):** Primary development with hot reload
 - **Port 6666 (Alt):** Test multiple versions or branches simultaneously
 - **Port 7777 (Carousel):** Component isolation and integration testing
@@ -242,17 +265,46 @@ Run `npm list` for complete dependency tree.
 
 ## 🌐 API Integration
 
+### Pokémon TCG API
 The application connects to the **Pokémon TCG API v2**:
 - Endpoint: `https://api.pokemontcg.io/v2/cards`
 - Query syntax: `name:*query*` for card names, `attacks.name:*query*` for attack names
 - Timeout: 60 seconds per request
 
+### Google Cloud Vision API (OCR)
+- **Service**: Google Cloud Vision API for text extraction
+- **Backend**: Express server on port 3001
+- **Authentication**: Uses `GOOGLE_APPLICATION_CREDENTIALS` environment variable
+- **Endpoints**:
+  - `POST /api/ocr/upload` - Upload card image
+  - `POST /api/ocr/process` - Extract text via OCR
+  - `POST /api/ocr/match` - Match extracted text to Pokemon cards
+- **Setup**: See `docs/OCR_GOOGLE_CLOUD_SETUP.md` for configuration
+
 ## 📝 Environment Variables
 
 Create a `.env` file based on `env.example`:
+
+### Frontend
 ```
 VITE_API_TIMEOUT=60000
+VITE_OCR_API_URL=http://localhost:3001  # Backend API URL for OCR
 ```
+
+### Backend (for OCR feature)
+```bash
+# Google Cloud Vision API
+GOOGLE_APPLICATION_CREDENTIALS=./gcp-key.json
+
+# Pokemon TCG API
+POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
+
+# Server Configuration
+PORT=3001
+CORS_ORIGIN=http://localhost:4444
+```
+
+See `backend/.env.example` for backend configuration template.
 
 ## 🧪 Testing
 
