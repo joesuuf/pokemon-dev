@@ -22,6 +22,9 @@ const DOM = {
     searchInput: null,
     viewModeSelect: null,
     loadingContainer: null,
+    loadingText: null,
+    timeoutTimer: null,
+    foundCards: null,
     errorContainer: null,
     resultsSection: null,
     cardsContainer: null,
@@ -33,6 +36,11 @@ const DOM = {
     modal: null,
     modalBody: null
 };
+
+// Loading state tracking
+let loadingTimer = null;
+let timeoutCountdown = null;
+let foundCardsList = [];
 
 // Initialize application when DOM is ready
 document.addEventListener('DOMContentLoaded', initApp);
@@ -63,6 +71,9 @@ function cacheDOMElements() {
     DOM.searchInput = document.getElementById('search-input');
     DOM.viewModeSelect = document.getElementById('view-mode');
     DOM.loadingContainer = document.getElementById('loading');
+    DOM.loadingText = DOM.loadingContainer?.querySelector('.loading-text');
+    DOM.timeoutTimer = document.getElementById('timeout-timer');
+    DOM.foundCards = document.getElementById('found-cards');
     DOM.errorContainer = document.getElementById('error');
     DOM.resultsSection = document.getElementById('results');
     DOM.cardsContainer = document.getElementById('cards-container');
@@ -156,12 +167,26 @@ function handleViewModeChange(event) {
 async function searchCards(query) {
     showLoading();
     hideError();
+    foundCardsList = [];
+    
+    // Start timeout countdown (30 seconds)
+    const timeoutDuration = 30;
+    let timeRemaining = timeoutDuration;
+    startTimeoutCountdown(timeoutDuration);
 
     try {
         const results = await PokemonAPI.searchCards(query, AppState.currentPage);
 
+        // Stop countdown
+        stopTimeoutCountdown();
+
         AppState.cards = results.data;
         AppState.totalPages = results.totalPages;
+
+        // Show found cards as they're discovered (simulate progressive loading)
+        if (results.data && results.data.length > 0) {
+            displayFoundCards(results.data);
+        }
 
         renderCards(results.data);
         updatePagination();
@@ -169,9 +194,105 @@ async function searchCards(query) {
 
     } catch (error) {
         console.error('Search error:', error);
+        stopTimeoutCountdown();
         showError(error.message || 'Failed to search cards. Please try again.');
     } finally {
         hideLoading();
+    }
+}
+
+/**
+ * Start timeout countdown timer
+ */
+function startTimeoutCountdown(duration) {
+    let timeRemaining = duration;
+    
+    if (DOM.timeoutTimer) {
+        updateTimeoutDisplay(timeRemaining);
+    }
+    
+    timeoutCountdown = setInterval(() => {
+        timeRemaining--;
+        
+        if (timeRemaining > 0 && DOM.timeoutTimer) {
+            updateTimeoutDisplay(timeRemaining);
+        } else {
+            stopTimeoutCountdown();
+        }
+    }, 1000);
+}
+
+/**
+ * Update timeout display
+ */
+function updateTimeoutDisplay(seconds) {
+    if (!DOM.timeoutTimer) return;
+    
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    const timeStr = minutes > 0 
+        ? `${minutes}m ${secs}s` 
+        : `${secs}s`;
+    
+    DOM.timeoutTimer.textContent = `?? Time remaining: ${timeStr}`;
+    DOM.timeoutTimer.style.display = 'block';
+}
+
+/**
+ * Stop timeout countdown
+ */
+function stopTimeoutCountdown() {
+    if (timeoutCountdown) {
+        clearInterval(timeoutCountdown);
+        timeoutCountdown = null;
+    }
+    if (DOM.timeoutTimer) {
+        DOM.timeoutTimer.style.display = 'none';
+    }
+}
+
+/**
+ * Display found cards as they're discovered
+ */
+function displayFoundCards(cards) {
+    if (!DOM.foundCards || !cards || cards.length === 0) return;
+    
+    // Clear previous
+    DOM.foundCards.innerHTML = '';
+    
+    // Show first few cards found (up to 5)
+    const cardsToShow = cards.slice(0, 5);
+    
+    if (cardsToShow.length > 0) {
+        const header = document.createElement('p');
+        header.className = 'found-cards-header';
+        header.textContent = `Found ${cards.length} card${cards.length !== 1 ? 's' : ''}:`;
+        DOM.foundCards.appendChild(header);
+        
+        const cardList = document.createElement('div');
+        cardList.className = 'found-cards-list';
+        
+        cardsToShow.forEach((card, index) => {
+            const cardItem = document.createElement('div');
+            cardItem.className = 'found-card-item';
+            
+            // Get variation name (set name + card number)
+            const setName = card.set?.name || 'Unknown Set';
+            const cardNumber = card.number || '?';
+            const variationName = `${card.name} (${setName} #${cardNumber})`;
+            
+            cardItem.textContent = `${index + 1}. ${variationName}`;
+            cardList.appendChild(cardItem);
+        });
+        
+        if (cards.length > 5) {
+            const more = document.createElement('div');
+            more.className = 'found-cards-more';
+            more.textContent = `... and ${cards.length - 5} more`;
+            cardList.appendChild(more);
+        }
+        
+        DOM.foundCards.appendChild(cardList);
     }
 }
 
@@ -427,12 +548,30 @@ function showLoading() {
     AppState.isLoading = true;
     DOM.loadingContainer.classList.remove('hidden');
     DOM.loadingContainer.setAttribute('aria-busy', 'true');
+    
+    // Clear found cards
+    if (DOM.foundCards) {
+        DOM.foundCards.innerHTML = '';
+    }
+    
+    // Update loading text
+    if (DOM.loadingText) {
+        DOM.loadingText.textContent = 'Searching for cards...';
+    }
 }
 
 function hideLoading() {
     AppState.isLoading = false;
+    stopTimeoutCountdown();
     DOM.loadingContainer.classList.add('hidden');
     DOM.loadingContainer.setAttribute('aria-busy', 'false');
+    
+    // Clear found cards after a brief delay
+    setTimeout(() => {
+        if (DOM.foundCards) {
+            DOM.foundCards.innerHTML = '';
+        }
+    }, 500);
 }
 
 function showError(message) {
