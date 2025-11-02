@@ -1,0 +1,149 @@
+/* src/components/ErrorMessage.css */
+.error-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-icon {
+  margin-bottom: 20px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.error-icon svg {
+  filter: drop-shadow(0 2px 8px rgba(220, 38, 38, 0.3));
+}
+
+.error-title {
+  color: #dc2626;
+  font-size: 1.5em;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #666;
+  font-size: 1.1em;
+  margin: 0 0 25px 0;
+  line-height: 1.5;
+  padding: 15px;
+  background: #fef2f2;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+  text-align: left;
+}
+
+.error-suggestions {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e5e5;
+  text-align: left;
+}
+
+.suggestion-title {
+  color: #333;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  font-size: 1.1em;
+}
+
+.error-suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.error-suggestions li {
+  color: #666;
+  padding: 8px 0 8px 30px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.error-suggestions li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .error-container {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .error-title {
+    font-size: 1.3em;
+  }
+  
+  .error-message {
+    font-size: 1em;
+  }
+  
+  .error-suggestions li {
+    font-size: 0.95em;
+    padding-left: 25px;
+  }
+}
+
+/* Dark mode support if needed */
+@media (prefers-color-scheme: dark) {
+  .error-container {
+    background: #1f2937;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .error-title {
+    color: #ef4444;
+  }
+  
+  .error-message {
+    background: rgba(254, 242, 242, 0.1);
+    color: #e5e5e5;
+    border-left-color: #ef4444;
+  }
+  
+  .suggestion-title {
+    color: #f3f4f6;
+  }
+  
+  .error-suggestions li {
+    color: #d1d5db;
+  }
+  
+  .error-suggestions {
+    border-top-color: #374151;
+  }
+}
