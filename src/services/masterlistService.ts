@@ -42,12 +42,25 @@ async function loadMasterlist(): Promise<PokemonCard[]> {
       const query = encodeURIComponent('name:*');
       const pageSize = 1000; // Large page size to minimize requests
 
-      const response = await fetch(
-        `/api/cards?q=${query}&pageSize=${pageSize}&orderBy=name`
-      );
+      // Get API key from environment variable
+      const apiKey = import.meta.env.VITE_POKEMON_API_KEY || '';
+      const apiUrl = 'https://api.pokemontcg.io/v2/cards';
+      
+      // Build headers with API key if available
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      if (apiKey) {
+        headers['X-Api-Key'] = apiKey;
+      }
+
+      const url = `${apiUrl}?q=${query}&pageSize=${pageSize}&orderBy=name`;
+      console.log('[MASTERLIST] Fetching from:', url);
+
+      const response = await fetch(url, { headers });
 
       if (!response.ok) {
-        throw new Error(`Failed to load masterlist: ${response.status}`);
+        throw new Error(`Failed to load masterlist: ${response.status} ${response.statusText}`);
       }
 
       const data: ApiResponse = await response.json();
