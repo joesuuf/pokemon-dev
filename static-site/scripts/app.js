@@ -187,9 +187,9 @@ async function searchCards(query) {
         if (results.data && results.data.length > 0) {
             displayFoundCards(results.data);
             
-            // Rotate gradient background for each card found
-            if (typeof GradientManager !== 'undefined') {
-                GradientManager.applyGradient(document.body);
+            // Apply set theme based on first card found
+            if (results.data.length > 0 && typeof SetThemeManager !== 'undefined') {
+                SetThemeManager.applySetTheme(document.body, results.data[0]);
             }
         }
 
@@ -291,8 +291,11 @@ function displayFoundCards(cards) {
             cardItem.textContent = `${index + 1}. ${variationName}`;
             cardList.appendChild(cardItem);
             
-            // Rotate gradient for each card found
-            if (typeof GradientManager !== 'undefined') {
+            // Rotate gradient based on card's set theme
+            if (typeof SetThemeManager !== 'undefined') {
+                SetThemeManager.applySetTheme(document.body, card);
+            } else if (typeof GradientManager !== 'undefined') {
+                // Fallback to general gradient manager
                 GradientManager.applyGradient(document.body);
             }
         }, index * 200); // 200ms delay between each card
