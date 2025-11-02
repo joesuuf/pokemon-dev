@@ -65,7 +65,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Log error, but suppress service worker errors in webview environments
     if (isServiceWorkerError && isWebviewEnvironment()) {
       logger.warn(
-        'Service worker error caught by error boundary (suppressed in webview)'
+        `Service worker error caught by error boundary (suppressed in webview) - ${window.location.href}`
       );
       // Reset error state to prevent error UI from showing
       this.setState({ hasError: false, error: null, errorInfo: null });

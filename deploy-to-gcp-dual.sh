@@ -17,20 +17,26 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${BLUE}"
-echo "========================================================================"
+echo "========================================================================="
 echo "   Deploy Dual Version to GCP (gcp.count.la)"
-echo "========================================================================"
+echo "========================================================================="
 echo -e "${NC}"
+
+# Add gcloud to PATH if installed in home directory
+if [ -d "$HOME/google-cloud-sdk/bin" ]; then
+    export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+fi
 
 # Check for gcloud
 if ! command -v gcloud &> /dev/null; then
     echo -e "${RED}Error: gcloud CLI not installed${NC}"
     echo "Install: https://cloud.google.com/sdk/docs/install"
+    echo "Or run: curl https://sdk.cloud.google.com | bash"
     exit 1
 fi
 
 # Configuration
-PROJECT_ID="pokemon-tcg-gcp"  # Change if needed
+PROJECT_ID="chk-poke-ocr"
 BUCKET_NAME="gcp-count-la"
 REGION="us-central1"
 
@@ -41,10 +47,13 @@ echo "  Region: $REGION"
 echo "  Domain: gcp.count.la"
 echo ""
 
-read -p "Continue with deployment? (y/n): " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    exit 0
+# Allow skipping prompt with AUTO_DEPLOY env var
+if [ -z "$AUTO_DEPLOY" ]; then
+    read -p "Continue with deployment? (y/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 0
+    fi
 fi
 
 # Authenticate
@@ -68,8 +77,8 @@ gcloud config set project "$PROJECT_ID" 2>/dev/null || {
 # Enable APIs
 echo ""
 echo -e "${BLUE}Step 3: Enabling required APIs${NC}"
-gcloud services enable storage-api.googleapis.com --project="$PROJECT_ID"
-gcloud services enable compute.googleapis.com --project="$PROJECT_ID"
+gcloud services enable storage-api.googleapis.com --project="$PROJECT_ID" 2>/dev/null || true
+gcloud services enable compute.googleapis.com --project="$PROJECT_ID" 2>/dev/null || true
 
 # Build deployment
 echo ""
@@ -100,10 +109,17 @@ if [ -d "static-site/assets" ]; then
     cp -r static-site/assets dist/v2/
 fi
 
-# Add footer link to static version
-cat >> dist/v2/index.html << 'FOOTER'
+# Add footer link to static version (before closing body tag)
+if ! grep -q "version-footer" dist/v2/index.html; then
+    python3 << 'PYTHON'
+import re
 
-<style>
+# Read the file
+with open('dist/v2/index.html', 'r') as f:
+    content = f.read()
+
+# Add footer before </body>
+footer = '''<style>
 .version-footer {
     position: fixed;
     bottom: 15px;
@@ -128,13 +144,19 @@ cat >> dist/v2/index.html << 'FOOTER'
 }
 </style>
 <a href="/" class="version-footer" title="Switch to React TypeScript Version">← React Version</a>
-</body>
-</html>
-FOOTER
+'''
 
-# Fix duplicate closing tags
-sed -i '$ d' dist/v2/index.html
-sed -i '$ d' dist/v2/index.html
+# Insert before </body>
+content = content.replace('</body>', footer + '\n</body>')
+
+# Write back
+with open('dist/v2/index.html', 'w') as f:
+    f.write(content)
+PYTHON
+    echo "  ✓ Footer link added to static site"
+else
+    echo "  ✓ Footer link already exists"
+fi
 
 echo "  ✓ Deployment package ready"
 
@@ -145,8 +167,10 @@ echo -e "${BLUE}Step 5: Setting up Cloud Storage bucket${NC}"
 # Create bucket
 gsutil mb -p "$PROJECT_ID" -c STANDARD -l "$REGION" "gs://$BUCKET_NAME" 2>/dev/null || echo "  → Bucket already exists"
 
-# Make bucket public
+# Make bucket public (required for direct access via storage.googleapis.com URLs)
+# Note: If using Load Balancer later, you can make bucket private and grant access only to Load Balancer
 echo "  → Making bucket publicly readable..."
+echo "  ℹ️  This is safe for static sites - content is meant to be public"
 gsutil iam ch allUsers:objectViewer "gs://$BUCKET_NAME"
 
 # Configure for static website
