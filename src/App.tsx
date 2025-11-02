@@ -54,27 +54,18 @@ function App() {
     setError(null);
     setTimeRemaining(60);
 
-    // PERF-03: Query formatting (memoized calculation)
+    // Build display query for UI
     const queryParts = [];
     if (params.name) {
-      // Check if user already provided field syntax
-      if (params.name.includes(':')) {
-        queryParts.push(params.name);
-      } else {
-        queryParts.push(`name:*${params.name}*`);
-      }
+      queryParts.push(`Name: ${params.name}`);
     }
     if (params.attackName) {
-      if (params.attackName.includes(':')) {
-        queryParts.push(params.attackName);
-      } else {
-        queryParts.push(`attacks.name:*${params.attackName}*`);
-      }
+      queryParts.push(`Attack: ${params.attackName}`);
     }
     const displayQuery = queryParts.join(' AND ');
     setSearchQuery(displayQuery);
 
-    console.log('[INFO] Starting search for:', displayQuery);
+    console.log('[INFO] Starting masterlist search for:', displayQuery);
 
     try {
       const response = await searchCards(params);
@@ -84,19 +75,15 @@ function App() {
         setError('No cards found matching your search criteria.');
       }
     } catch (err) {
-      console.error('[ERROR] API Error:', err);
+      console.error('[ERROR] Search Error:', err);
 
       const errorMessage = err instanceof Error
         ? err.message
         : 'An unexpected error occurred';
 
-      // Provide more user-friendly error messages
-      if (errorMessage.includes('timeout')) {
-        setError('The search is taking too long. The Pokemon TCG API might be slow or your query might be too complex. Try a simpler search.');
-      } else if (errorMessage.includes('400')) {
-        setError('Invalid search query. Please check your search syntax.');
-      } else if (errorMessage.includes('429')) {
-        setError('Too many requests. Please wait a moment and try again.');
+      // Provide user-friendly error messages
+      if (errorMessage.includes('Failed to load masterlist')) {
+        setError('Failed to load card database. Please check your connection and try again.');
       } else {
         setError(errorMessage);
       }

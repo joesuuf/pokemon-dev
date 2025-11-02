@@ -1,0 +1,17 @@
+# Pokemon Card Image Downloader Dependencies
+
+# Python standard library modules used:
+# - json
+# - os
+# - sys
+# - argparse
+# - urllib.request
+# - urllib.error
+# - pathlib
+# - typing
+# - concurrent.futures
+# - datetime
+# - hashlib
+# - time
+
+# No external dependencies required - uses only Python 3.8+ standard library

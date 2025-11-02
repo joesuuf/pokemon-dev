@@ -74,6 +74,11 @@ export interface PokemonCard {
     small: string;
     large: string;
   };
+  imageStatus?: {
+    large?: 'downloaded' | 'missing' | 'needed' | 'error';
+    small?: 'downloaded' | 'missing' | 'needed' | 'error';
+    updatedAt?: string;
+  };
   tcgplayer?: {
     url: string;
     updatedAt: string;
