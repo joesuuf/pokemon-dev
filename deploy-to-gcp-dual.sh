@@ -17,9 +17,9 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${BLUE}"
-echo "========================================================================"
+echo "========================================================================="
 echo "   Deploy Dual Version to GCP (gcp.count.la)"
-echo "========================================================================"
+echo "========================================================================="
 echo -e "${NC}"
 
 # Add gcloud to PATH if installed in home directory
@@ -36,7 +36,7 @@ if ! command -v gcloud &> /dev/null; then
 fi
 
 # Configuration
-PROJECT_ID="chk-poke-ocr"  # Your existing GCP project
+PROJECT_ID="chk-poke-ocr"
 BUCKET_NAME="gcp-count-la"
 REGION="us-central1"
 
@@ -77,8 +77,8 @@ gcloud config set project "$PROJECT_ID" 2>/dev/null || {
 # Enable APIs
 echo ""
 echo -e "${BLUE}Step 3: Enabling required APIs${NC}"
-gcloud services enable storage-api.googleapis.com --project="$PROJECT_ID"
-gcloud services enable compute.googleapis.com --project="$PROJECT_ID"
+gcloud services enable storage-api.googleapis.com --project="$PROJECT_ID" 2>/dev/null || true
+gcloud services enable compute.googleapis.com --project="$PROJECT_ID" 2>/dev/null || true
 
 # Build deployment
 echo ""

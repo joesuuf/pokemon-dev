@@ -98,34 +98,48 @@ fi
 
 # Add footer link to static version (before closing body tag)
 if ! grep -q "version-footer" dist/v2/index.html; then
-    # Find the closing body tag and insert footer before it
-    sed -i '/<\/body>/i\
-<style>\
-.version-footer {\
-    position: fixed;\
-    bottom: 15px;\
-    right: 15px;\
-    background: rgba(204, 0, 0, 0.9);\
-    color: white;\
-    padding: 10px 20px;\
-    border-radius: 4px;\
-    text-decoration: none;\
-    font-size: 14px;\
-    font-weight: 600;\
-    z-index: 9999;\
-    transition: all 0.3s ease;\
-    border: 2px solid rgba(255, 255, 255, 0.3);\
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);\
-}\
-.version-footer:hover {\
-    background: rgba(204, 0, 0, 1);\
-    border-color: rgba(255, 255, 255, 0.6);\
-    transform: translateY(-2px);\
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);\
-}\
-</style>\
-<a href="/" class="version-footer" title="Switch to React TypeScript Version">← React Version</a>\
-' dist/v2/index.html
+    python3 << 'PYTHON'
+import re
+
+# Read the file
+with open('dist/v2/index.html', 'r') as f:
+    content = f.read()
+
+# Add footer before </body>
+footer = '''<style>
+.version-footer {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(204, 0, 0, 0.9);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+.version-footer:hover {
+    background: rgba(204, 0, 0, 1);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+</style>
+<a href="/" class="version-footer" title="Switch to React TypeScript Version">← React Version</a>
+'''
+
+# Insert before </body>
+content = content.replace('</body>', footer + '\n</body>')
+
+# Write back
+with open('dist/v2/index.html', 'w') as f:
+    f.write(content)
+PYTHON
     echo -e "${GREEN}✓ Footer link added to static site${NC}"
 else
     echo -e "${YELLOW}⚠️  Footer link already exists${NC}"
