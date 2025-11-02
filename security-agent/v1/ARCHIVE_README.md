@@ -1,9 +1,12 @@
-# Security Agent v1 Archive
+# ⚠️ ARCHIVED - Security Agent v1
+
+**🚫 DO NOT USE - FULLY ARCHIVED AND DEPRECATED**
 
 This directory contains the archived version 1.0 of the Security Agent.
 
-**Archived Date**: 2025-01-XX  
-**Reason**: Upgraded to v2.0 with comprehensive enhancements
+**Archived Date**: 2025-11-02
+**Reason**: Fully replaced by v2.0 with comprehensive enhancements
+**Status**: ❌ No longer maintained, ❌ No longer supported, ❌ No npm scripts
 
 ## Contents
 
