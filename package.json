@@ -26,6 +26,7 @@
     "frontend:8888": "vite --config vite.config.8888.ts",
     "frontend:9999": "vite --config vite.config.9999.ts",
     "frontends:all": "npm-run-all --parallel frontend:5555 frontend:6666 frontend:7777 frontend:8888 frontend:9999",
+    "start:all": "concurrently --kill-others-on-fail=false --restart-tries=3 --restart-after=2000 -n \"hub,frontends\" -c \"cyan,magenta\" \"npm run hub\" \"npm run frontends:all\"",
     "watchdog": "bash watchdog-frontends.sh",
     "watchdog:start": "bash start-watchdog-background.sh",
     "watchdog:stop": "bash stop-watchdog.sh",
