@@ -1,13 +1,14 @@
 # Security Agent v2.0 Migration Summary
 
-## Migration Completed: 2025-01-XX
+## Migration Completed: 2025-11-02
 
-### ? Archive Complete
+### ✅ Archive Complete - v1 FULLY DEPRECATED
 
 **v1 Agent Archived**: `security-agent/v1/`
-- All v1 files preserved
-- Backward compatibility maintained
-- v1 scripts still functional
+- All v1 files preserved in archive
+- ❌ NO backward compatibility in package.json
+- ❌ v1 npm scripts REMOVED
+- ⚠️ v1 is READ-ONLY archive for reference only
 
 ### ? v2 Agent Created
 
@@ -55,19 +56,22 @@
 ### ?? Files Updated
 
 **package.json**:
-- Version bumped to `2.0.0`
-- New scripts:
-  - `security:scan:v2` - Run v2 agent
-  - `security:report:v2` - Generate v2 report
-  - `security:ci:v2` - CI/CD v2 integration
-- v1 scripts preserved for backward compatibility
+- Version: `2.0.0`
+- Updated scripts (v1 REMOVED):
+  - `security:scan` - Run v2 agent (was v1, now v2)
+  - `security:report` - Generate v2 report (was v1, now v2)
+  - `security:ci` - CI/CD v2 integration (was v1, now v2)
+- ❌ All v1 scripts removed
+- ✅ v2 is now the default and only option
 
 ### ?? Usage
 
-**Run v2 Agent**:
+**Run v2 Agent** (ONLY OPTION):
 ```bash
-# Via npm
-npm run security:scan:v2
+# Via npm (recommended)
+npm run security:scan        # Full security scan
+npm run security:report      # Generate JSON report
+npm run security:ci          # CI/CD integration
 
 # Direct Python
 python3 agents/python/security_agent_v2.py .
@@ -82,13 +86,11 @@ python3 agents/python/security_agent_v2.py . -o security-report-v2.json
 ./security-agent/run-agent-v2.sh
 ```
 
-**Run v1 Agent** (backward compatibility):
+**⚠️ v1 Agent DEPRECATED:**
 ```bash
-# Via npm
-npm run security:scan
-
-# Direct Python
-python3 security-agent/v1/agent.py
+# v1 npm scripts REMOVED from package.json
+# v1 files archived at security-agent/v1/ (reference only)
+# Do not use v1 for new scans
 ```
 
 ### ?? Key Features

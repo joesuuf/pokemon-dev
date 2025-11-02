@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon TCG Development Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .status {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .server-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .server-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+        }
+
+        .server-card.main { --accent-color: #3b82f6; --accent-light: #60a5fa; }
+        .server-card.alt { --accent-color: #8b5cf6; --accent-light: #a78bfa; }
+        .server-card.v2 { --accent-color: #10b981; --accent-light: #34d399; }
+        .server-card.carousel { --accent-color: #f59e0b; --accent-light: #fbbf24; }
+        .server-card.hub { --accent-color: #ec4899; --accent-light: #f472b6; }
+
+        .port-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .server-card h2 {
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+            font-size: 1.5rem;
+        }
+
+        .server-type {
+            color: #6b7280;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .unique-features {
+            background: #f9fafb;
+            border-left: 3px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .unique-features h3 {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .unique-features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .unique-features li {
+            padding: 0.3rem 0;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+
+        .unique-features li::before {
+            content: '→ ';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tech-badge {
+            background: #e5e7eb;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .action-button:hover {
+            background: var(--accent-light);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+        }
+
+        .info-section h2 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .command-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .command-block code {
+            color: #10b981;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-indicator.active {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: white;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Pokemon TCG Development Hub</h1>
+            <p class="subtitle">Central Dashboard for All Development Servers</p>
+            <div class="status">
+                <span class="status-indicator active"></span>
+                All Systems Operational
+            </div>
+        </header>
+
+        <div class="servers-grid">
+            <!-- Main Development Server -->
+            <div class="server-card main">
+                <div class="port-badge">Port 5173</div>
+                <h2>Main Application</h2>
+                <div class="server-type">Primary Development Server</div>
+
+                <p class="description">
+                    The core Pokemon TCG Search application running on Vite's development server with hot module replacement (HMR).
+                </p>
+
+                <div class="unique-features">
+                    <h3>What Makes It Unique</h3>
+                    <ul>
+                        <li>Lightning-fast HMR with Vite</li>
+                        <li>React 19.2.0 with latest features</li>
+                        <li>TypeScript type-checking</li>
+                        <li>Live React component updates</li>
+                        <li>Development mode with debugging</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">Vite</span>
+                    <span class="tech-badge">React 19</span>
+                    <span class="tech-badge">TypeScript</span>
+                    <span class="tech-badge">TailwindCSS 4</span>
+                </div>
+
+                <a href="http://localhost:5173" class="action-button" target="_blank">Open Main App →</a>
+            </div>
+
+            <!-- Alternate Port Server -->
+            <div class="server-card alt">
+                <div class="port-badge">Port 6666</div>
+                <h2>Alternate Dev Server</h2>
+                <div class="server-type">Secondary Development Instance</div>
+
+                <p class="description">
+                    Identical to the main server but on a different port for multi-instance testing and comparison.
+                </p>
+
+                <div class="unique-features">
+                    <h3>What Makes It Unique</h3>
+                    <ul>
+                        <li>Test multiple app versions simultaneously</li>
+                        <li>Compare different feature branches</li>
+                        <li>A/B testing in development</li>
+                        <li>Port isolation for network testing</li>
+                        <li>Same codebase, different state</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">Vite</span>
+                    <span class="tech-badge">React 19</span>
+                    <span class="tech-badge">Multi-instance</span>
+                </div>
+
+                <a href="http://localhost:6666" class="action-button" target="_blank">Open Alt Server →</a>
+            </div>
+
+            <!-- V2 Application -->
+            <div class="server-card v2">
+                <div class="port-badge">Port 9999</div>
+                <h2>V2 Application</h2>
+                <div class="server-type">Static Production Build</div>
+
+                <p class="description">
+                    Production-ready static build served via http-server with advanced security features.
+                </p>
+
+                <div class="unique-features">
+                    <h3>What Makes It Unique</h3>
+                    <ul>
+                        <li>Static file serving (no build process)</li>
+                        <li>CORS enabled for API testing</li>
+                        <li>Cache disabled (-c-1) for development</li>
+                        <li>Dotfiles hidden (--no-dotfiles)</li>
+                        <li>Production-like environment</li>
+                        <li>Auto-opens in browser (-o flag)</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">http-server</span>
+                    <span class="tech-badge">Static HTML</span>
+                    <span class="tech-badge">CORS</span>
+                    <span class="tech-badge">No Cache</span>
+                </div>
+
+                <a href="http://localhost:9999" class="action-button" target="_blank">Open V2 App →</a>
+            </div>
+
+            <!-- Carousel -->
+            <div class="server-card carousel">
+                <div class="port-badge">Port 7777</div>
+                <h2>Carousel Component</h2>
+                <div class="server-type">Standalone UI Component</div>
+
+                <p class="description">
+                    Isolated carousel component demonstration served independently for testing and integration.
+                </p>
+
+                <div class="unique-features">
+                    <h3>What Makes It Unique</h3>
+                    <ul>
+                        <li>Component isolation testing</li>
+                        <li>Independent from main app</li>
+                        <li>Same http-server config as V2</li>
+                        <li>CORS + no-cache + security</li>
+                        <li>Easy iframe/embed integration</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">http-server</span>
+                    <span class="tech-badge">Standalone</span>
+                    <span class="tech-badge">Component</span>
+                </div>
+
+                <a href="http://localhost:7777" class="action-button" target="_blank">Open Carousel →</a>
+            </div>
+
+            <!-- Hub (This Page) -->
+            <div class="server-card hub">
+                <div class="port-badge">Port 1111</div>
+                <h2>Development Hub</h2>
+                <div class="server-type">Central Dashboard (You Are Here)</div>
+
+                <p class="description">
+                    This page! A central dashboard providing quick access to all running development servers.
+                </p>
+
+                <div class="unique-features">
+                    <h3>What Makes It Unique</h3>
+                    <ul>
+                        <li>Single source of truth for all servers</li>
+                        <li>Documentation and comparisons</li>
+                        <li>Easy port number reference</li>
+                        <li>Quick navigation hub</li>
+                        <li>Development workflow center</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">http-server</span>
+                    <span class="tech-badge">Dashboard</span>
+                    <span class="tech-badge">Hub</span>
+                </div>
+
+                <a href="http://localhost:1111" class="action-button" target="_blank">Refresh Hub →</a>
+            </div>
+        </div>
+
+        <!-- Server Comparison Table -->
+        <div class="info-section">
+            <h2>📊 Port Comparison Matrix</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Port</th>
+                        <th>Server Type</th>
+                        <th>Purpose</th>
+                        <th>Hot Reload</th>
+                        <th>Build Process</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>5173</strong></td>
+                        <td>Vite Dev Server</td>
+                        <td>Main Development</td>
+                        <td>✅ Yes (HMR)</td>
+                        <td>✅ Live TypeScript/React</td>
+                        <td>Active development, debugging</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6666</strong></td>
+                        <td>Vite Dev Server</td>
+                        <td>Alternate Instance</td>
+                        <td>✅ Yes (HMR)</td>
+                        <td>✅ Live TypeScript/React</td>
+                        <td>Multi-instance testing, A/B tests</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9999</strong></td>
+                        <td>http-server</td>
+                        <td>V2 Static App</td>
+                        <td>❌ No (manual refresh)</td>
+                        <td>❌ Pre-built static</td>
+                        <td>Production simulation, static testing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7777</strong></td>
+                        <td>http-server</td>
+                        <td>Carousel Component</td>
+                        <td>❌ No (manual refresh)</td>
+                        <td>❌ Pre-built static</td>
+                        <td>Component isolation, integration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1111</strong></td>
+                        <td>http-server</td>
+                        <td>Development Hub</td>
+                        <td>❌ No (manual refresh)</td>
+                        <td>❌ Static HTML</td>
+                        <td>Navigation, documentation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Quick Start Guide -->
+        <div class="info-section">
+            <h2>🚀 Quick Start Commands</h2>
+
+            <h3>Start All Servers</h3>
+            <div class="command-block">
+                <code>npm run start:all</code>
+            </div>
+            <p>Launches all 4 servers (main dev + v2 + carousel + hub) concurrently.</p>
+
+            <h3>Start All + Alternate Port</h3>
+            <div class="command-block">
+                <code>npm run start:all+6666</code>
+            </div>
+            <p>Launches all 5 servers including the alternate dev server on port 6666.</p>
+
+            <h3>Individual Server Commands</h3>
+            <div class="command-block">
+                <code>npm run dev          # Start main dev server (port 5173)</code><br>
+                <code>npm run dev:6666     # Start alternate dev server (port 6666)</code><br>
+                <code>npm run v2           # Start v2 app (port 9999)</code><br>
+                <code>npm run carousel     # Start carousel (port 7777)</code><br>
+                <code>npm run hub          # Start this hub (port 1111)</code>
+            </div>
+        </div>
+
+        <!-- Technical Details -->
+        <div class="info-section">
+            <h2>⚙️ http-server Configuration</h2>
+            <p>The V2, Carousel, and Hub servers use enhanced http-server configuration:</p>
+
+            <div class="command-block">
+                <code>npx http-server [directory] -p [port] -a 0.0.0.0 --cors -c-1 --no-dotfiles -o</code>
+            </div>
+
+            <ul style="margin-top: 1rem; line-height: 1.8;">
+                <li><strong>-p [port]</strong> - Specifies the port number</li>
+                <li><strong>-a 0.0.0.0</strong> - Binds to all network interfaces</li>
+                <li><strong>--cors</strong> - Enables CORS for API testing</li>
+                <li><strong>-c-1</strong> - Disables caching for development</li>
+                <li><strong>--no-dotfiles</strong> - Hides .env, .git, etc. for security</li>
+                <li><strong>-o</strong> - Auto-opens browser on server start</li>
+            </ul>
+
+            <p style="margin-top: 1rem;">
+                <strong>📚 More capabilities:</strong> See <code>HTTP_SERVER_CAPABILITIES_TODO.md</code> for 16 additional features available but not yet implemented.
+            </p>
+        </div>
+
+        <!-- Security & Best Practices -->
+        <div class="info-section">
+            <h2>🔒 Security Features</h2>
+            <ul style="line-height: 1.8;">
+                <li>✅ Dotfiles hidden (no .env, .git exposure)</li>
+                <li>✅ CORS enabled for controlled cross-origin testing</li>
+                <li>✅ Cache disabled to prevent stale content</li>
+                <li>✅ All servers run on localhost only (0.0.0.0 for local network access)</li>
+                <li>⚠️ For production: Use HTTPS, authentication, and proper cache headers</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Pokemon TCG Development Hub • Port 1111</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                v2.0.0 • Running on http-server v14.1.1
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Check server status on load
+        const servers = [
+            { port: 5173, name: 'Main Dev' },
+            { port: 6666, name: 'Alt Dev' },
+            { port: 9999, name: 'V2 App' },
+            { port: 7777, name: 'Carousel' }
+        ];
+
+        async function checkServerStatus() {
+            for (const server of servers) {
+                try {
+                    const response = await fetch(`http://localhost:${server.port}`, { method: 'HEAD', mode: 'no-cors' });
+                    console.log(`✅ ${server.name} (${server.port}) is running`);
+                } catch (error) {
+                    console.log(`❌ ${server.name} (${server.port}) is not accessible`);
+                }
+            }
+        }
+
+        // Check on page load
+        window.addEventListener('load', checkServerStatus);
+    </script>
+</body>
+</html>
