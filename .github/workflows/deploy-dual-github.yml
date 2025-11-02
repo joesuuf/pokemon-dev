@@ -38,6 +38,7 @@ jobs:
       - name: Build React app with API key
         env:
           VITE_POKEMON_API_KEY: ${{ secrets.POKEMON_API_KEY }}
+          VITE_API_MODE: masterlist
         run: npm run build
 
       - name: Prepare dual deployment

@@ -49,6 +49,36 @@ body {
   opacity: 0.9;
 }
 
+.api-mode-indicator {
+  margin-top: 15px;
+}
+
+.api-mode-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.api-mode-badge.direct {
+  background: rgba(74, 144, 226, 0.3);
+  border-color: rgba(74, 144, 226, 0.5);
+  color: #4a90e2;
+}
+
+.api-mode-badge.masterlist {
+  background: rgba(46, 204, 113, 0.3);
+  border-color: rgba(46, 204, 113, 0.5);
+  color: #2ecc71;
+}
+
 .app-main {
   flex: 1;
 }

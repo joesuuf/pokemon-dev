@@ -5,6 +5,7 @@ import './components/GridCardItem.css';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
 import { applyRandomGradient } from './utils/gradientUtils';
+import { getApiMode } from './config/apiConfig';
 
 // Lazy load components for better performance
 const SearchForm = lazy(() => import('./components/SearchForm').then(module => ({ default: module.SearchForm })));
@@ -26,10 +27,13 @@ function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
+  const [apiMode, setApiMode] = useState<string>(getApiMode());
 
   // Apply random gradient on component mount
   useEffect(() => {
     applyRandomGradient();
+    // Update API mode display
+    setApiMode(getApiMode());
   }, []);
 
   // SEC-01: Timer cleanup - moved to useEffect to prevent memory leaks
@@ -90,6 +94,8 @@ function App() {
       // Provide user-friendly error messages
       if (errorMessage.includes('Failed to load masterlist')) {
         setError('Failed to load card database. Please check your connection and try again.');
+      } else if (errorMessage.includes('API request failed')) {
+        setError('Failed to connect to Pokemon TCG API. Please check your connection and try again.');
       } else {
         setError(errorMessage);
       }
@@ -114,6 +120,11 @@ function App() {
       <header className="app-header">
         <h1>Pokémon TCG Card Search</h1>
         <p className="subtitle">Search for Pokémon cards by name or attack</p>
+        <div className="api-mode-indicator">
+          <span className={`api-mode-badge ${apiMode}`}>
+            {apiMode === 'direct' ? '🔗 Direct API' : '📦 Masterlist API'}
+          </span>
+        </div>
       </header>
 
       <main className="app-main">
