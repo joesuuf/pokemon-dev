@@ -125,13 +125,34 @@ Testing analysis covering test coverage, unit tests, integration tests, test inf
 
 ---
 
+## Detailed To-Do Lists
+
+Each audit category has a comprehensive, modular to-do list with actionable tasks:
+
+- **[Security To-Do List](./security/security-todo-list.md)** - 5 issues, detailed tasks
+- **[Performance To-Do List](./performance/performance-todo-list.md)** - 11 issues, detailed tasks
+- **[SEO To-Do List](./seo/seo-todo-list.md)** - 11 issues, detailed tasks
+- **[Testing To-Do List](./testing/testing-todo-list.md)** - 7 issues, detailed tasks
+- **[Master To-Do List](./MASTER-TODO-LIST.md)** - Consolidated view of all issues
+
+Each to-do list includes:
+- ? Individual task breakdowns
+- ?? Time estimates
+- ?? Code references and examples
+- ?? Testing checklists
+- ?? Impact and ROI ratings
+
+---
+
 ## How to Use These Audits
 
 ### For Developers
 1. Review the V2 audit reports for your area of focus
-2. Check priority action items
-3. Implement recommended fixes
-4. Re-run audits after changes
+2. Check detailed to-do lists for actionable tasks
+3. Pick an issue and work through tasks modularly
+4. Check off tasks as you complete them
+5. Commit changes after each issue
+6. Re-run audits after changes
 
 ### For Project Managers
 1. Review overall scores and status
