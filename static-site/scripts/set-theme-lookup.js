@@ -1,5 +1,5 @@
 /**
- * Pokemon TCG Set Theme Lookup Table
+ * Pokemon TCG Set Theme Lookup Table - COMPREHENSIVE
  * Based on official Pokemon TCG set information
  * Maps set abbreviations to gradient color schemes
  * 
@@ -17,7 +17,7 @@
 
 const POKEMON_TCG_SET_THEMES = {
     // ============================================
-    // BASE SET ERA
+    // BASE SET ERA (1999-2002)
     // ============================================
     'BS': {
         name: 'Base Set',
@@ -115,9 +115,17 @@ const POKEMON_TCG_SET_THEMES = {
         releaseDate: '2002-02',
         route: '/sets/n4'
     },
+    'LC': {
+        name: 'Legendary Collection',
+        colors: ['#FFD700', '#CC0000', '#003DA5'],
+        angle: 135,
+        era: 'Base Set',
+        releaseDate: '2002-05',
+        route: '/sets/lc'
+    },
     
     // ============================================
-    // EX ERA
+    // EX ERA (2003-2007)
     // ============================================
     'EX1': {
         name: 'Ruby & Sapphire',
@@ -249,7 +257,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // DIAMOND & PEARL ERA
+    // DIAMOND & PEARL ERA (2007-2009)
     // ============================================
     'DP': {
         name: 'Diamond & Pearl',
@@ -317,7 +325,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // PLATINUM ERA
+    // PLATINUM ERA (2009)
     // ============================================
     'PL': {
         name: 'Platinum',
@@ -361,7 +369,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // HEARTGOLD & SOULSILVER ERA
+    // HEARTGOLD & SOULSILVER ERA (2010-2011)
     // ============================================
     'HGSS': {
         name: 'HeartGold & SoulSilver',
@@ -405,7 +413,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // BLACK & WHITE ERA
+    // BLACK & WHITE ERA (2011-2013)
     // ============================================
     'BW': {
         name: 'Black & White',
@@ -505,7 +513,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // XY ERA
+    // XY ERA (2014-2016)
     // ============================================
     'XY': {
         name: 'XY',
@@ -613,7 +621,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // SUN & MOON ERA
+    // SUN & MOON ERA (2017-2019)
     // ============================================
     'SUM': {
         name: 'Sun & Moon',
@@ -721,7 +729,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // SWORD & SHIELD ERA
+    // SWORD & SHIELD ERA (2020-2022)
     // ============================================
     'SWSH': {
         name: 'Sword & Shield',
@@ -845,7 +853,7 @@ const POKEMON_TCG_SET_THEMES = {
     },
     
     // ============================================
-    // SCARLET & VIOLET ERA
+    // SCARLET & VIOLET ERA (2023-Present)
     // ============================================
     'SVE': {
         name: 'Scarlet & Violet',
@@ -934,6 +942,42 @@ const POKEMON_TCG_SET_THEMES = {
         era: 'Scarlet & Violet',
         releaseDate: '2024-08',
         route: '/sets/svi9'
+    },
+    'SVI10': {
+        name: 'Stellar Crown',
+        colors: ['#BA68C8', '#009688', '#827717'],
+        angle: 135,
+        era: 'Scarlet & Violet',
+        releaseDate: '2024-11',
+        route: '/sets/svi10'
+    },
+    
+    // ============================================
+    // SPECIAL SETS & PROMOS
+    // ============================================
+    'PROMO': {
+        name: 'Promotional',
+        colors: ['#FFD700', '#CC0000', '#003DA5'],
+        angle: 135,
+        era: 'Special',
+        releaseDate: '1999-01',
+        route: '/sets/promo'
+    },
+    'POP': {
+        name: 'POP Series',
+        colors: ['#9370DB', '#FFD700', '#4169E1'],
+        angle: 135,
+        era: 'Special',
+        releaseDate: '2004-01',
+        route: '/sets/pop'
+    },
+    'BLW': {
+        name: 'Black & White Promos',
+        colors: ['#424242', '#E0E0E0', '#212121'],
+        angle: 135,
+        era: 'Special',
+        releaseDate: '2011-01',
+        route: '/sets/blw'
     },
     
     // ============================================
