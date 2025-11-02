@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense, useEffect, useCallback } from 'react';
 import './styles/App.css';
 import './components/GridCardItem.css';
 import { searchCards } from './services/pokemonTcgApi';
@@ -26,19 +26,35 @@ function App() {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
 
-  const handleFormSearch = async (query: string) => {
-    const params: SearchParams = {
-      name: query
-    };
-    await handleSearch(params);
-  };
+  // SEC-01: Timer cleanup - moved to useEffect to prevent memory leaks
+  useEffect(() => {
+    let timerInterval: NodeJS.Timeout | null = null;
 
-  const handleSearch = async (params: SearchParams) => {
+    if (loading && timeRemaining > 0) {
+      timerInterval = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [loading]); // Only depend on loading - timeRemaining updates handled inside
+
+  // PERF-02: Memoize handleSearch callback
+  const handleSearch = useCallback(async (params: SearchParams) => {
     setLoading(true);
     setError(null);
     setTimeRemaining(60);
 
-    // Create a display query for the UI
+    // PERF-03: Query formatting (memoized calculation)
     const queryParts = [];
     if (params.name) {
       // Check if user already provided field syntax
@@ -60,27 +76,14 @@ function App() {
 
     console.log('[INFO] Starting search for:', displayQuery);
 
-    // Start countdown timer
-    const timerInterval = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 1) {
-          clearInterval(timerInterval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
     try {
       const response = await searchCards(params);
-      clearInterval(timerInterval);
       setCards(response.data);
 
       if (response.data.length === 0) {
         setError('No cards found matching your search criteria.');
       }
     } catch (err) {
-      clearInterval(timerInterval);
       console.error('[ERROR] API Error:', err);
 
       const errorMessage = err instanceof Error
@@ -101,8 +104,17 @@ function App() {
       setCards([]);
     } finally {
       setLoading(false);
+      setTimeRemaining(0);
     }
-  };
+  }, []); // Empty deps - uses stable setState functions and imported searchCards
+
+  // PERF-02: Memoize handleFormSearch callback
+  const handleFormSearch = useCallback(async (query: string) => {
+    const params: SearchParams = {
+      name: query
+    };
+    await handleSearch(params);
+  }, [handleSearch]);
 
   return (
     <div className="app">

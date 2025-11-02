@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 interface SearchFormProps {
   onSearch: (query: string) => void;
@@ -7,7 +7,8 @@ interface SearchFormProps {
   onViewModeChange: (mode: 'card-view' | 'detailed-view') => void;
 }
 
-export const SearchForm: React.FC<SearchFormProps> = ({
+// PERF-01: Memoize SearchForm component to prevent unnecessary re-renders
+export const SearchForm = React.memo<SearchFormProps>(({
   onSearch,
   loading,
   viewMode,
@@ -15,12 +16,13 @@ export const SearchForm: React.FC<SearchFormProps> = ({
 }) => {
   const [query, setQuery] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // PERF-02: Memoize handleSubmit callback
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query.trim());
     }
-  };
+  }, [query, onSearch]);
 
   return (
     <form onSubmit={handleSubmit} className="search-form">
@@ -70,4 +72,4 @@ export const SearchForm: React.FC<SearchFormProps> = ({
       </button>
     </form>
   );
-};
+});

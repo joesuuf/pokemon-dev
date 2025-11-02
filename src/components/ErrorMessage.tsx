@@ -6,7 +6,8 @@ interface ErrorMessageProps {
   message: string;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+// PERF-01: Memoize ErrorMessage component to prevent unnecessary re-renders
+const ErrorMessage = React.memo<ErrorMessageProps>(({ message }) => {
   return (
     <div className="error-container">
       <div className="error-icon">
@@ -36,6 +37,6 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ErrorMessage;
