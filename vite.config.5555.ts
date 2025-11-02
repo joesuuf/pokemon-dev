@@ -9,7 +9,16 @@ export default defineConfig({
   server: {
     port: 5555,
     strictPort: true,
-    host: true
+    host: '0.0.0.0',
+    hmr: {
+      host: '0.0.0.0',
+      port: 5555,
+      protocol: 'ws',
+    },
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
   },
   build: {
     outDir: resolve(__dirname, 'dist/port-5555')

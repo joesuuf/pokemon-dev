@@ -7,5 +7,14 @@ export default defineConfig({
     port: 8888,
     strictPort: false,
     host: '0.0.0.0', // Allow access from Codespaces and WSL (public)
-  }
+    hmr: {
+      host: '0.0.0.0',
+      port: 8888,
+      protocol: 'ws',
+    },
+    watch: {
+      usePolling: true, // Enable polling for file watching (needed for WSL/remote)
+      interval: 1000, // Poll interval in milliseconds
+    },
+  },
 })
