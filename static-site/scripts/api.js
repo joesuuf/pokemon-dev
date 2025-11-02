@@ -10,13 +10,15 @@ const PokemonAPI = (function() {
     const CONFIG = {
         baseURL: 'https://api.pokemontcg.io/v2',
         pageSize: 20,
-        timeout: 10000 // 10 seconds
+        timeout: 30000, // 30 seconds - increased for slow connections
+        retries: 3, // Number of retry attempts
+        retryDelay: 1000 // Delay between retries in ms
     };
 
     /**
-     * Make a secure API request
+     * Make a secure API request with retry logic
      */
-    async function makeRequest(endpoint, params = {}) {
+    async function makeRequest(endpoint, params = {}, retryCount = 0) {
         // Build query string securely
         const queryParams = new URLSearchParams();
 
@@ -37,6 +39,7 @@ const PokemonAPI = (function() {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     // Note: In production, API key should come from backend proxy
                     // Never expose API keys in frontend code
                 },
@@ -48,6 +51,15 @@ const PokemonAPI = (function() {
             clearTimeout(timeoutId);
 
             if (!response.ok) {
+                // Don't retry on client errors (4xx)
+                if (response.status >= 400 && response.status < 500) {
+                    throw new Error(getErrorMessage(response.status));
+                }
+                // Retry on server errors (5xx)
+                if (response.status >= 500 && retryCount < CONFIG.retries) {
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.retryDelay * (retryCount + 1)));
+                    return makeRequest(endpoint, params, retryCount + 1);
+                }
                 throw new Error(getErrorMessage(response.status));
             }
 
@@ -58,7 +70,20 @@ const PokemonAPI = (function() {
             clearTimeout(timeoutId);
 
             if (error.name === 'AbortError') {
-                throw new Error('Request timeout. Please check your connection and try again.');
+                // Retry on timeout if we haven't exceeded retry limit
+                if (retryCount < CONFIG.retries) {
+                    console.log(`Request timeout, retrying... (${retryCount + 1}/${CONFIG.retries})`);
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.retryDelay * (retryCount + 1)));
+                    return makeRequest(endpoint, params, retryCount + 1);
+                }
+                throw new Error('Request timeout. The API may be slow or unavailable. Please check your connection and try again.');
+            }
+
+            // Retry on network errors
+            if (error instanceof TypeError && retryCount < CONFIG.retries) {
+                console.log(`Network error, retrying... (${retryCount + 1}/${CONFIG.retries})`);
+                await new Promise(resolve => setTimeout(resolve, CONFIG.retryDelay * (retryCount + 1)));
+                return makeRequest(endpoint, params, retryCount + 1);
             }
 
             throw error;
@@ -76,7 +101,8 @@ const PokemonAPI = (function() {
             404: 'No results found.',
             429: 'Too many requests. Please wait a moment and try again.',
             500: 'Server error. Please try again later.',
-            503: 'Service unavailable. Please try again later.'
+            503: 'Service unavailable. Please try again later.',
+            504: 'Gateway timeout. The API server is taking too long to respond.'
         };
 
         return messages[status] || `Request failed with status ${status}`;
