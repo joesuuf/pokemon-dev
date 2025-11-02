@@ -167,8 +167,10 @@ echo -e "${BLUE}Step 5: Setting up Cloud Storage bucket${NC}"
 # Create bucket
 gsutil mb -p "$PROJECT_ID" -c STANDARD -l "$REGION" "gs://$BUCKET_NAME" 2>/dev/null || echo "  → Bucket already exists"
 
-# Make bucket public
+# Make bucket public (required for direct access via storage.googleapis.com URLs)
+# Note: If using Load Balancer later, you can make bucket private and grant access only to Load Balancer
 echo "  → Making bucket publicly readable..."
+echo "  ℹ️  This is safe for static sites - content is meant to be public"
 gsutil iam ch allUsers:objectViewer "gs://$BUCKET_NAME"
 
 # Configure for static website
