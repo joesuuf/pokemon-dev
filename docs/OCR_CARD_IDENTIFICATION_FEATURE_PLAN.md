@@ -1,7 +1,12 @@
 # OCR Card Identification Feature Plan
 
 ## Overview
-Add Google Cloud Platform (GCP) Vision API integration to identify Pokemon cards from uploaded images using OCR on typical card regions (corners, etc.) and match them to official cards with 95% confidence.
+Add **Google Cloud Platform (GCP) only** integration to identify Pokemon cards from uploaded images using OCR on typical card regions (corners, etc.) and match them to official cards with 95% confidence.
+
+**Google Services Used:**
+- Google Cloud Vision API (OCR)
+- Google Cloud Storage (optional, for image storage)
+- Google Cloud Functions or Cloud Run (optional, for serverless backend)
 
 ## Feature Goals
 - **Input**: User uploads an image of a Pokemon card
@@ -81,9 +86,10 @@ External API
 
 ### 3.1 GCP Vision API Setup
 
-#### Required GCP Services
-- Cloud Vision API (OCR)
-- Cloud Storage (optional, for temporary image storage)
+#### Required Google Cloud Services
+- **Cloud Vision API** (OCR) - Primary service
+- **Cloud Storage** (optional, for temporary image storage)
+- **Cloud Functions** or **Cloud Run** (optional, for serverless backend deployment)
 
 #### API Features to Use
 - **TEXT_DETECTION**: Detect text in image
@@ -617,21 +623,59 @@ pydantic==2.5.0
 - Deploy to any Docker-compatible host
 - Easy to scale and manage
 
-#### Option 3: Cloud VM (GCP/AWS/Azure)
-- Deploy backend to virtual machine
+#### Option 3: Google Cloud Run (Recommended)
+- Serverless container platform
+- Auto-scaling
+- Pay per use
+- Integrated with GCP services
+- Same GCP project as Vision API
+
+#### Option 4: Google Cloud Functions
+- Fully serverless
+- Automatic scaling
+- Event-driven
+- Integrated with GCP services
+
+#### Option 5: Google Compute Engine (VM)
 - Full control over environment
 - Can use same GCP project as Vision API
+- Custom configurations
 
-#### Option 4: Railway/Render/Fly.io
-- Modern PaaS alternatives to Vercel
-- Simple deployment process
-- Environment variable management built-in
+### Google Cloud Deployment Considerations
+- **CORS**: Configure CORS in Cloud Run/Functions to allow frontend domain
+- **Environment Variables**: Use Google Secret Manager for credentials
+- **Authentication**: Use GCP Service Accounts for Vision API access
+- **HTTPS**: Automatically provided by Cloud Run/Functions
+- **IAM**: Configure proper IAM roles for Vision API access
+- **Billing**: Monitor Vision API usage in GCP Console
 
-### Deployment Considerations
-- **CORS**: Configure CORS to allow frontend domain
-- **Environment Variables**: Store GCP credentials securely
-- **Port Binding**: Bind to `0.0.0.0` for remote access (Codespaces, WSL, etc.)
-- **HTTPS**: Use reverse proxy (nginx) or cloud provider SSL for production
+---
+
+## Google Cloud Platform Architecture
+
+### Recommended Architecture: Cloud Run + Vision API
+
+```
+Frontend (React/TypeScript)
+  ? HTTPS
+Google Cloud Run (Backend API)
+  ??? POST /api/ocr/upload
+  ??? POST /api/ocr/process
+  ??? POST /api/ocr/match
+  ?
+Google Cloud Vision API (OCR)
+  ?
+Google Cloud Run (Card Matching Logic)
+  ?
+Pokemon TCG API v2 (External, read-only)
+```
+
+### Benefits of Google-Only Stack
+- **Unified billing**: All costs in one GCP account
+- **Integrated security**: IAM roles work across services
+- **Easy deployment**: Cloud Run uses same Docker containers
+- **Monitoring**: All logs/metrics in Google Cloud Console
+- **Cost optimization**: First 1,000 Vision API requests/month free
 
 ---
 
@@ -650,16 +694,50 @@ PORT=3001  # Backend API port
 CORS_ORIGIN=http://localhost:5173  # Frontend URL for CORS
 ```
 
-### Environment Configuration
-```bash
-# .env file (local development)
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
-PORT=3001  # Backend API port
+### Google Cloud Setup
 
-# Production (set in deployment environment)
-# Store GCP credentials securely via environment variables or secure config service
+#### 1. Create GCP Project
+```bash
+gcloud projects create pokemon-ocr --name="Pokemon OCR"
+gcloud config set project pokemon-ocr
 ```
+
+#### 2. Enable Required APIs
+```bash
+# Enable Vision API
+gcloud services enable vision.googleapis.com
+
+# Enable Cloud Run (if using)
+gcloud services enable run.googleapis.com
+
+# Enable Cloud Storage (if using)
+gcloud services enable storage.googleapis.com
+```
+
+#### 3. Create Service Account
+```bash
+# Create service account for Vision API
+gcloud iam service-accounts create vision-service \
+  --display-name="Vision API Service"
+
+# Grant Vision API permissions
+gcloud projects add-iam-policy-binding pokemon-ocr \
+  --member="serviceAccount:vision-service@pokemon-ocr.iam.gserviceaccount.com" \
+  --role="roles/vision.user"
+
+# Create and download key
+gcloud iam service-accounts keys create ./gcp-key.json \
+  --iam-account=vision-service@pokemon-ocr.iam.gserviceaccount.com
+```
+
+#### 4. Store Credentials in Secret Manager (Production)
+```bash
+# Store service account key in Secret Manager
+gcloud secrets create vision-service-account-key \
+  --data-file=./gcp-key.json
+```
+
+---
 
 ---
 

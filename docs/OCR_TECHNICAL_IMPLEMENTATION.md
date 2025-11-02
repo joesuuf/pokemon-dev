@@ -1,6 +1,12 @@
-# OCR Card Identification - Technical Implementation Guide
+## Google Cloud Platform - Only Integration
 
-## Quick Start
+This implementation uses **exclusively Google Cloud Platform services**:
+- Google Cloud Vision API (OCR)
+- Google Cloud Run (Backend API hosting)
+- Google Cloud Storage (Optional image storage)
+- Google Secret Manager (Credentials)
+
+No Vercel, Supabase, or other third-party services.
 
 ### 1. GCP Setup
 ```bash
@@ -37,75 +43,90 @@ npm install --save-dev @types/react-dropzone
 ```
 
 ### 3. Environment Variables
-Add to `.env`:
-```bash
-# GCP Vision API
-GOOGLE_APPLICATION_CREDENTIALS=./gcp-key.json  # Local dev
-GCP_VISION_API_KEY=your-api-key  # For production (Vercel)
 
-# Existing
+**Local Development (.env):**
+```bash
+# Google Cloud Vision API
+GOOGLE_APPLICATION_CREDENTIALS=./gcp-key.json
+
+# Pokemon TCG API (existing, read-only)
 POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
+
+# Backend Server (if running locally)
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
 ```
+
+**Google Cloud Run (Production):**
+- Set environment variables in Cloud Run console
+- Use Secret Manager for sensitive credentials
+- `GOOGLE_APPLICATION_CREDENTIALS` is automatically handled by Cloud Run
 
 ---
 
 ## Backend Implementation
 
-### API Endpoint: `/api/ocr/upload.ts`
+### Google Cloud Run Deployment
+
+The backend can be deployed to Google Cloud Run for a fully serverless, Google-only solution:
+
+```bash
+# Build Docker image
+docker build -t gcr.io/pokemon-ocr/ocr-backend .
+
+# Push to Google Container Registry
+docker push gcr.io/pokemon-ocr/ocr-backend
+
+# Deploy to Cloud Run
+gcloud run deploy ocr-backend \
+  --image gcr.io/pokemon-ocr/ocr-backend \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars POKEMON_TCG_API_KEY=your-key \
+  --set-secrets GOOGLE_APPLICATION_CREDENTIALS=vision-service-account-key:latest
+```
+
+### Local Development: Express Server
+
+For local development, use Express. For production, deploy to Cloud Run.
+
+### API Endpoint: Express Route `/api/ocr/upload`
 
 ```typescript
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import { IncomingForm } from 'formidable';
+import express, { Request, Response } from 'express';
+import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable default body parser
-  },
-};
+const upload = multer({
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  storage: multer.memoryStorage(),
+});
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+const router = express.Router();
+
+router.post('/upload', upload.single('image'), async (req: Request, res: Response) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file provided' });
+  }
+
+  // Validate file type
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!allowedTypes.includes(req.file.mimetype)) {
+    return res.status(400).json({
+      error: 'Invalid file type',
+      allowedTypes,
+    });
   }
 
   try {
-    const form = new IncomingForm({
-      maxFileSize: 5 * 1024 * 1024, // 5MB
-      keepExtensions: true,
-    });
-
-    const [fields, files] = await form.parse(req);
-
-    const imageFile = Array.isArray(files.image) ? files.image[0] : files.image;
-    
-    if (!imageFile) {
-      return res.status(400).json({ error: 'No image file provided' });
-    }
-
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!allowedTypes.includes(imageFile.mimetype || '')) {
-      return res.status(400).json({
-        error: 'Invalid file type',
-        allowedTypes,
-      });
-    }
-
-    // Read file as base64
-    const fileBuffer = fs.readFileSync(imageFile.filepath);
-    const base64Image = fileBuffer.toString('base64');
-    const dataUrl = `data:${imageFile.mimetype};base64,${base64Image}`;
+    // Convert to base64
+    const base64Image = req.file.buffer.toString('base64');
+    const dataUrl = `data:${req.file.mimetype};base64,${base64Image}`;
 
     // Generate unique ID
     const imageId = uuidv4();
-
-    // Clean up temp file
-    fs.unlinkSync(imageFile.filepath);
 
     return res.status(200).json({
       success: true,
@@ -119,13 +140,15 @@ export default async function handler(
       message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
-}
+});
+
+export default router;
 ```
 
-### API Endpoint: `/api/ocr/process.ts`
+### API Endpoint: Express Route `/api/ocr/process`
 
 ```typescript
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import express, { Request, Response } from 'express';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 // Initialize Vision API client
@@ -144,14 +167,7 @@ interface ProcessRequest {
   regions?: OCRRegions[];
 }
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+router.post('/process', async (req: Request, res: Response) => {
   try {
     const { imageData, regions }: ProcessRequest = req.body;
 
@@ -270,10 +286,10 @@ function parseCardText(text: string): {
 }
 ```
 
-### API Endpoint: `/api/ocr/match.ts`
+### API Endpoint: Express Route `/api/ocr/match`
 
 ```typescript
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import express, { Request, Response } from 'express';
 import type { PokemonCard } from '../../src/types/pokemon';
 
 interface OCRResults {
@@ -287,14 +303,7 @@ interface MatchRequest {
   ocrResults: OCRResults;
 }
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+router.post('/match', async (req: Request, res: Response) => {
   const startTime = Date.now();
 
   try {

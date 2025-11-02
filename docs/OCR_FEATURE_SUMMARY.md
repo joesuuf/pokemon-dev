@@ -1,7 +1,13 @@
 # OCR Card Identification - Quick Reference
 
 ## Feature Summary
-Use GCP Vision API to OCR Pokemon card images and match them to official cards with 95% confidence.
+Use **Google Cloud Platform (GCP) only** - Vision API to OCR Pokemon card images and match them to official cards with 95% confidence.
+
+## Google Services Used
+- **Cloud Vision API**: OCR text extraction
+- **Cloud Run**: Backend API hosting (optional)
+- **Cloud Storage**: Image storage (optional)
+- **Secret Manager**: Credential management (production)
 
 ## Key Components
 
@@ -49,5 +55,7 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
 
 ## Next Steps
 1. Review full plan: `docs/OCR_CARD_IDENTIFICATION_FEATURE_PLAN.md`
-2. Set up GCP Vision API credentials
-3. Begin Phase 1 implementation
+2. Complete GCP setup: `docs/OCR_GOOGLE_CLOUD_SETUP.md`
+3. Set up GCP Vision API credentials
+4. Choose backend option (Node.js/Express or Python/FastAPI)
+5. Begin Phase 1 implementation
