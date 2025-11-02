@@ -72,11 +72,7 @@ Test if Vision API works:
 export GOOGLE_APPLICATION_CREDENTIALS=./gcp-key.json
 
 # Test with a simple Node.js script or Python
-node -e "
-const { ImageAnnotatorClient } = require('@google-cloud/vision');
-const client = new ImageAnnotatorClient();
-console.log('Vision API client initialized successfully');
-"
+node -e "const {ImageAnnotatorClient} = require('@google-cloud/vision'); const client = new ImageAnnotatorClient(); console.log('Vision API client initialized successfully');"
 ```
 
 Or test with Python:
