@@ -96,30 +96,16 @@ const GradientManager = (function() {
     }
     
     /**
-     * Preload all gradients
+     * Preload all gradients (CSS gradients are instant, but we cache the strings)
      */
     function preloadGradients() {
-        const images = [];
-        
         for (let i = 0; i < GRADIENT_COUNT; i++) {
-            const img = new Image();
-            const dataUrl = generateGradientSVG(i);
-            
-            img.onload = () => {
-                loadedGradients++;
-                if (loadedGradients === GRADIENT_COUNT) {
-                    console.log('All gradients preloaded and cached');
-                }
-            };
-            
-            img.src = dataUrl;
             gradients.push({
                 index: i,
-                dataUrl: dataUrl,
-                image: img
+                cssGradient: getCSSGradient(i)
             });
         }
-        
+        console.log('All gradients cached and ready');
         return gradients;
     }
     
@@ -127,21 +113,23 @@ const GradientManager = (function() {
      * Get next gradient (rotates through all gradients)
      */
     function getNextGradient() {
-        const gradient = gradients[currentGradientIndex];
+        const index = currentGradientIndex;
         currentGradientIndex = (currentGradientIndex + 1) % GRADIENT_COUNT;
-        return gradient;
+        return {
+            index: index,
+            cssGradient: getCSSGradient(index)
+        };
     }
     
     /**
-     * Apply gradient to element
+     * Apply gradient to element using CSS
      */
     function applyGradient(element) {
         const gradient = getNextGradient();
         if (gradient && element) {
-            element.style.backgroundImage = `url(${gradient.dataUrl})`;
-            element.style.backgroundSize = 'cover';
-            element.style.backgroundPosition = 'center';
-            element.style.transition = 'background-image 0.3s ease';
+            const cssGradient = getCSSGradient(gradient.index);
+            element.style.background = cssGradient;
+            element.style.backgroundAttachment = 'fixed';
         }
     }
     
