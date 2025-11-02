@@ -1,10 +1,11 @@
 import type { Pokemon, PokemonListResponse } from './types';
 
-const API_BASE_URL = 'https://api.pokemontcg.io/v2';
-const API_KEY = import.meta.env.VITE_POKEMON_TCG_API_KEY;
+// Use the serverless proxy API instead of direct calls
+// The proxy handles API key authentication server-side
+const API_BASE_URL = '/api';
 
 const headers: HeadersInit = {
-  'X-Api-Key': API_KEY || '',
+  'Content-Type': 'application/json',
 };
 
 export async function searchPokemon(
@@ -25,7 +26,7 @@ export async function searchPokemon(
 
   const response = await fetch(
     `${API_BASE_URL}/cards?${params}`,
-    { headers }
+    { method: 'GET', headers }
   );
 
   if (!response.ok) {
@@ -38,7 +39,7 @@ export async function searchPokemon(
 export async function getPokemonById(id: string): Promise<Pokemon> {
   const response = await fetch(
     `${API_BASE_URL}/cards/${id}`,
-    { headers }
+    { method: 'GET', headers }
   );
 
   if (!response.ok) {
@@ -52,7 +53,7 @@ export async function getPokemonById(id: string): Promise<Pokemon> {
 export async function getRandomPokemon(count: number = 20): Promise<Pokemon[]> {
   const response = await fetch(
     `${API_BASE_URL}/cards?pageSize=${count}&orderBy=name,-number`,
-    { headers }
+    { method: 'GET', headers }
   );
 
   if (!response.ok) {
