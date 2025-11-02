@@ -15,7 +15,7 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Configuration
-PORTS=(5555 6666 7777 8888 9999)
+PORTS=(4444 5555 6666 7777 8888 9999)
 PIDS=()
 LOG_DIR="logs/watchdog"
 RESTART_INTERVAL=60  # Restart every 60 seconds
@@ -84,6 +84,10 @@ start_frontend() {
 
     # Start the appropriate server based on port
     case $port in
+        4444)
+            # Port 4444 uses vite for OCR feature
+            npm run frontend:$port > "$log_file" 2>&1 &
+            ;;
         6666)
             # Port 6666 uses http-server
             npx http-server frontends/port-6666 -p 6666 -a 0.0.0.0 --cors > "$log_file" 2>&1 &
