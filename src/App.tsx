@@ -5,13 +5,14 @@ import './components/GridCardItem.css';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
 import { applyRandomGradient } from './utils/gradientUtils';
-import { getApiMode } from './config/apiConfig';
+import { setApiMode as setApiModeConfig, ApiMode } from './config/apiConfig';
 
 // Lazy load components for better performance
 const SearchForm = lazy(() => import('./components/SearchForm').then(module => ({ default: module.SearchForm })));
 const CardList = lazy(() => import('./components/CardList').then(module => ({ default: module.CardList })));
 const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
 const ErrorMessage = lazy(() => import('./components/ErrorMessage'));
+const ApiToggle = lazy(() => import('./components/ApiToggle').then(module => ({ default: module.ApiToggle })));
 
 // Simple fallback component for Suspense
 const ComponentLoader = () => (
@@ -27,13 +28,19 @@ function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
-  const [apiMode, setApiMode] = useState<string>(getApiMode());
 
   // Apply random gradient on component mount
   useEffect(() => {
     applyRandomGradient();
-    // Update API mode display
-    setApiMode(getApiMode());
+  }, []);
+
+  // Handle API mode change
+  const handleApiModeChange = useCallback((mode: ApiMode) => {
+    setApiModeConfig(mode); // Update config
+    console.log(`[APP] API mode changed to: ${mode}`);
+    // Clear current results when switching modes
+    setCards([]);
+    setError(null);
   }, []);
 
   // SEC-01: Timer cleanup - moved to useEffect to prevent memory leaks
@@ -120,11 +127,9 @@ function App() {
       <header className="app-header">
         <h1>Pokémon TCG Card Search</h1>
         <p className="subtitle">Search for Pokémon cards by name or attack</p>
-        <div className="api-mode-indicator">
-          <span className={`api-mode-badge ${apiMode}`}>
-            {apiMode === 'direct' ? '🔗 Direct API' : '📦 Masterlist API'}
-          </span>
-        </div>
+        <Suspense fallback={<div style={{ marginTop: '10px' }}>Loading...</div>}>
+          <ApiToggle onModeChange={handleApiModeChange} />
+        </Suspense>
       </header>
 
       <main className="app-main">

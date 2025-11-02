@@ -13,7 +13,8 @@ const AppState = {
     viewMode: 'grid',
     searchQuery: '',
     cards: [],
-    isLoading: false
+    isLoading: false,
+    apiMode: 'masterlist' // 'masterlist' or 'direct'
 };
 
 // DOM Elements Cache
@@ -34,7 +35,9 @@ const DOM = {
     prevButton: null,
     nextButton: null,
     modal: null,
-    modalBody: null
+    modalBody: null,
+    toggleMasterlist: null,
+    toggleDirect: null
 };
 
 // Loading state tracking
@@ -89,6 +92,10 @@ function cacheDOMElements() {
     DOM.nextButton = document.getElementById('next-page');
     DOM.modal = document.getElementById('modal');
     DOM.modalBody = document.getElementById('modal-body');
+    
+    // API Toggle elements
+    DOM.toggleMasterlist = document.getElementById('toggle-masterlist');
+    DOM.toggleDirect = document.getElementById('toggle-direct');
 }
 
 /**
@@ -180,13 +187,22 @@ async function searchCards(query) {
     startTimeoutCountdown(timeoutDuration);
 
     try {
-        const results = await PokemonAPI.searchCards(query, AppState.currentPage);
+        let results;
+        
+        // Use appropriate API based on mode
+        if (AppState.apiMode === 'masterlist') {
+            console.log('[APP] Using masterlist API');
+            results = await MasterlistService.searchCards(query, AppState.currentPage);
+        } else {
+            console.log('[APP] Using direct API');
+            results = await PokemonAPI.searchCards(query, AppState.currentPage);
+        }
 
         // Stop countdown
         stopTimeoutCountdown();
 
         AppState.cards = results.data;
-        AppState.totalPages = results.totalPages;
+        AppState.totalPages = results.totalPages || results.totalPages;
 
         // Show found cards as they're discovered (simulate progressive loading)
         if (results.data && results.data.length > 0) {
@@ -209,6 +225,36 @@ async function searchCards(query) {
     } finally {
         hideLoading();
     }
+}
+
+/**
+ * Set API mode and update UI
+ */
+function setApiMode(mode) {
+    if (mode !== 'masterlist' && mode !== 'direct') {
+        console.warn('[APP] Invalid API mode:', mode);
+        return;
+    }
+
+    AppState.apiMode = mode;
+    console.log(`[APP] API mode changed to: ${mode}`);
+
+    // Update toggle buttons
+    if (DOM.toggleMasterlist && DOM.toggleDirect) {
+        if (mode === 'masterlist') {
+            DOM.toggleMasterlist.classList.add('active');
+            DOM.toggleDirect.classList.remove('active');
+        } else {
+            DOM.toggleDirect.classList.add('active');
+            DOM.toggleMasterlist.classList.remove('active');
+        }
+    }
+
+    // Clear current results when switching modes
+    AppState.cards = [];
+    AppState.currentPage = 1;
+    hideResults();
+    hideError();
 }
 
 /**

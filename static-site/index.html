@@ -19,6 +19,17 @@
         <div class="container">
             <h1 class="title">Pokemon TCG Card Search</h1>
             <p class="subtitle">Pure HTML/CSS/API Static Site</p>
+            <div class="api-toggle-container">
+                <div class="api-toggle-label">API Mode:</div>
+                <div class="api-toggle-switch">
+                    <button id="toggle-masterlist" class="api-toggle-button active masterlist" title="Use cached masterlist for faster searches">
+                        ?? Masterlist
+                    </button>
+                    <button id="toggle-direct" class="api-toggle-button direct" title="Use direct API calls for real-time results">
+                        ?? Direct API
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -133,6 +144,7 @@
     <script src="scripts/set-theme-lookup.js"></script>
     <script src="scripts/set-theme-manager.js"></script>
     <script src="scripts/gradient-manager.js"></script>
+    <script src="scripts/masterlist.js"></script>
     <script src="scripts/api.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="scripts/app.js"></script>
