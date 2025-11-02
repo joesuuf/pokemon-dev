@@ -49,10 +49,36 @@ function initApp() {
     // Set up event listeners
     setupEventListeners();
 
+    // Apply random gradient background
+    applyRandomGradient();
+
     // Check for URL parameters (for bookmarking/sharing)
     checkURLParams();
 
     console.log('App initialized successfully');
+}
+
+/**
+ * Apply random gradient background
+ */
+function applyRandomGradient() {
+    // Define gradient variations using Pokemon brand colors
+    const gradients = [
+        'linear-gradient(135deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%)',
+        'linear-gradient(135deg, #CC0000 0%, #FFDE00 40%, #003DA5 100%)',
+        'linear-gradient(135deg, #FF0000 0%, #FFDE00 35%, #003DA5 100%)',
+        'linear-gradient(135deg, #CC0000 0%, #FFDE00 45%, #0066CC 90%)',
+        'linear-gradient(140deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%)',
+        'linear-gradient(135deg, #FF0000 0%, #FFFF00 50%, #0066CC 100%)',
+        'linear-gradient(130deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%)',
+        'linear-gradient(135deg, #990000 0%, #FFDE00 45%, #002966 100%)',
+        'linear-gradient(138deg, #CC0000 0%, #FFDE00 48%, #003DA5 100%)',
+        'linear-gradient(135deg, #CC0000 0%, #FFDE00 52%, #003DA5 100%)'
+    ];
+    
+    const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+    document.body.style.background = randomGradient;
+    document.body.style.backgroundAttachment = 'fixed';
 }
 
 /**
@@ -454,7 +480,7 @@ function showResults() {
 function showEmptyState() {
     DOM.cardsContainer.innerHTML = `
         <div class="empty-state">
-            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-icon">??</div>
             <p class="empty-state-text">No cards found. Try a different search term.</p>
         </div>
     `;

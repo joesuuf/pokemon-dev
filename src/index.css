@@ -29,18 +29,18 @@
   box-sizing: border-box;
 }
 
-/* Enforce Roboto font globally */
+/* Enforce monospace font globally */
 html,
 body,
 #root {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: 'Courier New', Courier, monospace !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ensure all elements inherit Roboto */
+/* Ensure all elements inherit monospace */
 body * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Courier New', Courier, monospace !important;
 }
 
 code {

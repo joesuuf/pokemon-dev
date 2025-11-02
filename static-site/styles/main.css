@@ -37,7 +37,7 @@
     --spacing-xxl: 3rem;
 
     /* Typography */
-    --font-primary: 'Roboto', sans-serif;
+    --font-primary: 'Courier New', Courier, monospace;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
@@ -78,11 +78,18 @@ body {
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--text-color);
-    background: linear-gradient(135deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%);
+    /* Background gradient will be applied dynamically via JavaScript */
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background 0.3s ease;
+}
+
+/* Enforce monospace font globally */
+html,
+body,
+* {
+    font-family: 'Courier New', Courier, monospace !important;
 }
 
 /* Accessibility - Visually Hidden */
