@@ -29,11 +29,18 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
+/* Enforce Roboto font globally */
+html,
+body,
+#root {
+  font-family: 'Roboto', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all elements inherit Roboto */
+body * {
+  font-family: 'Roboto', sans-serif;
 }
 
 code {

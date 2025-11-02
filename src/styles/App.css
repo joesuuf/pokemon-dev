@@ -4,10 +4,21 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
+/* Enforce Roboto font globally */
+html,
+body,
+#root {
+  font-family: 'Roboto', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all elements inherit Roboto */
+body * {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
   background: linear-gradient(135deg, #CC0000 0%, #FFDE00 50%, #003DA5 100%);
   min-height: 100vh;
 }
