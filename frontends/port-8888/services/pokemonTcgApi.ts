@@ -1,18 +1,9 @@
 // src/services/pokemonTcgApi.ts
-import axios, { AxiosError } from 'axios';
 import { SearchParams, ApiResponse } from '../types/pokemon';
 
-const API_KEY = import.meta.env.VITE_POKEMON_TCG_API_KEY;
-const BASE_URL = 'https://api.pokemontcg.io/v2';
-
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    ...(API_KEY && { 'X-Api-Key': API_KEY })
-  },
-  timeout: 60000
-});
+// Use the serverless proxy API instead of direct calls
+// The proxy handles API key authentication server-side
+const PROXY_BASE_URL = '/api';
 
 function formatQuery(params: SearchParams): string {
   const queryParts: string[] = [];
@@ -52,57 +43,49 @@ export async function searchCards(params: SearchParams): Promise<ApiResponse> {
       return { data: [], page: 1, pageSize: 20, count: 0, totalCount: 0 };
     }
     
-    console.log('[INFO] Calling Pokemon TCG API...');
+    console.log('[INFO] Calling Pokemon TCG API via proxy...');
     
-    const requestUrl = `${BASE_URL}/cards?q=${encodeURIComponent(query)}&pageSize=20`;
-    console.log('[DEBUG] Requesting URL:', requestUrl);
-    console.log('[DEBUG] Using API Key:', API_KEY ? 'Yes' : 'No (public access)');
+    const requestUrl = new URL(`${PROXY_BASE_URL}/cards`);
+    requestUrl.searchParams.append('q', query);
+    requestUrl.searchParams.append('pageSize', '20');
     
-    const requestParams = {
-      q: query,
-      pageSize: 20
-    };
+    console.log('[DEBUG] Requesting URL:', requestUrl.toString());
     
-    console.log('[DEBUG] Request: GET', `${BASE_URL}/cards`);
-    console.log('[DEBUG] Params:', requestParams);
-    
-    const response = await axiosInstance.get<ApiResponse>('/cards', {
-      params: requestParams
+    const response = await fetch(requestUrl.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     
-    console.log('[SUCCESS] API Response received');
-    console.log('[INFO] Found', response.data.count, 'cards out of', response.data.totalCount, 'total matches');
-    
-    if (response.data.data.length > 0) {
-      console.log('[DEBUG] First card:', response.data.data[0].name);
-      console.log('[DEBUG] Card IDs:', response.data.data.map(c => c.id).join(', '));
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('[ERROR] API Response Error:');
+      console.error('[ERROR] Status:', response.status);
+      console.error('[ERROR] Status Text:', response.statusText);
+      console.error('[ERROR] Data:', errorData);
+      
+      throw new Error(`API Error (${response.status}): ${errorData.error || response.statusText}`);
     }
     
-    return response.data;
+    const data: ApiResponse = await response.json();
+    
+    console.log('[SUCCESS] API Response received');
+    console.log('[INFO] Found', data.count, 'cards out of', data.totalCount, 'total matches');
+    
+    if (data.data.length > 0) {
+      console.log('[DEBUG] First card:', data.data[0].name);
+      console.log('[DEBUG] Card IDs:', data.data.map(c => c.id).join(', '));
+    }
+    
+    return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      
-      if (!axiosError.response) {
-        console.error('[ERROR] No response from server:', axiosError.response || {});
-        console.error('[ERROR] Network/Request error:', axiosError.message);
-        
-        if (axiosError.code === 'ECONNABORTED') {
-          console.error('[ERROR] Request timeout - API may be slow or unreachable');
-        }
-      } else {
-        console.error('[ERROR] API Response Error:');
-        console.error('[ERROR] Status:', axiosError.response.status);
-        console.error('[ERROR] Status Text:', axiosError.response.statusText);
-        console.error('[ERROR] Data:', axiosError.response.data);
-        console.error('[ERROR] Headers:', axiosError.response.headers);
-      }
-      
-      console.error('[ERROR] No response received from server');
-      throw new Error(`API Error (${axiosError.response?.status || 'N/A'}): ${axiosError.message}`);
+    if (error instanceof Error) {
+      console.error('[ERROR] Request failed:', error.message);
+      throw error;
     }
     
     console.error('[ERROR] Unexpected error type:', error);
-    throw error;
+    throw new Error('Unknown error occurred while fetching cards');
   }
 }

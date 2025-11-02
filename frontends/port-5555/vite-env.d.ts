@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_POKEMON_TCG_API_KEY: string;
+  // API keys are handled server-side via the proxy API
+  // No client-side environment variables needed
 }
 
 interface ImportMeta {
