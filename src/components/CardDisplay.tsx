@@ -21,6 +21,7 @@ export const CardDisplay: React.FC<CardDisplayProps> = ({ card }) => {
               src={card.images.large}
               alt={card.name}
               className="card-image-large"
+              loading="lazy"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = card.images.small;
               }}

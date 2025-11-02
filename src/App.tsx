@@ -1,13 +1,22 @@
 // src/App.tsx
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import './styles/App.css';
 import './components/GridCardItem.css';
-import { SearchForm } from './components/SearchForm';
-import { CardList } from './components/CardList';
-import LoadingSpinner from './components/LoadingSpinner';
-import ErrorMessage from './components/ErrorMessage';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
+
+// Lazy load components for better performance
+const SearchForm = lazy(() => import('./components/SearchForm').then(module => ({ default: module.SearchForm })));
+const CardList = lazy(() => import('./components/CardList').then(module => ({ default: module.CardList })));
+const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
+const ErrorMessage = lazy(() => import('./components/ErrorMessage'));
+
+// Simple fallback component for Suspense
+const ComponentLoader = () => (
+  <div style={{ padding: '20px', textAlign: 'center' }}>
+    <div className="loading-spinner">Loading...</div>
+  </div>
+);
 
 function App() {
   const [cards, setCards] = useState<PokemonCard[]>([]);
@@ -103,12 +112,14 @@ function App() {
       </header>
 
       <main className="app-main">
-        <SearchForm
-          onSearch={handleFormSearch}
-          loading={loading}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
+        <Suspense fallback={<ComponentLoader />}>
+          <SearchForm
+            onSearch={handleFormSearch}
+            loading={loading}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
+        </Suspense>
 
         {searchQuery && (
           <div className="search-query">
@@ -116,10 +127,20 @@ function App() {
           </div>
         )}
 
-        {loading && <LoadingSpinner timeRemaining={timeRemaining} />}
-        {error && <ErrorMessage message={error} />}
+        {loading && (
+          <Suspense fallback={<ComponentLoader />}>
+            <LoadingSpinner timeRemaining={timeRemaining} />
+          </Suspense>
+        )}
+        {error && (
+          <Suspense fallback={<ComponentLoader />}>
+            <ErrorMessage message={error} />
+          </Suspense>
+        )}
         {!loading && !error && cards.length > 0 && (
-          <CardList cards={cards} loading={loading} error={error} viewMode={viewMode} />
+          <Suspense fallback={<ComponentLoader />}>
+            <CardList cards={cards} loading={loading} error={error} viewMode={viewMode} />
+          </Suspense>
         )}
       </main>
     </div>

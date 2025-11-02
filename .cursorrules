@@ -1,0 +1,438 @@
+# Cursor Rules - Pokemon TCG Search Application
+# Updated: November 1, 2025
+# Based on Anthropic Claude Best Practices
+
+## Project Overview
+This is a Pokemon TCG Card Search application with multiple front-end versions.
+- **Main Stack**: React 19.2.0 + TypeScript + Vite 7 + Tailwind CSS 4.1.16
+- **Python Version**: Python 3.12+ required for agents and tooling
+- **Repository**: https://github.com/joesuuf/pokemon-dev
+
+## Core Technical Requirements
+
+### Required Versions
+- **React**: 19.2.0 (latest stable)
+- **React-DOM**: 19.2.0
+- **Tailwind CSS**: 4.1.16 with @tailwindcss/postcss
+- **TypeScript**: 5.2.2+
+- **Vite**: 7.1.12+
+- **Python**: 3.12+ (for agents and build tools)
+- **Node.js**: 18.x or higher
+
+### Port Configuration
+- **Port 6666**: React 19 with latest features (NEW - primary development)
+- **Port 8888**: React main development server (Vite)
+- **Port 9999**: Pure HTML/CSS/Vanilla JS version (v2)
+- **Port 7777**: Carousel front-end demo
+
+All servers MUST bind to `0.0.0.0` for public/remote access (Codespaces, WSL, etc.)
+
+## Anthropic Claude Coding Best Practices (Nov 2025)
+
+### 1. Code Quality Standards
+- **Type Safety**: Always use TypeScript with strict mode enabled
+- **No `any` types**: Use proper type definitions or generics
+- **Immutability**: Prefer `const` over `let`, use immutable patterns
+- **Functional Components**: Use React functional components with hooks
+- **Error Boundaries**: Implement proper error handling and boundaries
+- **Security First**: Sanitize all user inputs, validate data, prevent XSS
+
+### 2. React 19 Best Practices
+```typescript
+// ? DO: Use lazy loading for components
+import { lazy, Suspense } from 'react';
+const Component = lazy(() => import('./Component'));
+
+// ? DO: Use proper Suspense boundaries
+<Suspense fallback={<Loading />}>
+  <LazyComponent />
+</Suspense>
+
+// ? DO: Use React 19 features properly
+// - useTransition for concurrent rendering
+// - useOptimistic for optimistic updates
+// - Server Components when appropriate
+
+// ? DON'T: Use class components (deprecated)
+// ? DON'T: Forget to add loading states
+// ? DON'T: Block rendering with synchronous operations
+```
+
+### 3. Tailwind CSS 4.1 Guidelines
+```css
+/* ? DO: Use Tailwind utility classes */
+<div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
+
+/* ? DO: Use @layer for custom styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+}
+
+/* ? DON'T: Use inline styles when Tailwind classes exist */
+/* ? DON'T: Create custom CSS without @layer */
+```
+
+**Tailwind 4.1 Configuration**: See `tailwind.config.js` and `postcss.config.js`
+
+### 4. Performance Requirements
+- **Lazy Loading**: ALL images MUST have `loading="lazy"` attribute
+- **Code Splitting**: Use React.lazy() for route-based and component-based splitting
+- **Bundle Size**: Monitor bundle size - aim for < 250kb gzipped for main bundle
+- **Tree Shaking**: Import only what you need from libraries
+- **Memoization**: Use `useMemo` and `useCallback` for expensive operations
+
+### 5. Python Agent Framework
+```python
+# ? DO: Use Python 3.12+ features
+# ? DO: Follow PEP 8 style guide
+# ? DO: Use type hints (from typing import ...)
+# ? DO: Validate with jsonschema for agent communication
+
+# Required Python packages:
+# - jsonschema>=4.0.0
+# - pytest>=8.0.0
+# - pytest-cov>=4.0.0
+
+# Agent locations:
+# - agents/python/*.py
+# - agents/lib/*.py
+```
+
+## Code Style Guidelines
+
+### TypeScript/React
+```typescript
+// ? Component Structure
+import React, { useState, useEffect } from 'react';
+import type { ComponentProps } from './types';
+
+interface Props {
+  title: string;
+  onAction: (id: string) => void;
+  items?: Item[];
+}
+
+export const Component: React.FC<Props> = ({ title, onAction, items = [] }) => {
+  const [state, setState] = useState<StateType>(initialState);
+  
+  useEffect(() => {
+    // Effect logic
+  }, [dependency]);
+
+  return (
+    <div className="container">
+      {/* JSX */}
+    </div>
+  );
+};
+```
+
+### File Naming Conventions
+- **React Components**: PascalCase (e.g., `CardDisplay.tsx`)
+- **Utilities/Helpers**: camelCase (e.g., `apiHelpers.ts`)
+- **Types**: PascalCase (e.g., `pokemon.ts` with `PokemonCard` type)
+- **Constants**: UPPER_SNAKE_CASE in separate file or const assertion
+- **CSS Modules**: ComponentName.module.css
+- **Python Files**: snake_case (e.g., `security_agent.py`)
+
+### Import Order
+```typescript
+// 1. External libraries
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+// 2. Internal absolute imports
+import { Button } from '@/components/ui';
+import { api } from '@/lib/api';
+
+// 3. Relative imports
+import { localHelper } from './helpers';
+import type { LocalType } from './types';
+
+// 4. Styles
+import './styles.css';
+```
+
+## Security Requirements
+
+### Input Validation
+```typescript
+// ? DO: Sanitize all user inputs
+const sanitizeInput = (input: string): string => {
+  return input.trim().replace(/[<>]/g, '');
+};
+
+// ? DO: Validate against schemas
+import { z } from 'zod';
+const schema = z.object({ name: z.string().min(1).max(100) });
+```
+
+### XSS Prevention
+- **NEVER** use `dangerouslySetInnerHTML` without sanitization
+- **ALWAYS** escape user-generated content
+- **USE** Content Security Policy headers
+- **VALIDATE** all API responses
+
+### API Security
+- **HTTPS only** for all external requests
+- **Validate** response structure before use
+- **Handle errors** gracefully without exposing internals
+- **Rate limiting** for API calls (already implemented)
+
+## Testing Standards
+
+### Unit Tests (Vitest)
+```typescript
+// ? DO: Test user interactions
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+
+describe('Component', () => {
+  it('should handle user click', () => {
+    render(<Component />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByText('Result')).toBeInTheDocument();
+  });
+});
+```
+
+### Python Tests (pytest)
+```python
+# ? DO: Test agent behavior
+import pytest
+from agents.python.security_agent import SecurityAgent
+
+def test_security_scan():
+    agent = SecurityAgent()
+    result = agent.scan_code("sample.py")
+    assert result.success is True
+```
+
+## Accessibility (a11y) Requirements
+
+```tsx
+// ? DO: Use semantic HTML
+<button onClick={handleClick} aria-label="Close dialog">?</button>
+
+// ? DO: Add ARIA attributes when needed
+<div role="alert" aria-live="polite">{errorMessage}</div>
+
+// ? DO: Ensure keyboard navigation
+<input onKeyDown={handleKeyDown} />
+
+// ? DON'T: Use div/span for interactive elements
+// ? DON'T: Forget alt text on images
+```
+
+## Important Links & Documentation
+
+### Official Documentation
+- **React 19**: https://react.dev/
+- **Tailwind CSS 4.1**: https://tailwindcss.com/docs
+- **Vite**: https://vitejs.dev/
+- **TypeScript**: https://www.typescriptlang.org/docs/
+- **Pokemon TCG API**: https://docs.pokemontcg.io/
+
+### Project Documentation
+- **Agents Overview**: `/agents/AGENTS_OVERVIEW.md`
+- **Modular Framework**: `/agents/MODULAR_FRAMEWORK_README.md`
+- **Security Agent**: `/security-agent/README.md`
+- **Frontend Ports**: `/FRONTEND_PORTS.md`
+- **Testing Report**: `/FRONTEND_TESTING_REPORT.md`
+- **Setup Guide**: `/README.md`
+
+### Key Repository Files
+- **Package Config**: `/package.json`
+- **TypeScript Config**: `/tsconfig.json`
+- **Tailwind Config**: `/tailwind.config.js`
+- **Vite Config**: `/vite.config.ts`
+- **Python Agents**: `/agents/python/`
+- **Schemas**: `/agents/schemas/`
+
+## Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Start React dev server (port 8888)
+npm run dev
+
+# Start React 19 on port 6666 (NEW)
+npm run dev:6666
+
+# Start all front-ends (7777, 8888, 9999)
+npm run start:all
+
+# Start all including 6666
+npm run start:all+6666
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+
+# Run security scan
+npm run security:scan
+
+# Type check
+npm run build  # TypeScript check is part of build
+```
+
+## Git Commit Guidelines
+
+### Commit Message Format
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation only
+- **style**: Code style changes (formatting, semicolons, etc.)
+- **refactor**: Code refactoring without functionality changes
+- **perf**: Performance improvements
+- **test**: Adding or updating tests
+- **chore**: Build process or auxiliary tool changes
+- **security**: Security fixes or improvements
+
+### Examples
+```
+feat(lazy-loading): implement lazy loading for all components
+
+- Added React.lazy() for SearchForm, CardList, LoadingSpinner
+- Wrapped components in Suspense boundaries
+- Added loading="lazy" to all images
+
+Closes #123
+```
+
+## Error Handling Patterns
+
+```typescript
+// ? DO: Use proper error boundaries
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, errorInfo) {
+    logErrorToService(error, errorInfo);
+  }
+}
+
+// ? DO: Handle async errors
+try {
+  const data = await api.fetch();
+  setData(data);
+} catch (error) {
+  if (error instanceof ApiError) {
+    setError(error.message);
+  } else {
+    setError('An unexpected error occurred');
+  }
+  logger.error('API call failed', { error, context });
+}
+
+// ? DO: Provide user-friendly error messages
+// ? DON'T: Expose stack traces to users
+```
+
+## Performance Monitoring
+
+### Metrics to Track
+- **FCP** (First Contentful Paint): < 1.8s
+- **LCP** (Largest Contentful Paint): < 2.5s
+- **FID** (First Input Delay): < 100ms
+- **CLS** (Cumulative Layout Shift): < 0.1
+- **TTI** (Time to Interactive): < 3.8s
+
+### Tools
+- Lighthouse CI in build pipeline
+- Web Vitals monitoring
+- Bundle analysis with `vite-bundle-visualizer`
+
+## AI Assistant Guidelines (For Claude/Cursor)
+
+### When Writing Code
+1. **ALWAYS** check existing patterns in the codebase first
+2. **ALWAYS** use TypeScript with proper types
+3. **ALWAYS** implement lazy loading for new components
+4. **ALWAYS** add `loading="lazy"` to new images
+5. **ALWAYS** use Tailwind classes instead of inline styles
+6. **NEVER** introduce `any` types
+7. **NEVER** skip error handling
+8. **NEVER** create security vulnerabilities
+
+### When Reviewing Code
+1. Check for proper type safety
+2. Verify lazy loading implementation
+3. Ensure accessibility standards
+4. Confirm Tailwind CSS usage
+5. Validate security practices
+6. Check for performance optimizations
+
+### When Debugging
+1. Check browser console for errors
+2. Verify network requests in DevTools
+3. Check React DevTools for component issues
+4. Review Vite build output for warnings
+5. Check TypeScript errors: `npm run build`
+
+## Multi-Version Support
+
+This project maintains 4 front-end versions:
+
+1. **React 19 (Port 6666)** - Latest features, primary development
+   - Uses React 19.2.0
+   - Lazy loading enabled
+   - Full TypeScript
+   - Tailwind CSS 4.1.16
+
+2. **React 18 (Port 8888)** - Stable version
+   - Main development server
+   - Full feature set
+   - Production builds
+
+3. **HTML/Vanilla JS (Port 9999)** - No framework
+   - Pure HTML/CSS/JavaScript
+   - No build step required
+   - Lazy loading enabled in JS
+
+4. **Carousel Demo (Port 7777)** - Showcase
+   - Single-file HTML app
+   - Inline styles and scripts
+   - Lazy loading enabled
+
+**When adding features**: Ensure compatibility across all versions where applicable.
+
+## Environment Variables
+
+```bash
+# Create .env file with:
+VITE_API_KEY=your-pokemon-tcg-api-key  # Optional - API is open
+NODE_ENV=development
+VITE_PORT=8888
+```
+
+## Final Reminders
+
+- ?? **Performance First**: Lazy load everything possible
+- ?? **Security Always**: Validate, sanitize, escape
+- ? **Accessibility Required**: ARIA, semantic HTML, keyboard nav
+- ?? **Mobile First**: Responsive design is mandatory
+- ?? **Test Everything**: Unit tests + integration tests
+- ?? **Document Changes**: Update README and relevant docs
+- ?? **Use Tailwind**: Don't write custom CSS without good reason
+- ?? **Python 3.12+**: Required for all agent work
+- ?? **React 19**: Latest features and best practices
+
+---
+
+**Last Updated**: November 1, 2025
+**Maintained By**: Development Team
+**Questions?**: Check `/docs/` directory or repository issues

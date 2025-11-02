@@ -30,6 +30,7 @@ export const GridCardItem: React.FC<GridCardItemProps> = ({ card }) => {
         <img
           src={card.images.small}
           alt={card.name}
+          loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               'https://via.placeholder.com/120x168?text=Card+Not+Found';
