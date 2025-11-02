@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.pokemontcg.io; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.pokemontcg.io;">
+    <meta name="description" content="Pokemon TCG Card Search - Pure HTML/CSS/API Static Site">
+    <meta name="theme-color" content="#ffcb05">
+    <title>Pokemon TCG Search - Static Site</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/cards.css">
+    <link rel="stylesheet" href="styles/mobile.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Pokemon TCG Card Search</h1>
+            <p class="subtitle">Pure HTML/CSS/API Static Site</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Search Form -->
+            <section class="search-section">
+                <form id="search-form" class="search-form" method="get" action="#results">
+                    <div class="form-group">
+                        <label for="search-input" class="visually-hidden">Search Pokemon Cards</label>
+                        <input
+                            type="text"
+                            id="search-input"
+                            name="q"
+                            class="search-input"
+                            placeholder="Search for Pokemon cards..."
+                            autocomplete="off"
+                            required
+                            aria-required="true"
+                            pattern="[A-Za-z0-9\s\-]*"
+                            title="Enter card name (letters, numbers, spaces, and hyphens only)"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="view-mode" class="form-label">View Mode:</label>
+                        <select id="view-mode" name="view" class="select-input">
+                            <option value="grid">Grid View</option>
+                            <option value="list">List View</option>
+                            <option value="detailed">Detailed View</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon">??</span>
+                        Search Cards
+                    </button>
+                </form>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading-container hidden" role="status" aria-live="polite">
+                <div class="spinner"></div>
+                <p class="loading-text">Searching for cards...</p>
+                <p id="timeout-timer" class="timeout-timer"></p>
+                <div id="found-cards" class="found-cards"></div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error" class="error-container hidden" role="alert" aria-live="assertive">
+                <div class="error-content">
+                    <span class="error-icon">??</span>
+                    <p class="error-message"></p>
+                </div>
+                <button class="btn btn-secondary" onclick="hideError()">Dismiss</button>
+            </div>
+
+            <!-- Results Section -->
+            <section id="results" class="results-section hidden">
+                <div class="results-header">
+                    <h2 class="results-title">Search Results</h2>
+                    <p class="results-count">
+                        <span id="result-count">0</span> cards found
+                    </p>
+                </div>
+
+                <div id="cards-container" class="cards-grid">
+                    <!-- Cards will be loaded here via vanilla JavaScript -->
+                </div>
+
+                <!-- Pagination -->
+                <nav class="pagination" aria-label="Search results pagination">
+                    <button class="btn btn-secondary" id="prev-page" disabled>
+                        &laquo; Previous
+                    </button>
+                    <span class="page-info">
+                        Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                    </span>
+                    <button class="btn btn-secondary" id="next-page" disabled>
+                        Next &raquo;
+                    </button>
+                </nav>
+            </section>
+
+            <!-- Card Detail Modal -->
+            <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                <div class="modal-overlay" onclick="closeModal()"></div>
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+                        &times;
+                    </button>
+                    <div id="modal-body" class="modal-body">
+                        <!-- Card details will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Pokemon TCG Search. Data provided by <a href="https://pokemontcg.io" target="_blank" rel="noopener noreferrer">Pokemon TCG API</a></p>
+            <p class="security-badge">
+                <span class="badge">?? Secure</span>
+                <span class="badge">?? Mobile-First</span>
+                <span class="badge">? Accessible</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Vanilla JavaScript - No frameworks -->
+    <script src="scripts/set-theme-lookup.js"></script>
+    <script src="scripts/set-theme-manager.js"></script>
+    <script src="scripts/gradient-manager.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "pokemon-tcg-static-site",
+  "version": "1.0.0",
+  "description": "Pure HTML/CSS/JavaScript static site for Pokemon TCG Card Search",
+  "private": true,
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "serve:node": "npx http-server -p 8000"
+  }
+}
