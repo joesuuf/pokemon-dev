@@ -32,7 +32,7 @@
     "watchdog:stop": "bash stop-watchdog.sh",
     "watchdog:status": "bash status-watchdog.sh",
     "watchdog:logs": "tail -f logs/watchdog/watchdog-background.log",
-    "hub": "vite --port 1111 --host 0.0.0.0"
+    "hub": "vite --config vite.config.1111.ts"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
