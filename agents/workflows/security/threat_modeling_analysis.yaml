@@ -1,0 +1,9 @@
+---
+name: threat_modeling_analysis
+description: STRIDE-based threat modeling and attack surface analysis
+skills:
+  - threat_modeling_stride
+config:
+  stride_analysis: true
+  attack_surface_mapping: true
+---

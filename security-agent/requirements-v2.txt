@@ -1,0 +1,15 @@
+# Security Agent v2.0 Requirements
+# Python 3.12+ required
+
+# Core dependencies
+jsonschema>=4.0.0  # Schema validation
+pyyaml>=6.0  # YAML configuration parsing
+requests>=2.31.0  # HTTP requests (for dependency checking)
+
+# Optional dependencies
+colorama>=0.4.6  # Cross-platform colored terminal output
+matplotlib>=3.7.0  # Visualization (optional, for charts)
+pandas>=2.0.0  # Data analysis (optional, for metrics)
+
+# Modular framework dependencies
+# (included via agents/python/modular_agent_framework.py)
