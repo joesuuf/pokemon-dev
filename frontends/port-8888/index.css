@@ -1,0 +1,75 @@
+/* src/index.css */
+
+/* Import Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* Define Pokemon-themed colors and custom design tokens */
+@theme {
+  /* Pokemon brand colors */
+  --color-pokemon-red: #CC0000;
+  --color-pokemon-blue: #003DA5;
+  --color-pokemon-yellow: #FFDE00;
+
+  /* Semantic color aliases */
+  --color-primary: #CC0000;
+  --color-secondary: #003DA5;
+  --color-accent: #FFDE00;
+
+  /* Extended color palette for Pokemon theme */
+  --color-pokemon-red-light: #FF0000;
+  --color-pokemon-red-dark: #990000;
+  --color-pokemon-blue-light: #0066CC;
+  --color-pokemon-blue-dark: #002966;
+}
+
+/* Global reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5569d8 0%, #6a4391 100%);
+}
+
+/* Selection Colors */
+::selection {
+  background: #667eea;
+  color: white;
+}
+
+::-moz-selection {
+  background: #667eea;
+  color: white;
+}

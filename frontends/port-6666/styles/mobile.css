@@ -1,0 +1,231 @@
+/* Mobile-First Responsive Styles */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .search-form {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .form-group:first-child {
+        flex: 1;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    :root {
+        --font-size-base: 1.125rem;
+        --font-size-lg: 1.25rem;
+        --font-size-xl: 1.75rem;
+        --font-size-xxl: 2.5rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-lg);
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: var(--spacing-xl);
+    }
+
+    .search-section {
+        padding: var(--spacing-xxl);
+    }
+
+    .modal-content {
+        max-width: 800px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .card-detailed-header {
+        flex-direction: row;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        padding: 0 var(--spacing-xl);
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 575px) {
+    .header {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .title {
+        font-size: var(--font-size-xl);
+    }
+
+    .subtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .search-form {
+        gap: var(--spacing-md);
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .card-detailed-header {
+        flex-direction: column;
+    }
+
+    .card-detailed-image {
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-content {
+        max-height: 95vh;
+    }
+
+    .modal-body {
+        padding: var(--spacing-md);
+    }
+
+    /* Optimize touch targets for mobile */
+    .btn,
+    .card,
+    a {
+        min-height: 44px; /* iOS recommended touch target size */
+    }
+
+    /* Prevent zoom on input focus (iOS) */
+    input[type="text"],
+    select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Landscape phone adjustments */
+@media (max-width: 767px) and (orientation: landscape) {
+    .header {
+        padding: var(--spacing-md) 0;
+    }
+
+    .main-content {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .modal-content {
+        max-height: 80vh;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #e0e0e0;
+        --text-light: #b0b0b0;
+        --bg-color: #1a1a1a;
+        --white: #2d2d2d;
+        --border-color: #404040;
+    }
+
+    .card {
+        background: #2d2d2d;
+    }
+
+    .search-input,
+    .select-input {
+        background: #1a1a1a;
+        color: #e0e0e0;
+        border-color: #404040;
+    }
+
+    .modal-content {
+        background: #2d2d2d;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .spinner {
+        animation: none;
+        border-top-color: var(--primary-color);
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .btn-primary {
+        border: 2px solid currentColor;
+    }
+
+    .card {
+        border: 2px solid var(--border-color);
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Disable hover effects on touch devices */
+    .card:hover {
+        transform: none;
+    }
+
+    .btn-primary:hover {
+        transform: none;
+    }
+
+    /* Add active state instead */
+    .card:active {
+        transform: scale(0.98);
+    }
+
+    .btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Screen reader optimizations */
+@media speech {
+    .card-image {
+        speak: none;
+    }
+
+    .spinner {
+        speak: none;
+    }
+}

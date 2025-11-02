@@ -16,7 +16,13 @@
     "security:report": "python3 security-agent/agent.py --format html",
     "security:ci": "python3 security-agent/agent.py --exit-on-critical",
     "v2:dev": "cd v2 && python3 -m http.server 8080",
-    "v2:serve": "npx http-server v2 -p 8080 -o"
+    "v2:serve": "npx http-server v2 -p 8080 -o",
+    "frontend:5555": "vite --config vite.config.5555.ts",
+    "frontend:6666": "npx http-server frontends/port-6666 -p 6666",
+    "frontend:7777": "vite --config vite.config.7777.ts",
+    "frontend:8888": "vite --config vite.config.8888.ts",
+    "frontend:9999": "vite --config vite.config.9999.ts",
+    "frontends:all": "npm-run-all --parallel frontend:5555 frontend:6666 frontend:7777 frontend:8888 frontend:9999"
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
