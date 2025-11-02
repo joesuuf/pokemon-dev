@@ -1,65 +1,41 @@
 import type { Pokemon, PokemonListResponse } from './types';
+import { searchCardsFromMasterlist, getCardById as getCardByIdFromMasterlist, getRandomCards as getRandomCardsFromMasterlist } from '../services/masterlistService';
 
-// Use the serverless proxy API instead of direct calls
-// The proxy handles API key authentication server-side
-const API_BASE_URL = '/api';
-
-const headers: HeadersInit = {
-  'Content-Type': 'application/json',
-};
-
+/**
+ * Search Pokemon cards using the masterlist
+ */
 export async function searchPokemon(
   query: string,
   page: number = 1,
   pageSize: number = 20
 ): Promise<PokemonListResponse> {
-  const searchQuery = query.trim() 
-    ? `name:"${query}*" OR name:"*${query}*"` 
-    : '';
-  
-  const params = new URLSearchParams({
-    q: searchQuery,
-    page: page.toString(),
-    pageSize: pageSize.toString(),
-    orderBy: 'name,-number', // Order by name ascending, then number descending
-  });
-
-  const response = await fetch(
-    `${API_BASE_URL}/cards?${params}`,
-    { method: 'GET', headers }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch Pokemon cards');
+  if (!query.trim()) {
+    return { data: [], page, pageSize, count: 0, totalCount: 0 };
   }
 
-  return response.json();
+  const params = {
+    name: query.trim()
+  };
+
+  return searchCardsFromMasterlist(params, page, pageSize);
 }
 
+/**
+ * Get a Pokemon card by ID from the masterlist
+ */
 export async function getPokemonById(id: string): Promise<Pokemon> {
-  const response = await fetch(
-    `${API_BASE_URL}/cards/${id}`,
-    { method: 'GET', headers }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch Pokemon card');
+  const card = await getCardByIdFromMasterlist(id);
+  
+  if (!card) {
+    throw new Error(`Pokemon card with ID ${id} not found`);
   }
 
-  const data = await response.json();
-  return data.data;
+  return card;
 }
 
+/**
+ * Get random Pokemon cards from the masterlist
+ */
 export async function getRandomPokemon(count: number = 20): Promise<Pokemon[]> {
-  const response = await fetch(
-    `${API_BASE_URL}/cards?pageSize=${count}&orderBy=name,-number`,
-    { method: 'GET', headers }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch random Pokemon cards');
-  }
-
-  const data: PokemonListResponse = await response.json();
-  return data.data;
+  return getRandomCardsFromMasterlist(count);
 }
