@@ -57,6 +57,11 @@ function initApp() {
     // Set up event listeners
     setupEventListeners();
 
+    // Apply random gradient background on page load
+    if (typeof GradientManager !== 'undefined') {
+        GradientManager.applyGradient(document.body);
+    }
+
     // Check for URL parameters (for bookmarking/sharing)
     checkURLParams();
 

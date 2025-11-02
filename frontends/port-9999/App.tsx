@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './styles/App.css';
 import './components/GridCardItem.css';
 import { SearchForm } from './components/SearchForm';
@@ -8,6 +8,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
+import { applyRandomGradient } from './utils/gradientUtils';
 
 function App() {
   const [cards, setCards] = useState<PokemonCard[]>([]);
@@ -16,6 +17,11 @@ function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
+
+  // Apply random gradient on component mount
+  useEffect(() => {
+    applyRandomGradient();
+  }, []);
 
   const handleFormSearch = async (query: string) => {
     const params: SearchParams = {

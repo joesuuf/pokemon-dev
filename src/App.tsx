@@ -4,6 +4,7 @@ import './styles/App.css';
 import './components/GridCardItem.css';
 import { searchCards } from './services/pokemonTcgApi';
 import { PokemonCard, SearchParams } from './types/pokemon';
+import { applyRandomGradient } from './utils/gradientUtils';
 
 // Lazy load components for better performance
 const SearchForm = lazy(() => import('./components/SearchForm').then(module => ({ default: module.SearchForm })));
@@ -25,6 +26,11 @@ function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'card-view' | 'detailed-view'>('card-view');
+
+  // Apply random gradient on component mount
+  useEffect(() => {
+    applyRandomGradient();
+  }, []);
 
   // SEC-01: Timer cleanup - moved to useEffect to prevent memory leaks
   useEffect(() => {

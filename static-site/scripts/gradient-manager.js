@@ -36,7 +36,19 @@ const GradientManager = (function() {
     }
     
     /**
+     * Get random gradient from available options
+     */
+    function getRandomGradient() {
+        const randomIndex = Math.floor(Math.random() * GRADIENT_COUNT);
+        return {
+            index: randomIndex,
+            cssGradient: getCSSGradient(randomIndex)
+        };
+    }
+    
+    /**
      * Get next gradient (rotates through all gradients)
+     * Kept for backward compatibility
      */
     function getNextGradient() {
         const index = currentGradientIndex;
@@ -48,10 +60,10 @@ const GradientManager = (function() {
     }
     
     /**
-     * Apply gradient to element using CSS
+     * Apply random gradient to element using CSS
      */
     function applyGradient(element) {
-        const gradient = getNextGradient();
+        const gradient = getRandomGradient();
         if (gradient && element) {
             const cssGradient = getCSSGradient(gradient.index);
             element.style.background = cssGradient;
@@ -133,6 +145,7 @@ const GradientManager = (function() {
     return {
         init,
         getNextGradient,
+        getRandomGradient,
         applyGradient,
         getCSSGradient,
         GRADIENT_COUNT

@@ -32,7 +32,7 @@
     --spacing-xxl: 3rem;
 
     /* Typography */
-    --font-primary: 'Roboto', sans-serif;
+    --font-primary: 'Courier New', Courier, monospace;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
@@ -68,11 +68,11 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Enforce Roboto font globally */
+/* Enforce monospace font globally */
 html,
 body,
 #root {
-    font-family: 'Roboto', sans-serif !important;
+    font-family: 'Courier New', Courier, monospace !important;
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--text-color);
@@ -81,9 +81,9 @@ body,
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ensure all elements inherit Roboto */
+/* Ensure all elements inherit monospace */
 body * {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Courier New', Courier, monospace !important;
 }
 
 /* Accessibility - Visually Hidden */
