@@ -92,8 +92,8 @@ External API
 
 #### Authentication
 - Service Account JSON key file
-- Environment variable: `GOOGLE_APPLICATION_CREDENTIALS` (for local dev)
-- Vercel environment variable: `GCP_VISION_API_KEY` (for production)
+- Environment variable: `GOOGLE_APPLICATION_CREDENTIALS` (points to service account JSON)
+- For production: Store credentials securely (environment variable or secure config)
 
 ### 3.2 Backend API Endpoints
 
@@ -458,28 +458,144 @@ export async function matchCard(ocrResults: ParsedCardInfo): Promise<OCRMatchRes
 
   return response.json();
 }
+---
+
+## 5. Backend Options
+
+### Option A: Node.js/Express (TypeScript) - Recommended for Frontend Integration
+
+**Pros:**
+- Same language as frontend (TypeScript)
+- Easy integration with existing React app
+- Large ecosystem and community support
+- Can share types between frontend/backend
+
+**Setup:**
+```bash
+# Create backend directory
+mkdir backend
+cd backend
+npm init -y
+
+# Install dependencies
+npm install express cors multer @google-cloud/vision dotenv axios
+npm install --save-dev @types/express @types/cors @types/multer @types/node typescript ts-node nodemon
 ```
+
+**Structure:**
+```
+backend/
+??? src/
+?   ??? routes/
+?   ?   ??? ocr.ts
+?   ?   ??? index.ts
+?   ??? services/
+?   ?   ??? vision.ts
+?   ?   ??? cardMatcher.ts
+?   ??? utils/
+?   ?   ??? textParser.ts
+?   ??? server.ts
+?   ??? types.ts
+??? package.json
+??? tsconfig.json
+??? .env
+```
+
+### Option B: Python/FastAPI - Aligns with Existing Python Agents
+
+**Pros:**
+- Consistent with existing Python agent infrastructure
+- Excellent GCP Vision API support
+- FastAPI provides automatic API documentation (Swagger UI)
+- Easy to integrate with existing Python tools
+
+**Setup:**
+```bash
+# Create backend directory
+mkdir backend
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install fastapi uvicorn python-multipart google-cloud-vision httpx python-dotenv pydantic
+```
+
+**Structure:**
+```
+backend/
+??? app/
+?   ??? routes/
+?   ?   ??? ocr.py
+?   ?   ??? __init__.py
+?   ??? services/
+?   ?   ??? vision.py
+?   ?   ??? card_matcher.py
+?   ??? utils/
+?   ?   ??? text_parser.py
+?   ??? main.py
+?   ??? types.py
+??? requirements.txt
+??? .env
+```
+
+### Recommendation
+
+**Choose Node.js/Express if:**
+- You want to share TypeScript types between frontend/backend
+- You prefer keeping everything in one language stack
+- You want simpler deployment setup
+
+**Choose Python/FastAPI if:**
+- You want consistency with existing Python agents
+- You prefer Python's ecosystem for ML/AI tasks
+- You want automatic API documentation (FastAPI provides Swagger UI)
 
 ---
 
-## 5. Dependencies
+## 6. Dependencies
 
 ### Backend Dependencies
+
+#### Node.js/Express Option
 ```json
 {
   "dependencies": {
-    "@google-cloud/vision": "^4.0.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
     "multer": "^1.4.5-lts.1",
-    "@types/multer": "^1.4.11"
+    "@google-cloud/vision": "^4.0.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.2.2",
+    "ts-node": "^10.9.1",
+    "nodemon": "^3.0.2"
   }
 }
+```
+
+#### Python/FastAPI Option
+```txt
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+google-cloud-vision==3.4.5
+httpx==0.25.1
+python-dotenv==1.0.0
+pydantic==2.5.0
 ```
 
 ### Frontend Dependencies
 ```json
 {
   "dependencies": {
-    "react-dropzone": "^14.2.3", // For drag & drop upload
+    "react-dropzone": "^14.2.3",
     "@types/react-dropzone": "^5.1.3"
   }
 }
@@ -487,35 +603,67 @@ export async function matchCard(ocrResults: ParsedCardInfo): Promise<OCRMatchRes
 
 ---
 
-## 6. Environment Variables
+## 7. Backend Deployment Options
+
+### Self-Hosted Options
+
+#### Option 1: Local Development Server
+- Run backend on `localhost:3001` (or chosen port)
+- Frontend connects via `http://localhost:3001/api/ocr/*`
+- Use for development/testing
+
+#### Option 2: Docker Container
+- Package backend in Docker container
+- Deploy to any Docker-compatible host
+- Easy to scale and manage
+
+#### Option 3: Cloud VM (GCP/AWS/Azure)
+- Deploy backend to virtual machine
+- Full control over environment
+- Can use same GCP project as Vision API
+
+#### Option 4: Railway/Render/Fly.io
+- Modern PaaS alternatives to Vercel
+- Simple deployment process
+- Environment variable management built-in
+
+### Deployment Considerations
+- **CORS**: Configure CORS to allow frontend domain
+- **Environment Variables**: Store GCP credentials securely
+- **Port Binding**: Bind to `0.0.0.0` for remote access (Codespaces, WSL, etc.)
+- **HTTPS**: Use reverse proxy (nginx) or cloud provider SSL for production
+
+---
+
+## 8. Environment Variables
 
 ### Required
 ```bash
 # GCP Vision API
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json  # Local dev
-GCP_VISION_API_KEY=your-api-key  # Production (Vercel)
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json  # Path to GCP service account JSON
 
-# Existing
+# Pokemon TCG API (existing)
 POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
+
+# Backend Server (if using Node.js/Express)
+PORT=3001  # Backend API port
+CORS_ORIGIN=http://localhost:5173  # Frontend URL for CORS
 ```
 
-### Vercel Configuration
-```json
-{
-  "env": {
-    "GCP_VISION_API_KEY": {
-      "description": "GCP Vision API key for OCR processing"
-    },
-    "GOOGLE_APPLICATION_CREDENTIALS": {
-      "description": "GCP service account JSON (base64 encoded)"
-    }
-  }
-}
+### Environment Configuration
+```bash
+# .env file (local development)
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
+POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
+PORT=3001  # Backend API port
+
+# Production (set in deployment environment)
+# Store GCP credentials securely via environment variables or secure config service
 ```
 
 ---
 
-## 7. Error Handling
+## 9. Error Handling
 
 ### OCR Errors
 - **Image too large**: Return 400 with max size message
@@ -530,7 +678,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 8. Testing Strategy
+## 10. Testing Strategy
 
 ### Unit Tests
 - Text parsing functions
@@ -555,7 +703,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 9. Performance Considerations
+## 11. Performance Considerations
 
 ### Optimization
 - **Image compression**: Resize before sending to GCP (max 2048px)
@@ -570,7 +718,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 10. Security Considerations
+## 12. Security Considerations
 
 ### Image Upload Security
 - **File type validation**: Only allow image formats
@@ -585,15 +733,18 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 11. Implementation Phases
+## 13. Implementation Phases
 
 ### Phase 1: Backend OCR API (Week 1)
+- [ ] Choose backend option (Node.js/Express OR Python/FastAPI)
+- [ ] Set up backend server structure
 - [ ] Set up GCP Vision API credentials
-- [ ] Create `/api/ocr/upload` endpoint
-- [ ] Create `/api/ocr/process` endpoint
+- [ ] Create `POST /api/ocr/upload` endpoint
+- [ ] Create `POST /api/ocr/process` endpoint
 - [ ] Implement OCR text extraction
 - [ ] Implement text parsing logic
 - [ ] Write unit tests
+- [ ] Configure CORS for frontend access
 
 ### Phase 2: Card Matching (Week 1-2)
 - [ ] Create `/api/ocr/match` endpoint
@@ -620,7 +771,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 12. Future Enhancements
+## 14. Future Enhancements
 
 ### Advanced Features
 - **Batch upload**: Process multiple cards at once
@@ -636,7 +787,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 13. Success Metrics
+## 15. Success Metrics
 
 ### Technical Metrics
 - **OCR accuracy**: >95% correct text extraction
@@ -651,7 +802,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 14. Documentation
+## 16. Documentation
 
 ### User Documentation
 - How to upload card images
@@ -667,7 +818,7 @@ POKEMON_TCG_API_KEY=your-pokemon-tcg-api-key
 
 ---
 
-## 15. Cost Estimation
+## 17. Cost Estimation
 
 ### GCP Vision API Costs
 - **First 1,000 units/month**: Free
