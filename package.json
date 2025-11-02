@@ -9,6 +9,7 @@
     "dev:all": "bash start-dev.sh",
     "dev:all:win": "powershell -ExecutionPolicy Bypass -File start-dev.ps1",
     "build": "tsc && vite build",
+    "build:hub": "vite build --config vite.config.1111.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "NODE_OPTIONS=--max-old-space-size=4096 vitest",

@@ -10,6 +10,7 @@ export default defineConfig({
     host: '0.0.0.0'
   },
   build: {
-    outDir: resolve(__dirname, 'dist/hub')
+    outDir: resolve(__dirname, 'dist/hub'),
+    emptyOutDir: false
   }
 })

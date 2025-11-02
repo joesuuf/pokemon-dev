@@ -24,10 +24,6 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/cards"
-    },
-    {
-      "source": "/",
-      "destination": "/hub/index.html"
     }
   ],
   "headers": [
