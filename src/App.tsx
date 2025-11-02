@@ -148,6 +148,15 @@ function App() {
           </Suspense>
         )}
       </main>
+
+      {/* Version footer link */}
+      <a
+        href="/v2/"
+        className="version-footer"
+        title="Switch to Static HTML/CSS Version"
+      >
+        Static v2 →
+      </a>
     </div>
   );
 }
