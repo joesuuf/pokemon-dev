@@ -167,7 +167,7 @@ function App() {
 
       {/* Version footer link */}
       <a
-        href="/v2/"
+        href="http://localhost:6666/"
         className="version-footer"
         title="Switch to Static HTML/CSS Version"
       >

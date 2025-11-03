@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -18,10 +19,11 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist-4444',
+    outDir: resolve(__dirname, 'dist/port-4444'),
   },
-  root: '.',
-  publicDir: 'public',
+  // Point Vite root to the OCR frontend folder
+  root: resolve(__dirname, 'frontends/port-4444'),
+  publicDir: resolve(__dirname, 'frontends/port-4444'),
 });
 
 

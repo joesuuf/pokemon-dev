@@ -5,7 +5,7 @@
 ### Primary Ports (Most Used)
 
 #### Port 8888 - Main React Frontend ⭐ PRIMARY
-**Command:** `npm run dev`
+**Command:** `npm run frontend:8888`
 - **Frontend:** React 19.2.0 + TypeScript + Vite
 - **Location:** `src/` directory
 - **Index:** `index.html` (root)

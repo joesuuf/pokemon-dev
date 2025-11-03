@@ -4,8 +4,8 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  root: resolve(__dirname, 'hub'),
-  publicDir: resolve(__dirname, 'hub'),
+  root: resolve(__dirname, 'frontends/port-1111'),
+  publicDir: resolve(__dirname, 'frontends/port-1111'),
   server: {
     port: 1111,
     strictPort: true,
@@ -21,7 +21,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: resolve(__dirname, 'dist/hub'),
+    outDir: resolve(__dirname, 'dist/port-1111'),
     emptyOutDir: false
   }
 })
