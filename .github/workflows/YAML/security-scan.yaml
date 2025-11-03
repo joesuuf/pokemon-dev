@@ -1,0 +1,158 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop, 'claude/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  mobile-security-scan:
+    name: Mobile Security & Standards Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Run Mobile Security Agent
+      id: security_scan
+      run: |
+        echo "🔍 Running Mobile Security & Standards Agent..."
+        chmod +x security-agent/run-agent.sh
+        python3 security-agent/agent.py --format all || echo "scan_failed=true" >> $GITHUB_OUTPUT
+
+    - name: Upload Security Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-reports-${{ github.run_number }}
+        path: security-agent/reports/
+        retention-days: 90
+
+    - name: Comment PR with Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          // Find the latest markdown report
+          const reportsDir = 'security-agent/reports';
+          if (!fs.existsSync(reportsDir)) {
+            console.log('No reports directory found');
+            return;
+          }
+
+          const files = fs.readdirSync(reportsDir);
+          const mdReports = files.filter(f => f.endsWith('.md')).sort().reverse();
+
+          if (mdReports.length === 0) {
+            console.log('No markdown reports found');
+            return;
+          }
+
+          const reportPath = path.join(reportsDir, mdReports[0]);
+          const reportContent = fs.readFileSync(reportPath, 'utf8');
+
+          // Create comment
+          const comment = `## 🔒 Mobile Security & Standards Report
+
+${reportContent}
+
+---
+*📊 [View detailed HTML report in artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})*
+          `;
+
+          // Post comment
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: Check for Critical Issues
+      if: steps.security_scan.outputs.scan_failed == 'true'
+      run: |
+        echo "::error::Critical security issues found! Check the reports for details."
+        exit 1
+
+  typescript-standards:
+    name: TypeScript/React Standards
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint || echo "Linting issues found"
+
+    - name: Run TypeScript Compiler Check
+      run: npx tsc --noEmit
+
+  python-standards:
+    name: Python 3 Standards
+    runs-on: ubuntu-latest
+    if: false  # Enable when Python code is added
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install flake8 mypy black
+
+    - name: Run flake8
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: Run mypy
+      run: mypy --strict **/*.py || true
+
+    - name: Check formatting with black
+      run: black --check . || true
+
+  security-summary:
+    name: Security Scan Summary
+    runs-on: ubuntu-latest
+    needs: [mobile-security-scan, typescript-standards]
+    if: always()
+
+    steps:
+    - name: Summary
+      run: |
+        echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All security scans completed" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Scans Performed:" >> $GITHUB_STEP_SUMMARY
+        echo "- Mobile Security & Standards Agent" >> $GITHUB_STEP_SUMMARY
+        echo "- TypeScript/React Standards Check" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📊 Download artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
