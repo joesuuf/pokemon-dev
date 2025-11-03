@@ -44,7 +44,7 @@ Add Google Cloud Vision API integration to automatically identify Pokemon cards 
 - `package.json` - Added scripts and dependencies
 - `hub/index.html` - Added OCR entry
 - `README.md` - Updated with OCR documentation
-- `FRONTEND_PORTS.md` - Added port 4444
+- `documentation/guides/documentation/guides/FRONTEND_PORTS.md` - Added port 4444
 - `watchdog-frontends.sh` - Added port 4444 to watchdog
 
 ## ?? How to Test

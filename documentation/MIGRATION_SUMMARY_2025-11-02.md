@@ -131,7 +131,7 @@ All static servers now use security best practices:
 
 #### New Documentation
 - ✅ `HTTP_SERVER_CAPABILITIES_TODO.md` - 16 http-server features not yet implemented
-- ✅ `SCRIPT_AUDIT_REPORT.md` - Comprehensive script audit
+- ✅ `documentation/audits/collection/documentation/audits/collection/SCRIPT_AUDIT_REPORT.md` - Comprehensive script audit
 - ✅ `MIGRATION_SUMMARY_2025-11-02.md` - This file
 
 ---
@@ -149,7 +149,7 @@ All static servers now use security best practices:
 - **Created:** 4 files
   - `hub/index.html`
   - `HTTP_SERVER_CAPABILITIES_TODO.md`
-  - `SCRIPT_AUDIT_REPORT.md`
+  - `documentation/audits/collection/documentation/audits/collection/SCRIPT_AUDIT_REPORT.md`
   - `MIGRATION_SUMMARY_2025-11-02.md`
 
 - **Deleted:** 3 files
@@ -230,7 +230,7 @@ npm run hub                   # ✅ New central dashboard
 
 ### Technical References
 - `HTTP_SERVER_CAPABILITIES_TODO.md` - Future http-server enhancements
-- `SCRIPT_AUDIT_REPORT.md` - Pre-migration audit results
+- `documentation/audits/collection/documentation/audits/collection/SCRIPT_AUDIT_REPORT.md` - Pre-migration audit results
 - `security-agent/README.md` - Security agent v2 documentation
 
 ### Archive

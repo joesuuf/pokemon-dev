@@ -43,8 +43,8 @@ npm run watchdog:logs
 - `status-watchdog.sh` - Check status
 
 ### Documentation
-- `WATCHDOG.md` - Complete documentation
-- `WATCHDOG_SUMMARY.md` - This quick reference
+- `documentation/process/documentation/process/WATCHDOG.md` - Complete documentation
+- `documentation/process/documentation/process/WATCHDOG_SUMMARY.md` - This quick reference
 
 ### Package.json Updates
 - Added `npm-run-all` dependency
@@ -181,7 +181,7 @@ npm install
 
 ## For More Information
 
-See [WATCHDOG.md](WATCHDOG.md) for complete documentation including:
+See [documentation/process/documentation/process/WATCHDOG.md](documentation/process/documentation/process/WATCHDOG.md) for complete documentation including:
 - Advanced configuration
 - Production deployment
 - Security considerations

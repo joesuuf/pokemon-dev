@@ -119,7 +119,7 @@ The static site dramatically outperforms the React version in all measurable met
 7. Image loading states (30 min)
 8. Rate limiting (30 min)
 
-**See:** `AUDIT_REPORT_REACT.md` for complete details
+**See:** `documentation/audits/collection/documentation/audits/collection/AUDIT_REPORT_REACT.md` for complete details
 
 ---
 
@@ -272,9 +272,9 @@ bash extract-static-site.sh
 ## Files Created During Audit
 
 ### Audit Reports
-- ✅ `AUDIT_REPORT_REACT.md` - Complete React frontend audit (50+ pages)
+- ✅ `documentation/audits/collection/documentation/audits/collection/AUDIT_REPORT_REACT.md` - Complete React frontend audit (50+ pages)
 - ✅ `AUDIT_REPORT_STATIC_SITE.md` - Complete static site audit (45+ pages)
-- ✅ `AUDIT_SUMMARY.md` - This file (master overview)
+- ✅ `documentation/audits/collection/documentation/audits/collection/AUDIT_SUMMARY.md` - This file (master overview)
 
 ### Extraction Scripts
 - ✅ `extract-react-app.sh` - React app extraction automation
@@ -507,7 +507,7 @@ bash start-server.sh
 ## Next Steps
 
 1. **Review Audit Reports**
-   - Read `AUDIT_REPORT_REACT.md`
+   - Read `documentation/audits/collection/documentation/audits/collection/AUDIT_REPORT_REACT.md`
    - Read `AUDIT_REPORT_STATIC_SITE.md`
 
 2. **Choose Version**
@@ -551,9 +551,9 @@ bash start-server.sh
 ## Support & Documentation
 
 ### Full Documentation
-- **React:** `AUDIT_REPORT_REACT.md` (detailed)
+- **React:** `documentation/audits/collection/documentation/audits/collection/AUDIT_REPORT_REACT.md` (detailed)
 - **Static:** `AUDIT_REPORT_STATIC_SITE.md` (detailed)
-- **Summary:** `AUDIT_SUMMARY.md` (this file)
+- **Summary:** `documentation/audits/collection/documentation/audits/collection/AUDIT_SUMMARY.md` (this file)
 
 ### Quick References
 After extraction, see:
@@ -606,13 +606,13 @@ bash extract-react-app.sh
 bash extract-static-site.sh
 
 # Read full React audit
-less AUDIT_REPORT_REACT.md
+less documentation/audits/collection/documentation/audits/collection/AUDIT_REPORT_REACT.md
 
 # Read full static site audit
 less AUDIT_REPORT_STATIC_SITE.md
 
 # Read this summary
-less AUDIT_SUMMARY.md
+less documentation/audits/collection/documentation/audits/collection/AUDIT_SUMMARY.md
 ```
 
 ---
