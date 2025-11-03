@@ -41,7 +41,7 @@
 
 #### Documentation
 - [x] README.md - Project documentation (6.5 KB)
-- [x] documentation/process/MANIFEST.md - File inventory (7.2 KB)
+- [x] documentation/process/documentation/process/MANIFEST.md - File inventory (7.2 KB)
 - [x] STANDALONE_VERIFICATION.md - This file
 
 ### ✅ Excluded Files (As Designed)
@@ -205,7 +205,7 @@ pokemon-dev-v0/
 │   └── utils/ ✅
 ├── api/ ✅
 ├── README.md ✅
-├── documentation/process/MANIFEST.md ✅
+├── documentation/process/documentation/process/MANIFEST.md ✅
 └── STANDALONE_VERIFICATION.md ✅ (this file)
 ```
 

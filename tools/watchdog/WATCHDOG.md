@@ -502,7 +502,7 @@ npm run watchdog:start
 
 ## Related Documentation
 
-- [documentation/guides/FRONTEND_PORTS.md](documentation/guides/FRONTEND_PORTS.md) - Frontend port configuration
+- [documentation/guides/documentation/guides/FRONTEND_PORTS.md](documentation/guides/documentation/guides/FRONTEND_PORTS.md) - Frontend port configuration
 - [README.md](README.md) - Main project documentation
 - [package.json](package.json) - NPM scripts and dependencies
 
