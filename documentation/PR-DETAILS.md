@@ -120,7 +120,7 @@ Related documentation added in previous commit:
 ```bash
 gh pr create \
   --title "Implement Tailwind CSS v4.1.16 and Fix TypeScript Errors" \
-  --body-file documentation/process/PR-DETAILS.md \
+  --body-file documentation/process/documentation/process/PR-DETAILS.md \
   --head claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 ```
 

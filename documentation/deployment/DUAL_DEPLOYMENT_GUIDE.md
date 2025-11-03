@@ -427,11 +427,11 @@ Total: ~$1-5/month depending on traffic
 
 ## 📚 Related Documentation
 
-- **documentation/audits/collection/AUDIT_SUMMARY.md** - Performance comparison (8.8/10 static vs 8.2/10 React)
-- **documentation/guides/DEV_PORTS_GUIDE.md** - Local development ports
-- **documentation/api/API_KEYS_SETUP.md** - Secret management
-- **documentation/guides/GCP_SETUP_GUIDE.md** - Detailed GCP instructions
-- **documentation/process/GITHUB_SETUP_REVIEW.md** - GitHub configuration review
+- **documentation/audits/collection/documentation/audits/collection/AUDIT_SUMMARY.md** - Performance comparison (8.8/10 static vs 8.2/10 React)
+- **documentation/guides/documentation/guides/DEV_PORTS_GUIDE.md** - Local development ports
+- **documentation/api/documentation/api/API_KEYS_SETUP.md** - Secret management
+- **documentation/guides/documentation/guides/GCP_SETUP_GUIDE.md** - Detailed GCP instructions
+- **documentation/process/documentation/process/GITHUB_SETUP_REVIEW.md** - GitHub configuration review
 
 ---
 

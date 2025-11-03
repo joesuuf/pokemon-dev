@@ -212,7 +212,7 @@ npm run build
 ## ?? Documentation References
 
 - **Lazy Loading Guide**: `/LAZY_LOADING_IMPLEMENTATION.md`
-- **Frontend Ports**: `/documentation/guides/FRONTEND_PORTS.md`
+- **Frontend Ports**: `/documentation/guides/documentation/guides/FRONTEND_PORTS.md`
 - **Cursor Rules**: `/.cursorrules`
 - **Project README**: `/README.md`
 - **Agents Overview**: `/agents/AGENTS_OVERVIEW.md`

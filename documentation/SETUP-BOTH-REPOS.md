@@ -37,7 +37,7 @@ git push https://github.com/joesuuf/pokemon-www-v0.1.git claude/check-tailwind-v
 ```
 
 ### Step 3: Create PR on GitHub
-Use the PR details from `documentation/process/PR-DETAILS.md`:
+Use the PR details from `documentation/process/documentation/process/PR-DETAILS.md`:
 - **URL:** https://github.com/joesuuf/pokemon-www-v0.1/pull/new/claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 
 ---
@@ -80,7 +80,7 @@ git push pokemon-www --tags
 ```
 
 ### Step 3: Create PR
-Use the PR details from `documentation/process/PR-DETAILS.md`:
+Use the PR details from `documentation/process/documentation/process/PR-DETAILS.md`:
 - **URL:** https://github.com/joesuuf/pokemon-www-v0.1/pull/new/claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 
 ---
@@ -121,7 +121,7 @@ git checkout claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 #### Steps:
 1. Go to the PR URL above
 2. GitHub will show the comparison
-3. Copy the content from `documentation/process/PR-DETAILS.md`
+3. Copy the content from `documentation/process/documentation/process/PR-DETAILS.md`
 4. Paste into the PR description
 5. Click "Create pull request"
 
@@ -134,7 +134,7 @@ git checkout claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 #### Steps:
 1. Complete one of the setup options above
 2. Go to the PR URL
-3. Copy the content from `documentation/process/PR-DETAILS.md`
+3. Copy the content from `documentation/process/documentation/process/PR-DETAILS.md`
 4. Paste into the PR description
 5. Click "Create pull request"
 
@@ -150,7 +150,7 @@ cd /home/user/pokemon-dev
 gh pr create \
   --repo joesuuf/pokemon-dev \
   --title "Implement Tailwind CSS v4.1.16 and Fix TypeScript Errors" \
-  --body-file documentation/process/PR-DETAILS.md \
+  --body-file documentation/process/documentation/process/PR-DETAILS.md \
   --head claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 ```
 
@@ -163,7 +163,7 @@ git push -u pokemon-www claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 gh pr create \
   --repo joesuuf/pokemon-www-v0.1 \
   --title "Implement Tailwind CSS v4.1.16 and Fix TypeScript Errors" \
-  --body-file documentation/process/PR-DETAILS.md \
+  --body-file documentation/process/documentation/process/PR-DETAILS.md \
   --head claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 ```
 
@@ -241,7 +241,7 @@ Both PRs will include:
 2. **pokemon-www-v0.1**: Choose an option above to set up, then create PR
 
 ### Files to Reference:
-- `documentation/process/PR-DETAILS.md` - Complete PR description
+- `documentation/process/documentation/process/PR-DETAILS.md` - Complete PR description
 - `PROJECT-STATUS.md` - Project context
 - `documentation/guides/tailwind-v4-guide.md` - Technical details
 

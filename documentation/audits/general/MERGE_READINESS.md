@@ -65,11 +65,11 @@
 #### Documentation:
 - `agents/PHASE1_COMPLETE.md`
 - `FRONTEND_TESTING_REPORT.md`
-- `documentation/guides/WSL_SETUP.md`
-- `documentation/guides/WSL_DEV_RUNNER.md`
-- `documentation/guides/REMOTE_ACCESS.md`
-- `documentation/process/COMMIT_SUMMARY.md`
-- `documentation/process/BRANCH_STATUS.md`
+- `documentation/guides/documentation/guides/WSL_SETUP.md`
+- `documentation/guides/documentation/guides/WSL_DEV_RUNNER.md`
+- `documentation/guides/documentation/guides/REMOTE_ACCESS.md`
+- `documentation/process/documentation/process/COMMIT_SUMMARY.md`
+- `documentation/process/documentation/process/BRANCH_STATUS.md`
 
 #### Front-End Testing:
 - `index-test.html` - Testing hub
@@ -107,7 +107,7 @@ git push origin main
 - Source: `phase1-json-communication`
 - Target: `main`
 - Title: "Phase 1: JSON Communication Infrastructure - COMPLETE"
-- Description: See documentation/process/COMMIT_SUMMARY.md
+- Description: See documentation/process/documentation/process/COMMIT_SUMMARY.md
 
 ---
 

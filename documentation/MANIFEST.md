@@ -7,7 +7,7 @@ This document provides a complete inventory of all files included in the pokemon
 ```
 pokemon-dev-v0/
 ├── README.md                      ← Project documentation
-├── documentation/process/MANIFEST.md                    ← This file
+├── documentation/process/documentation/process/MANIFEST.md                    ← This file
 │
 ├── Configuration Files
 ├── package.json                   ← NPM dependencies & scripts (411 packages)
@@ -152,7 +152,7 @@ pokemon-dev-v0/
 - **Type Definitions**: 2
 - **Test Files**: 5
 - **Utility Functions**: 1
-- **Documentation**: 2 (README.md, documentation/process/MANIFEST.md)
+- **Documentation**: 2 (README.md, documentation/process/documentation/process/MANIFEST.md)
 - **Assets**: 1
 
 **TOTAL: 50+ files**
