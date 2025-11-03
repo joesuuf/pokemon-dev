@@ -99,7 +99,7 @@ After this PR:
 
 Related documentation added in previous commit:
 - `PROJECT-STATUS.md` - Complete project roadmap
-- `docs/tailwind-v4-guide.md` - Tailwind v4 reference
+- `documentation/guides/tailwind-v4-guide.md` - Tailwind v4 reference
 - `docs/sandbox-setup-guide.md` - Sandbox development guide
 - `docs/problem-solving-workbook.ipynb` - Interactive exercises
 
@@ -120,7 +120,7 @@ Related documentation added in previous commit:
 ```bash
 gh pr create \
   --title "Implement Tailwind CSS v4.1.16 and Fix TypeScript Errors" \
-  --body-file PR-DETAILS.md \
+  --body-file documentation/process/PR-DETAILS.md \
   --head claude/check-tailwind-version-011CUfUBLNqZ6mnFTZtHHSZg
 ```
 
@@ -249,7 +249,7 @@ a1da4a1 - Add .gitignore to exclude environment and build files
 
 If you have any questions about this PR:
 1. Review `PROJECT-STATUS.md` for project context
-2. Check `docs/tailwind-v4-guide.md` for Tailwind information
+2. Check `documentation/guides/tailwind-v4-guide.md` for Tailwind information
 3. See commit messages for detailed change descriptions
 
 ---

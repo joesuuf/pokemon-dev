@@ -12,7 +12,7 @@
 
 2. ? **Documentation Updated**
    - README.md - Added OCR feature section
-   - FRONTEND_PORTS.md - Added port 4444
+   - documentation/guides/FRONTEND_PORTS.md - Added port 4444
    - hub/index.html - Added OCR entry and port table
    - Complete OCR documentation suite
 
@@ -27,7 +27,7 @@
    - Pushed to: `cursor/ocr-pokemon-card-ids-for-linking-fd35`
 
 5. ? **PR Template Created**
-   - `PR_OCR_FEATURE.md` - Ready for PR creation
+   - `documentation/process/PR_OCR_FEATURE.md` - Ready for PR creation
 
 ### Port Status
 
@@ -41,7 +41,7 @@ All ports listed in hub (port 1111) are now managed by watchdog:
 
 ### Next Steps
 
-1. **Create PR** using `PR_OCR_FEATURE.md` as template
+1. **Create PR** using `documentation/process/PR_OCR_FEATURE.md` as template
 2. **Test end-to-end** OCR flow:
    ```bash
    npm run backend      # Terminal 1
@@ -58,7 +58,7 @@ All ports listed in hub (port 1111) are now managed by watchdog:
 **Base**: `main` (or your default branch)  
 **Title**: `feat: Add OCR card identification feature with Google Cloud Vision API`
 
-**Description**: Use content from `PR_OCR_FEATURE.md`
+**Description**: Use content from `documentation/process/PR_OCR_FEATURE.md`
 
 ---
 

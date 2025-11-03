@@ -269,8 +269,8 @@ npm run build
 ## Quick Links
 
 - **Audit Reports:**
-  - AUDIT_SUMMARY.md
-  - AUDIT_REPORT_REACT.md
+  - documentation/audits/collection/AUDIT_SUMMARY.md
+  - documentation/audits/collection/AUDIT_REPORT_REACT.md
   - AUDIT_REPORT_STATIC_SITE.md
 
 - **Deployment:**

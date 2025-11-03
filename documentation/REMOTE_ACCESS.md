@@ -356,8 +356,8 @@ npm run dev
 - `v2/index.html` - HTML front-end
 - `agents/PHASE1_COMPLETE.md` - Documentation
 - `FRONTEND_TESTING_REPORT.md` - Front-end docs
-- `WSL_SETUP.md` - WSL troubleshooting
-- `WSL_DEV_RUNNER.md` - Dev runner guide
+- `documentation/guides/WSL_SETUP.md` - WSL troubleshooting
+- `documentation/guides/WSL_DEV_RUNNER.md` - Dev runner guide
 
 ---
 

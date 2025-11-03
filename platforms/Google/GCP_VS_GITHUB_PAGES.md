@@ -170,7 +170,7 @@ gcloud run deploy SERVICE \
   --set-secrets="POKEMON_API_KEY=pokemon-api-key:latest"
 ```
 
-**See:** `API_KEYS_SETUP.md` for complete guide
+**See:** `documentation/api/API_KEYS_SETUP.md` for complete guide
 
 ---
 
@@ -418,13 +418,13 @@ For most static sites: GitHub Pages is sufficient ✅
 
 Quick access to all guides:
 
-1. **AUDIT_SUMMARY.md** - Complete audit results
-2. **AUDIT_REPORT_REACT.md** - React audit (50+ pages)
+1. **documentation/audits/collection/AUDIT_SUMMARY.md** - Complete audit results
+2. **documentation/audits/collection/AUDIT_REPORT_REACT.md** - React audit (50+ pages)
 3. **AUDIT_REPORT_STATIC_SITE.md** - Static audit (45+ pages)
-4. **DEV_PORTS_GUIDE.md** - Port mappings and local dev
-5. **GCP_SETUP_GUIDE.md** - Complete GCP guide (130+ pages)
-6. **API_KEYS_SETUP.md** - Secret management guide
-7. **GCP_VS_GITHUB_PAGES.md** - This file
+4. **documentation/guides/DEV_PORTS_GUIDE.md** - Port mappings and local dev
+5. **documentation/guides/GCP_SETUP_GUIDE.md** - Complete GCP guide (130+ pages)
+6. **documentation/api/API_KEYS_SETUP.md** - Secret management guide
+7. **documentation/deployment/GCP_VS_GITHUB_PAGES.md** - This file
 
 ### Scripts:
 - `deploy-to-github-pages.sh` - GitHub Pages deployment

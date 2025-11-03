@@ -92,7 +92,7 @@ This document provides a complete overview of the current project status, what n
   - Responsive design with Tailwind
   - Component patterns with Tailwind
 - **Resources:**
-  - `docs/tailwind-v4-guide.md` (created)
+  - `documentation/guides/tailwind-v4-guide.md` (created)
   - Official docs: https://tailwindcss.com/
   - Practice exercises needed
 
@@ -420,7 +420,7 @@ This document provides a complete overview of the current project status, what n
 ## 🎓 Learning Resources by Topic
 
 ### Tailwind CSS
-- 📖 `docs/tailwind-v4-guide.md` - Comprehensive guide
+- 📖 `documentation/guides/tailwind-v4-guide.md` - Comprehensive guide
 - 📓 `docs/tailwind-v4-guide.ipynb` - Interactive exercises
 - 🌐 [Official Docs](https://tailwindcss.com/)
 - 🎥 [YouTube: Tailwind Labs](https://www.youtube.com/@TailwindLabs)
@@ -451,7 +451,7 @@ This document provides a complete overview of the current project status, what n
 
 1. **Read Documentation** (2-3 hours)
    - `docs/sandbox-setup-guide.md`
-   - `docs/tailwind-v4-guide.md`
+   - `documentation/guides/tailwind-v4-guide.md`
    - `docs/anthropic-claude-code-guide.md`
 
 2. **Set Up Environment** (1 hour)

@@ -37,7 +37,7 @@ Target: c.storage.googleapis.com
 Proxy: DNS only (gray) or Proxied (orange) - both work
 ```
 
-**Or use Load Balancer** (see GCP_DEPLOYMENT_READY.md for details)
+**Or use Load Balancer** (see documentation/deployment/GCP_DEPLOYMENT_READY.md for details)
 
 ### 5. Verify
 

@@ -555,9 +555,9 @@ main branch push →
 
 Created for you:
 - `deploy-to-github-pages.sh` - Manual deployment script
-- `AUDIT_SUMMARY.md` - Full audit results
-- `DEV_PORTS_GUIDE.md` - Port mappings
-- `API_KEYS_SETUP.md` - Secret management guide
+- `documentation/audits/collection/AUDIT_SUMMARY.md` - Full audit results
+- `documentation/guides/DEV_PORTS_GUIDE.md` - Port mappings
+- `documentation/api/API_KEYS_SETUP.md` - Secret management guide
 
 ---
 

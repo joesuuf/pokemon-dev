@@ -115,9 +115,9 @@ Branch: security-agent-integration
   - test-schemas.html - Schema visualizer
   - index-test.html - Front-end testing hub
   - FRONTEND_TESTING_REPORT.md
-  - WSL_SETUP.md
-  - WSL_DEV_RUNNER.md
-  - REMOTE_ACCESS.md
+  - documentation/guides/WSL_SETUP.md
+  - documentation/guides/WSL_DEV_RUNNER.md
+  - documentation/guides/REMOTE_ACCESS.md
 
 - Scripts:
   - wsl_dev_runner.sh - WSL dev server runner
@@ -164,9 +164,9 @@ Documentation:
 - test-schemas.html - Interactive schema visualizer
 - index-test.html - Front-end testing hub with WSL commands
 - FRONTEND_TESTING_REPORT.md - Front-end testing documentation
-- WSL_SETUP.md - WSL troubleshooting guide
-- WSL_DEV_RUNNER.md - Dev runner script documentation
-- REMOTE_ACCESS.md - Remote access guide (Codespaces/GCP)
+- documentation/guides/WSL_SETUP.md - WSL troubleshooting guide
+- documentation/guides/WSL_DEV_RUNNER.md - Dev runner script documentation
+- documentation/guides/REMOTE_ACCESS.md - Remote access guide (Codespaces/GCP)
 
 Infrastructure:
 - wsl_dev_runner.sh - Automated WSL dev server runner
@@ -205,7 +205,7 @@ Ready for Phase 2: Extract Security Agent Skills
 - All Phase 1 implementation committed
 - All tests passing
 - Branch is up to date with remote
-- Untracked file: COMMIT_SUMMARY.md (documentation only)
+- Untracked file: documentation/process/COMMIT_SUMMARY.md (documentation only)
 
 ### main Branch
 **Status:** ✅ Nothing to commit

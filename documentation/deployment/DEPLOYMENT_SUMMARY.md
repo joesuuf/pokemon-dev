@@ -274,12 +274,12 @@ curl -I https://gcp.count.la/v2/
    - Builds React + adds static to v2/
    - Uploads to Cloud Storage
 
-3. **DUAL_DEPLOYMENT_GUIDE.md**
+3. **documentation/guides/DUAL_DEPLOYMENT_GUIDE.md**
    - Complete deployment documentation
    - Step-by-step instructions
    - Troubleshooting guide
 
-4. **DEPLOYMENT_SUMMARY.md**
+4. **documentation/deployment/DEPLOYMENT_SUMMARY.md**
    - This file - quick reference
 
 ---
@@ -365,13 +365,13 @@ Monthly Cost: ~$0.15 - $1.00
 
 All documentation has been created:
 
-1. **DEPLOYMENT_SUMMARY.md** (this file) - Quick start guide
-2. **DUAL_DEPLOYMENT_GUIDE.md** - Complete guide with all details
-3. **DEV_PORTS_GUIDE.md** - Local development ports
-4. **AUDIT_SUMMARY.md** - Performance audit results
-5. **GCP_SETUP_GUIDE.md** - Detailed GCP instructions
-6. **API_KEYS_SETUP.md** - Secret management
-7. **GITHUB_SETUP_REVIEW.md** - GitHub configuration review
+1. **documentation/deployment/DEPLOYMENT_SUMMARY.md** (this file) - Quick start guide
+2. **documentation/guides/DUAL_DEPLOYMENT_GUIDE.md** - Complete guide with all details
+3. **documentation/guides/DEV_PORTS_GUIDE.md** - Local development ports
+4. **documentation/audits/collection/AUDIT_SUMMARY.md** - Performance audit results
+5. **documentation/guides/GCP_SETUP_GUIDE.md** - Detailed GCP instructions
+6. **documentation/api/API_KEYS_SETUP.md** - Secret management
+7. **documentation/process/GITHUB_SETUP_REVIEW.md** - GitHub configuration review
 
 ---
 
@@ -407,7 +407,7 @@ Everything is set up and ready to deploy:
 
 ## 🆘 Need Help?
 
-1. Check **DUAL_DEPLOYMENT_GUIDE.md** for detailed instructions
+1. Check **documentation/guides/DUAL_DEPLOYMENT_GUIDE.md** for detailed instructions
 2. Review workflow logs in GitHub Actions
 3. Test locally first: `npm run build && npx http-server dist -p 8080`
 4. Verify DNS with dnschecker.org
