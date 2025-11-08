@@ -1,0 +1,63 @@
+{
+  "generated": "2025-11-08T17:01:31",
+  "totalSize": "222M",
+  "totalFiles": 19493,
+  "totalDirectories": 2180,
+  "topLevelDirectories": [
+    {"name": "node_modules", "size": "215M"},
+    {"name": "documentation", "size": "1.3M"},
+    {"name": "frontends", "size": "1.1M"},
+    {"name": "agents", "size": "544K"},
+    {"name": "src", "size": "280K"},
+    {"name": "security-agent", "size": "164K"},
+    {"name": "static-site", "size": "160K"},
+    {"name": "tools", "size": "108K"},
+    {"name": "platforms", "size": "76K"},
+    {"name": "backend", "size": "48K"},
+    {"name": "scripts", "size": "24K"},
+    {"name": "tests", "size": "12K"},
+    {"name": "api", "size": "8.0K"}
+  ],
+  "frontendVersions": [
+    {"port": "9999", "size": "216K"},
+    {"port": "8888", "size": "216K"},
+    {"port": "7777", "size": "208K"},
+    {"port": "5555", "size": "208K"},
+    {"port": "6666", "size": "108K"},
+    {"port": "1111", "size": "48K"},
+    {"port": "4444", "size": "8.0K"}
+  ],
+  "fileTypes": {
+    "typescript": 164,
+    "python": 27,
+    "markdown": 949,
+    "javascript": 15,
+    "css": 39
+  },
+  "documentation": {
+    "audits": "580K",
+    "integrations": "208K",
+    "ocr": "80K",
+    "deployment": "32K"
+  },
+  "agents": {
+    "python": "276K",
+    "tests": "52K",
+    "md": "52K",
+    "workflows": "40K",
+    "schemas": "20K",
+    "lib": "20K",
+    "skills": "12K"
+  },
+  "src": {
+    "components": "100K",
+    "tests": "32K",
+    "services": "28K",
+    "utils": "24K",
+    "styles": "24K",
+    "types": "12K",
+    "lib": "12K",
+    "pages": "8.0K",
+    "config": "8.0K"
+  }
+}
